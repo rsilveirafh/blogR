@@ -1,7 +1,7 @@
 {
-  "hash": "5a17c90a0117a8ff8e2919eb0ac5e269",
+  "hash": "d1abfdeea14fa58d48958cccf782be96",
   "result": {
-    "markdown": "---\ntitle: \"Drawing a star in R with ggplot\"\nauthor: \"Ricardo da Silveira Filho\"\ndate: \"2022-10-13\"\ncategories: [R, ggplot, code, star, PT, Lula]\nimage: \"image.jpg\"\n---\n\n\nIn Brazil we are about to choose the next President for the 4 years ahead.\n\nI am a workers party supporter (PT, *Partido dos Trabalhadores*), with **Lula** as our candidate.\n\n\n![Figure 1. Lulinha peace and love.](lula.jpeg)\n\n\nWith this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.\n\n\nFirst of all, we will need to load the package that we will use in this session:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\n```\n:::\n",
+    "markdown": "---\ntitle: \"Drawing a star in R with ggplot\"\nauthor: \"Ricardo da Silveira Filho\"\ndate: \"2022-10-13\"\ncategories: [R, ggplot, code, star, PT, Lula]\nimage: \"image.jpg\"\n---\n\n\nIn Brazil we are about to choose the next President for the 4 years ahead.\n\nI am a workers party supporter (PT, *Partido dos Trabalhadores*), with **Lula** as our candidate.\n\n\n![Figure 1. Lulinha peace and love.](lula.jpeg)\n\n\nWith this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.\n\n\nFirst of all, we will need to load `ggplot2`, the package that we will use in this session:\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\n```\n:::\n",
     "supporting": [],
     "filters": [
       "rmarkdown/pagebreak.lua"

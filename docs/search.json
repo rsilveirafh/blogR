@@ -9,9 +9,9 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About",
+    "title": "Ricardo da Silveira Filho",
     "section": "",
-    "text": "Feel yourself at home ^^"
+    "text": "I am a brazilian biologist and data scientist, curious about all sort of things. Here I want to share same tips, ideas, and thoughts that come to my head with you all.\nFeel yourself at home ^^"
   },
   {
     "objectID": "index.html",
@@ -25,6 +25,20 @@
     "href": "posts/post-with-code/index.html",
     "title": "Drawing a star in R with ggplot",
     "section": "",
-    "text": "I am a workers party supporter (PT, Partido dos Trabalhadores), with Lula as our candidate.\n\n\n\nFigure 1. Lulinha peace and love.\n\n\nWith this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.\nFirst of all, we will need to load the package that we will use in this session:\n\nlibrary(ggplot2)"
+    "text": "I am a workers party supporter (PT, Partido dos Trabalhadores), with Lula as our candidate.\n\n\n\nFigure 1. Lulinha peace and love.\n\n\nWith this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.\nFirst of all, we will need to load ggplot2, the package that we will use in this session:\n\nlibrary(ggplot2)"
+  },
+  {
+    "objectID": "about.html#education",
+    "href": "about.html#education",
+    "title": "Ricardo da Silveira Filho",
+    "section": "Education",
+    "text": "Education\nUniversidade Federal da Paraíba | João Pessoa, PB, Brazil\nPh.D. in Biological Sciences (Zoology) | 2013–2017\nUniversidade Federal da Paraíba | João Pessoa, PB, Brazil\nM.Sc. in Biological Sciences (Zoology) | 2010–2012\nUniversidade Estadual de Feira de Santana | Feira de Santana, BA, Brazil\nUndergrad in Biological Sciences | 2004–2009"
+  },
+  {
+    "objectID": "about.html#experience",
+    "href": "about.html#experience",
+    "title": "Ricardo da Silveira Filho",
+    "section": "Experience",
+    "text": "Experience\nUFRN | Post-Doctoral Fellow | 2022–\nConciso-TI | Head Data Scientist | 2020–\nUNEMAT | Post-Doctoral Fellow | 2018–2019"
   }
 ]

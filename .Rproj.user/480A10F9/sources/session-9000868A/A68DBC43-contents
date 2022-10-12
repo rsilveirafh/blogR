@@ -17,7 +17,7 @@ I am a workers party supporter (PT, *Partido dos Trabalhadores*), with **Lula** 
 With this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.
 
 
-First of all, we will need to load the package that we will use in this session:
+First of all, we will need to load `ggplot2`, the package that we will use in this session:
 
 ```{r}
 #| echo: true
