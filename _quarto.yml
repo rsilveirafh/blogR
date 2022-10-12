@@ -1,8 +1,9 @@
 project:
   type: website
+  output-dir: docs
 
 website:
-  title: "blogR"
+  title: "blogR - %>%ing"
   navbar:
     right:
       - about.qmd
