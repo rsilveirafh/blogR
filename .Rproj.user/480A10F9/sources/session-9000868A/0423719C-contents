@@ -15,7 +15,7 @@ format:
   html:
     theme: cosmo
     css: styles.css
-    highlight-style: tango
+    highlight-style: pygments
 
 
 

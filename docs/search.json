@@ -7,13 +7,6 @@
     "text": "Cheers!"
   },
   {
-    "objectID": "posts/post-with-code/index.html",
-    "href": "posts/post-with-code/index.html",
-    "title": "Post With Code",
-    "section": "",
-    "text": "1 + 1\n\n[1] 2"
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
@@ -23,8 +16,15 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Ricardo’s blog",
+    "title": "blogR - %>%ing",
     "section": "",
-    "text": "news\n\n\ncode\n\n\nanalysis\n\n\n\n\n\n\n\n\n\n\n\nOct 11, 2022\n\n\nHarlow Malloc\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nOct 10, 2022\n\n\nRicardo da Silveira Filho\n\n\n\n\n\n\nNo matching items"
+    "text": "R\n\n\nggplot\n\n\ncode\n\n\nstar\n\n\nPT\n\n\nLula\n\n\n\n\n\n\n\n\n\n\n\nOct 13, 2022\n\n\nRicardo da Silveira Filho\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\n\n\nOct 10, 2022\n\n\nRicardo da Silveira Filho\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Drawing a star in R with ggplot",
+    "section": "",
+    "text": "I am a workers party supporter (PT, Partido dos Trabalhadores), with Lula as our candidate.\n\n\n\nFigure 1. Lulinha peace and love.\n\n\nWith this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.\nFirst of all, we will need to load the package that we will use in this session:\n\nlibrary(ggplot2)"
   }
 ]
