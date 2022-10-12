@@ -1,0 +1,16 @@
+---
+title: "Welcome To My blogR"
+author: "Ricardo da Silveira Filho"
+date: "2022-10-10"
+categories: [news]
+---
+
+Arriving here!
+
+
+![](welcome.gif)
+
+
+Cheers!
+
+R.

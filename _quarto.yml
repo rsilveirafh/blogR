@@ -1,0 +1,20 @@
+project:
+  type: website
+
+website:
+  title: "blogR"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/rsilveirafh
+      - icon: instagram
+        href: https://instagram.com/ricardosilveirafh
+format:
+  html:
+    theme: darkly
+    css: styles.css
+    highlight-style: pygments
+
+
+
