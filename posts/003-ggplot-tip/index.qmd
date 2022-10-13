@@ -1,6 +1,6 @@
 ---
 title: "A great ggplot tip!"
-subtitle: "Learning about ggplot"
+subtitle: "Learning about theme elements"
 author: "Ricardo"
 date: "2022-10-14"
 categories: [code, ggplot2, R, tips]
