@@ -1,6 +1,6 @@
 ---
 title: "Drawing a star in R with ggplot"
-subtitle: "Let's draw a star!"
+subtitle: "A star shines!"
 author: "Ricardo"
 date: "2022-10-13"
 categories: [code, ggplot, Lula, PT, R, star]
