@@ -24,5 +24,7 @@ format:
     css: styles.css
     highlight-style: github
 
-
+comments:
+  giscus:
+    repo: rsilveirafh/blogR
 
