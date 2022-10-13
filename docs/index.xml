@@ -5,7 +5,7 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>Ricardo da Silveira Filho</title>
+<title>#blogR</title>
 <link>https://rsilveirafh.github.io/blogR/index.html</link>
 <atom:link href="https://rsilveirafh.github.io/blogR/index.xml" rel="self" type="application/rss+xml"/>
 <description>%>%ing the World</description>
@@ -14,14 +14,14 @@
 <item>
   <title>Welcome to my blogR</title>
   <dc:creator>Ricardo</dc:creator>
-  <link>https://rsilveirafh.github.io/blogR/posts/welcome/index.html</link>
+  <link>https://rsilveirafh.github.io/blogR/posts/001-welcome/index.html</link>
   <description><![CDATA[ 
 
 
 
 
 <p>Arriving here!</p>
-<p><img src="https://rsilveirafh.github.io/blogR/posts/welcome/welcome.gif" class="img-fluid"></p>
+<p><img src="https://rsilveirafh.github.io/blogR/posts/001-welcome/welcome.gif" class="img-fluid"></p>
 <p>Cheers!</p>
 <ol start="18" type="A">
 <li></li>
@@ -31,9 +31,9 @@
 
  ]]></description>
   <category>news</category>
-  <guid>https://rsilveirafh.github.io/blogR/posts/welcome/index.html</guid>
+  <guid>https://rsilveirafh.github.io/blogR/posts/001-welcome/index.html</guid>
   <pubDate>Mon, 10 Oct 2022 03:00:00 GMT</pubDate>
-  <media:content url="https://rsilveirafh.github.io/blogR/posts/welcome/welcome.gif" medium="image" type="image/gif"/>
+  <media:content url="https://rsilveirafh.github.io/blogR/posts/001-welcome/welcome.gif" medium="image" type="image/gif"/>
 </item>
 </channel>
 </rss>

@@ -3,14 +3,12 @@ project:
   output-dir: docs
 
 website:
+  title: "#blogR"
   site-url: https://rsilveirafh.github.io/blogR/
   description: "%>%ing the World"
   page-footer: 
     left: "Blog made with [Quarto](https://quarto.org/), by Ricardo da Silveira Filho."
   navbar:
-    left:
-      - href: index.qmd
-        text: "#blogR"
     right: 
       - about.qmd
       - icon: github
