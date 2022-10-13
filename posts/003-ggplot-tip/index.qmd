@@ -69,14 +69,5 @@ Thanks for the reading, cheers!
 R.
 
 
----
 
-
-### Session information
-
-```{r}
-#| echo: false
-
-sessioninfo::session_info(info = "packages")
-```
 

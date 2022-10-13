@@ -167,15 +167,7 @@ Cheers,
 R.
 
 
----
 
-
-### Session information
-
-```{r}
-#| echo: false
-sessioninfo::session_info(info = "packages")
-```
 
 
 
