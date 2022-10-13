@@ -1,10 +1,10 @@
 ---
 title: "A great ggplot tip!"
-subtitle: "Learning about ggplot."
+subtitle: "Learning about ggplot"
 author: "Ricardo"
 date: "2022-10-14"
 categories: [code, ggplot2, R, tips]
-image: "image.png"
+image: "https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png"
 draft: true
 ---
 
@@ -19,21 +19,64 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 
 ## History
 
-Some time ago, lost through the deep arms of the internet 😎, i have found a great drawing with all the theme elements references of a plot within `ggplot2`
+Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within `ggplot2`.
+
+But, as is well known, if you don't save that, it will be lost forever.
+
+Except when you have a great community in [twitter](http://twitter.com/), and there is a bunch of good people trying to help everyone!
+
+*Some time ahead...*
+
+I finally found it! Here it is:
 
 
+```{r}
+#| label: fig-ggplot
+#| fig-cap: ggplot2 theme elements references, by Isabella Benabaye.
+#| echo: false
+
+knitr::include_graphics("https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png")
+```
 
 
+I also found the [post](https://isabella-b.com/blog/ggplot2-theme-elements-reference/) on her blog, with better quality [images](https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.png) and/or a [pdf](https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.pdf) file.
 
 
+## The history continues...
+
+More interesting: actually, she had her idea after this twitter post from Henry Wang:
+
+```{r}
+#| label: fig-tweet
+#| fig-cap: Henry Wang's tweet.
+#| echo: false
+#| out-width: 70%
+
+tweetrmd::tweet_screenshot("https://twitter.com/henrywangnl/status/1259396196713537536?s=20&t=VdkteE_5Vjc676_nAF8kew")
+
+```
 
 
+And, he also made a nice [post](https://henrywang.nl/ggplot2-theme-elements-demonstration/) about the subject (where you can download his version of `ggplot2` theme elements demonstration).
 
 
+## Finishing
+
+That's it, enjoy the creativity and good ideas from all these people, soon I'll bring some more.
+
+Thanks for the reading, cheers!
+
+R.
 
 
+---
 
 
+### Session information
 
+```{r}
+#| echo: false
 
+sessioninfo::session_info()
+```
 

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ricardo">
-<meta name="dcterms.date" content="2022-10-13">
+<meta name="dcterms.date" content="2022-10-14">
 
-<title>#blogR - Drawing a star in R with ggplot</title>
+<title>#blogR - A great ggplot tip!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -173,15 +173,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Drawing a star in R with ggplot</h1>
-            <p class="subtitle lead">A star shines!</p>
+      <h1 class="title">A great ggplot tip!</h1>
+            <p class="subtitle lead">Learning about ggplot</p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
                 <div class="quarto-category">ggplot2</div>
-                <div class="quarto-category">Lula</div>
-                <div class="quarto-category">PT</div>
                 <div class="quarto-category">R</div>
-                <div class="quarto-category">star</div>
+                <div class="quarto-category">tips</div>
               </div>
                   </div>
   </div>
@@ -199,7 +197,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">October 13, 2022</p>
+        <p class="date">October 14, 2022</p>
       </div>
     </div>
       
@@ -219,214 +217,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="what-this-post-is-about" class="level2">
 <h2 class="anchored" data-anchor-id="what-this-post-is-about">What this post is about?</h2>
 <ul>
-<li>Drawing a star using <code>ggplot2</code> in R Language.</li>
+<li><code>ggplot2</code> tips</li>
 </ul>
 </section>
 <section id="history" class="level2">
-<h2 class="anchored" data-anchor-id="history">History:</h2>
-<p>In Brazil we are about to choose the next President for the 4 years ahead.</p>
-<p>I am a workers party supporter (PT, <em>Partido dos Trabalhadores</em>), with <strong><a href="https://twitter.com/LulaOficial">Lula</a></strong> as our candidate.</p>
+<h2 class="anchored" data-anchor-id="history">History</h2>
+<p>Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>ggplot2</code>.</p>
+<p>But, as is well known, if you don’t save that, it will be lost forever.</p>
+<p>Except when you have a great community in <a href="http://twitter.com/">twitter</a>, and there is a bunch of good people trying to help everyone!</p>
+<p><em>Some time ahead…</em></p>
+<p>I finally found it! Here it is:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-lula" class="quarto-figure quarto-figure-center anchored">
+<div id="fig-ggplot" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="lula.jpeg" class="img-fluid figure-img" width="375"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Lulinha peace and love &lt;3</figcaption><p></p>
+<p><img src="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: ggplot2 theme elements references, by Isabella Benabaye.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>With this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.</p>
+<p>I also found the <a href="https://isabella-b.com/blog/ggplot2-theme-elements-reference/">post</a> on her blog, with better quality <a href="https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.png">images</a> and/or a <a href="https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.pdf">pdf</a> file.</p>
 </section>
-<section id="hands-on" class="level2">
-<h2 class="anchored" data-anchor-id="hands-on">Hands on!</h2>
-<p>First of all, we will need to load <code>dplyr</code> and <code>ggplot2</code>, the package of functions that we will use in this session:</p>
+<section id="the-history-continues" class="level2">
+<h2 class="anchored" data-anchor-id="the-history-continues">The history continues…</h2>
+<p>More interesting: actually, she had her idea after this twitter post from Henry Wang:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># data wrangling</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># plots</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Let’s start by creating our blank canvas:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
+<div id="fig-tweet" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="index_files/figure-html/plot01-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Blank canvas.</figcaption><p></p>
+<p><img src="index_files/figure-html/fig-tweet-1.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: Henry Wang’s tweet.</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Now we can ask to ggplot to put a void theme (without texts or axis), and then to add a red background:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>red <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_void</span>() <span class="sc">+</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"red"</span>))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>red</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/plot02-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Red canvas.</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The challenge now is to draw by draft our star. First, let’s study how it is:</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-star" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="star.jpg" class="img-fluid figure-img" style="width:150.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: A star and its coordinates.</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>To do this, let’s create a <code>tibble</code> with the <code>x</code> and <code>y</code> coordinates (11 to close the polygon):</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="fu">rep_len</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">100</span> <span class="sc">*</span> <span class="fu">sin</span>(pi<span class="sc">/</span><span class="dv">10</span>) <span class="sc">/</span> <span class="fu">cos</span>(pi<span class="sc">/</span><span class="dv">5</span>)), </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">length.out =</span> <span class="dv">11</span>)</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>star <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">coord =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">x =</span> r <span class="sc">*</span> <span class="fu">sin</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> pi, <span class="at">length.out =</span> <span class="dv">11</span>)),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">y =</span> r <span class="sc">*</span> <span class="fu">cos</span>(<span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span> <span class="sc">*</span> pi, <span class="at">length.out =</span> <span class="dv">11</span>)))</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(star, <span class="at">align =</span> <span class="st">"c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<table class="table table-sm table-striped">
-<thead>
-<tr class="header">
-<th style="text-align: center;">coord</th>
-<th style="text-align: center;">x</th>
-<th style="text-align: center;">y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: center;">1</td>
-<td style="text-align: center;">0.00000</td>
-<td style="text-align: center;">100.0000</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">2</td>
-<td style="text-align: center;">22.45140</td>
-<td style="text-align: center;">30.9017</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">3</td>
-<td style="text-align: center;">95.10565</td>
-<td style="text-align: center;">30.9017</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">4</td>
-<td style="text-align: center;">36.32713</td>
-<td style="text-align: center;">-11.8034</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">5</td>
-<td style="text-align: center;">58.77853</td>
-<td style="text-align: center;">-80.9017</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">6</td>
-<td style="text-align: center;">0.00000</td>
-<td style="text-align: center;">-38.1966</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">7</td>
-<td style="text-align: center;">-58.77853</td>
-<td style="text-align: center;">-80.9017</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">8</td>
-<td style="text-align: center;">-36.32713</td>
-<td style="text-align: center;">-11.8034</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">9</td>
-<td style="text-align: center;">-95.10565</td>
-<td style="text-align: center;">30.9017</td>
-</tr>
-<tr class="even">
-<td style="text-align: center;">10</td>
-<td style="text-align: center;">-22.45140</td>
-<td style="text-align: center;">30.9017</td>
-</tr>
-<tr class="odd">
-<td style="text-align: center;">11</td>
-<td style="text-align: center;">0.00000</td>
-<td style="text-align: center;">100.0000</td>
-</tr>
-</tbody>
-</table>
-<p>Star coordinates.</p>
-</div>
-</div>
-<p>Now, let’s include the star coordinates (and the paths) within the red plot:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>red <span class="sc">+</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_polygon</span>(<span class="at">data =</span> star, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/plot03-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">Almost there.</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>The next step is to paint the star in white color, and also fix the coordinates:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pt <span class="ot">&lt;-</span> red <span class="sc">+</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_polygon</span>(<span class="at">data =</span> star, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">"white"</span>) <span class="sc">+</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_equal</span>()</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>pt </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/plot04-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">The workers party flag!</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Our PT flag is ready!</p>
-<p>Just to complete, we can include the number of the party in the middle of the star, the number 13!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pt <span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>,</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">label =</span> <span class="dv">13</span>,</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="sc">-</span><span class="dv">4</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="dv">0</span>,</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="dv">40</span>,</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="index_files/figure-html/plot05-1.png" class="img-fluid figure-img" width="672"></p>
-<p></p><figcaption class="figure-caption">It is ready!</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>We have our flag!</p>
-<p>The next step is to dress all red at October 30th 2022, vote in our great eletronic voting machines, and hope for the best!</p>
-<p>Make the L!</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-L" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="L.jpg" class="img-fluid figure-img" width="640"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;3: Faz o L!</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Cheers,</p>
+<p>And, he also made a nice <a href="https://henrywang.nl/ggplot2-theme-elements-demonstration/">post</a> about the subject (where you can download his version of <code>ggplot2</code> theme elements demonstration).</p>
+</section>
+<section id="finishing" class="level2">
+<h2 class="anchored" data-anchor-id="finishing">Finishing</h2>
+<p>That’s it, enjoy the creativity and good ideas from all these people, soon I’ll bring some more.</p>
+<p>Thanks for the reading, cheers!</p>
 <ol start="18" type="A">
 <li></li>
 </ol>
@@ -434,7 +265,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="session-information" class="level3">
 <h3 class="anchored" data-anchor-id="session-information">Session information</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>─ Session info ───────────────────────────────────────────────────────────────
  setting  value
@@ -451,48 +282,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 ─ Packages ───────────────────────────────────────────────────────────────────
  package     * version date (UTC) lib source
- assertthat    0.2.1   2019-03-21 [1] CRAN (R 4.2.0)
+ chromote      0.1.1   2022-09-07 [1] CRAN (R 4.2.1)
  cli           3.3.0   2022-04-25 [1] CRAN (R 4.2.0)
- colorspace    2.0-3   2022-02-21 [1] CRAN (R 4.2.0)
- crayon        1.5.1   2022-03-26 [1] CRAN (R 4.2.0)
- DBI           1.1.2   2021-12-20 [1] CRAN (R 4.2.0)
+ curl          4.3.3   2022-10-06 [1] CRAN (R 4.2.1)
  digest        0.6.29  2021-12-01 [1] CRAN (R 4.2.0)
- dplyr       * 1.0.9   2022-04-28 [1] CRAN (R 4.2.0)
- ellipsis      0.3.2   2021-04-29 [1] CRAN (R 4.2.0)
  evaluate      0.17    2022-10-07 [1] CRAN (R 4.2.1)
- fansi         1.0.3   2022-03-24 [1] CRAN (R 4.2.0)
- farver        2.1.0   2021-02-28 [1] CRAN (R 4.2.0)
  fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
- generics      0.1.2   2022-01-31 [1] CRAN (R 4.2.0)
- ggplot2     * 3.3.6   2022-05-03 [1] CRAN (R 4.2.0)
- glue          1.6.2   2022-02-24 [1] CRAN (R 4.2.0)
- gtable        0.3.0   2019-03-25 [1] CRAN (R 4.2.0)
- highr         0.9     2021-04-16 [1] CRAN (R 4.2.0)
  htmltools     0.5.3   2022-07-18 [1] CRAN (R 4.2.1)
  htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
- jpeg          0.1-9   2021-07-24 [1] CRAN (R 4.2.0)
+ httr          1.4.4   2022-08-17 [1] CRAN (R 4.2.1)
  jsonlite      1.8.2   2022-10-02 [1] CRAN (R 4.2.1)
  knitr         1.40    2022-08-24 [1] CRAN (R 4.2.1)
- labeling      0.4.2   2020-10-20 [1] CRAN (R 4.2.0)
- lifecycle     1.0.1   2021-09-24 [1] CRAN (R 4.2.0)
+ later         1.3.0   2021-08-18 [1] CRAN (R 4.2.0)
  magrittr      2.0.3   2022-03-30 [1] CRAN (R 4.2.0)
- munsell       0.5.0   2018-06-12 [1] CRAN (R 4.2.0)
- pillar        1.7.0   2022-02-01 [1] CRAN (R 4.2.0)
- pkgconfig     2.0.3   2019-09-22 [1] CRAN (R 4.2.0)
- purrr         0.3.4   2020-04-17 [1] CRAN (R 4.2.0)
+ processx      3.7.0   2022-07-07 [1] CRAN (R 4.2.1)
+ promises      1.2.0.1 2021-02-11 [1] CRAN (R 4.2.0)
+ ps            1.7.1   2022-06-18 [1] CRAN (R 4.2.1)
  R6            2.5.1   2021-08-19 [1] CRAN (R 4.2.0)
+ Rcpp          1.0.9   2022-07-08 [1] CRAN (R 4.2.1)
  rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.1)
  rmarkdown     2.17    2022-10-07 [1] CRAN (R 4.2.1)
  rstudioapi    0.13    2020-11-12 [1] CRAN (R 4.2.0)
- scales        1.2.0   2022-04-13 [1] CRAN (R 4.2.0)
  sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.1)
  stringi       1.7.8   2022-07-11 [1] CRAN (R 4.2.1)
  stringr       1.4.1   2022-08-20 [1] CRAN (R 4.2.1)
- tibble        3.1.7   2022-05-03 [1] CRAN (R 4.2.0)
- tidyselect    1.1.2   2022-02-21 [1] CRAN (R 4.2.0)
- utf8          1.2.2   2021-07-24 [1] CRAN (R 4.2.0)
- vctrs         0.4.1   2022-04-13 [1] CRAN (R 4.2.0)
- withr         2.5.0   2022-03-03 [1] CRAN (R 4.2.0)
+ tweetrmd      0.0.9   2022-10-13 [1] Github (gadenbuie/tweetrmd@075102b)
+ webshot2      0.1.0   2022-10-13 [1] Github (rstudio/webshot2@dff2626)
+ websocket     1.4.1   2021-08-18 [1] CRAN (R 4.2.0)
  xfun          0.33    2022-09-12 [1] CRAN (R 4.2.1)
  yaml          2.3.5   2022-02-21 [1] CRAN (R 4.2.0)
 

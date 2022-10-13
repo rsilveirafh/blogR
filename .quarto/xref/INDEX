@@ -22,5 +22,8 @@
   },
   "posts/001-welcome/index.qmd": {
     "index.html": "2bf81a3d"
+  },
+  "posts/003-ggplot-tip/index.qmd": {
+    "index.html": "a1c40090"
   }
 }

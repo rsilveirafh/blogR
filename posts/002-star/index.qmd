@@ -34,6 +34,9 @@ knitr::include_graphics("lula.jpeg")
 
 With this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.
 
+
+## Hands on!
+
 First of all, we will need to load `dplyr` and `ggplot2`, the package of functions that we will use in this session:
 
 ```{r}
@@ -143,6 +146,9 @@ pt +
 
 We have our flag! 
 
+
+## Finishing
+
 The next step is to dress all red at October 30th 2022, vote in our great eletronic voting machines, and hope for the best!
 
 Make the L!
@@ -160,6 +166,16 @@ Cheers,
 
 R.
 
+
+---
+
+
+### Session information
+
+```{r}
+#| echo: false
+sessioninfo::session_info()
+```
 
 
 
