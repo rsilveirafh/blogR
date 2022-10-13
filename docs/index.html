@@ -72,9 +72,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -142,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="Lula">Lula <span class="quarto-category-count">(1)</span></div><div class="category" data-category="PT">PT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(1)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ggplot">ggplot <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div><div class="category" data-category="star">star <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content column-page-left" id="quarto-document-content">
 
@@ -168,7 +168,57 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="news" data-listing-date-sort="1665370800000" data-listing-file-modified-sort="1665622922873" data-listing-reading-time-sort="0.01">
+<div class="quarto-post image-right" data-index="0" data-categories="code,ggplot,Lula,PT,R,star" data-listing-date-sort="1665630000000" data-listing-file-modified-sort="1665629280899" data-listing-reading-time-sort="1.98">
+<div class="thumbnail">
+<p><a href="./posts/002-star/index.html"> <img src="./posts/002-star/image.png" class="thumnail-image"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/002-star/index.html">
+<h3 class="no-anchor listing-title">
+Drawing a star in R with ggplot
+</h3>
+<div class="listing-subtitle">
+Let’s draw a star!
+</div>
+</a>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
+code
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('ggplot'); return false;">
+ggplot
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('Lula'); return false;">
+Lula
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('PT'); return false;">
+PT
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
+R
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('star'); return false;">
+star
+</div>
+</div>
+<a href="./posts/002-star/index.html">
+<div class="listing-description">
+In Brazil we are about to choose the next President for the 4 years ahead.
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/002-star/index.html">
+<div class="listing-date">
+Oct 13, 2022
+</div>
+<div class="listing-author">
+Ricardo
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="news" data-listing-date-sort="1665370800000" data-listing-file-modified-sort="1665622922873" data-listing-reading-time-sort="0.01">
 <div class="thumbnail">
 <p><a href="./posts/001-welcome/index.html"> <img src="./posts/001-welcome/welcome.gif" class="thumnail-image"> </a></p>
 </div>

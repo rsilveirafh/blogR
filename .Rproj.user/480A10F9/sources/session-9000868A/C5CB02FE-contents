@@ -3,15 +3,14 @@ title: "Drawing a star in R with ggplot"
 subtitle: "Let's draw a star!"
 author: "Ricardo"
 date: "2022-10-13"
-categories: [R, ggplot, code, star, PT, Lula]
-image: "image.jpg"
-draft: true
+categories: [code, ggplot, Lula, PT, R, star]
+image: "image.png"
+draft: false
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
-
 
 In Brazil we are about to choose the next President for the 4 years ahead.
 
@@ -23,14 +22,142 @@ I am a workers party supporter (PT, *Partido dos Trabalhadores*), with **[Lula](
 #| echo: false
 
 knitr::include_graphics("lula.jpeg")
+
 ```
 
 With this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.
 
-First of all, we will need to load `ggplot2`, the package that we will use in this session:
+First of all, we will need to load `dplyr` and `ggplot2`, the package of functions that we will use in this session:
 
-```{r p1}
+```{r}
+#| label: packages
 
-library(ggplot2)
+library(dplyr) # data wrangling
+library(ggplot2) # plots
 
 ```
+
+Let's start by creating our blank canvas:
+
+```{r}
+#| label: plot01
+#| fig-cap: Blank canvas.
+
+ggplot()
+
+```
+
+Now we can ask to ggplot to put a void theme (without texts or axis), and then to add a red background:
+
+```{r}
+#| label: plot02
+#| fig-cap: Red canvas.
+
+red <- ggplot() +
+	theme_void() +
+	theme(plot.background = element_rect(fill = "red"))
+
+red
+
+```
+
+The challenge now is to draw by draft our star. First, let's study how it is:
+
+```{r}
+#| label: fig-star
+#| echo: false
+#| fig-cap: A star and its coordinates.
+#| out-width: 150%
+
+knitr::include_graphics("star.jpg")
+
+```
+
+To do this, let's create a `tibble` with the `x` and `y` coordinates (11 to close the polygon):
+
+```{r}
+#| label: data-star
+#| fig-cap: Star coordinates.
+
+r <- rep_len(x = c(100, 100 * sin(pi/10) / cos(pi/5)), 
+			 length.out = 11)
+
+star <- 
+  tibble(
+  	coord = 1:11,
+    x = r * sin(seq(0, 2 * pi, length.out = 11)),
+    y = r * cos(seq(0, 2 * pi, length.out = 11))
+  )
+
+knitr::kable(star, align = "c")
+
+```
+
+Now, let's include the star coordinates (and the paths) within the red plot:
+
+```{r}
+#| label: plot03
+#| fig-cap: Almost there.
+
+red +
+	geom_polygon(data = star, mapping = aes(x = x, y = y))
+
+```
+
+The next step is to paint the star in white color, and also fix the coordinates:
+
+```{r}
+#| label: plot04
+#| fig-cap: The workers party flag!
+
+pt <- red +
+	geom_polygon(data = star, mapping = aes(x = x, y = y),
+				 fill = "white") +
+	coord_equal()
+
+pt 
+
+```
+
+Our PT flag is ready!
+
+Just to complete, we can include the number of the party in the middle of the star, the number 13!
+
+```{r}
+#| label: plot05
+#| fig-cap: It is ready!
+
+pt +
+	annotate(geom = "text",
+			 label = 13,
+			 x = -4,
+			 y = 0,
+			 size = 40,
+			 color = "red")
+	
+```
+
+We have our flag! 
+
+The next step is to dress all red at October 30th 2022, vote in our great eletronic voting machines, and hope for the best!
+
+Make the L!
+
+```{r}
+#| label: fig-L
+#| fig-cap: Faz o L!
+#| echo: false
+
+knitr::include_graphics("L.jpg")
+
+```
+
+
+
+
+
+
+
+
+
+

@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://rsilveirafh.github.io/blogR/index.html</loc>
-    <lastmod>2022-10-13T01:13:36.742Z</lastmod>
+    <lastmod>2022-10-13T02:48:06.439Z</lastmod>
   </url>
   <url>
     <loc>https://rsilveirafh.github.io/blogR/about.html</loc>
@@ -23,5 +23,9 @@
   <url>
     <loc>https://rsilveirafh.github.io/blogR/posts/001-welcome/index.html</loc>
     <lastmod>2022-10-13T01:02:03.525Z</lastmod>
+  </url>
+  <url>
+    <loc>https://rsilveirafh.github.io/blogR/posts/002-star/index.html</loc>
+    <lastmod>2022-10-13T02:48:05.763Z</lastmod>
   </url>
 </urlset>

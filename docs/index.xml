@@ -10,7 +10,232 @@
 <atom:link href="https://rsilveirafh.github.io/blogR/index.xml" rel="self" type="application/rss+xml"/>
 <description>%>%ing the World</description>
 <generator>quarto-1.1.251</generator>
-<lastBuildDate>Mon, 10 Oct 2022 03:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 13 Oct 2022 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Drawing a star in R with ggplot</title>
+  <dc:creator>Ricardo</dc:creator>
+  <link>https://rsilveirafh.github.io/blogR/posts/002-star/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>In Brazil we are about to choose the next President for the 4 years ahead.</p>
+<p>I am a workers party supporter (PT, <em>Partido dos Trabalhadores</em>), with <strong><a href="https://twitter.com/LulaOficial">Lula</a></strong> as our candidate.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-lula" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/lula.jpeg" class="img-fluid figure-img" width="375"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Lulinha peace and love &lt;3</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>With this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.</p>
+<p>First of all, we will need to load <code>dplyr</code> and <code>ggplot2</code>, the package of functions that we will use in this session:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;"># data wrangling</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(ggplot2) <span class="co" style="color: #5E5E5E;"># plots</span></span></code></pre></div>
+</div>
+<p>Let’s start by creating our blank canvas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">ggplot</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/index_files/figure-html/plot01-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Blank canvas.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we can ask to ggplot to put a void theme (without texts or axis), and then to add a red background:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">red <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb3-2">    <span class="fu" style="color: #4758AB;">theme_void</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb3-3">    <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">plot.background =</span> <span class="fu" style="color: #4758AB;">element_rect</span>(<span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"red"</span>))</span>
+<span id="cb3-4"></span>
+<span id="cb3-5">red</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/index_files/figure-html/plot02-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Red canvas.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The challenge now is to draw by draft our star. First, let’s study how it is:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-star" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/star.jpg" class="img-fluid figure-img" style="width:150.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: A star and its coordinates.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To do this, let’s create a <code>tibble</code> with the <code>x</code> and <code>y</code> coordinates (11 to close the polygon):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">r <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">rep_len</span>(<span class="at" style="color: #657422;">x =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">100</span>, <span class="dv" style="color: #AD0000;">100</span> <span class="sc" style="color: #5E5E5E;">*</span> <span class="fu" style="color: #4758AB;">sin</span>(pi<span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">10</span>) <span class="sc" style="color: #5E5E5E;">/</span> <span class="fu" style="color: #4758AB;">cos</span>(pi<span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">5</span>)), </span>
+<span id="cb4-2">             <span class="at" style="color: #657422;">length.out =</span> <span class="dv" style="color: #AD0000;">11</span>)</span>
+<span id="cb4-3"></span>
+<span id="cb4-4">star <span class="ot" style="color: #003B4F;">&lt;-</span> </span>
+<span id="cb4-5">  <span class="fu" style="color: #4758AB;">tibble</span>(</span>
+<span id="cb4-6">    <span class="at" style="color: #657422;">coord =</span> <span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">11</span>,</span>
+<span id="cb4-7">    <span class="at" style="color: #657422;">x =</span> r <span class="sc" style="color: #5E5E5E;">*</span> <span class="fu" style="color: #4758AB;">sin</span>(<span class="fu" style="color: #4758AB;">seq</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">*</span> pi, <span class="at" style="color: #657422;">length.out =</span> <span class="dv" style="color: #AD0000;">11</span>)),</span>
+<span id="cb4-8">    <span class="at" style="color: #657422;">y =</span> r <span class="sc" style="color: #5E5E5E;">*</span> <span class="fu" style="color: #4758AB;">cos</span>(<span class="fu" style="color: #4758AB;">seq</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">*</span> pi, <span class="at" style="color: #657422;">length.out =</span> <span class="dv" style="color: #AD0000;">11</span>))</span>
+<span id="cb4-9">  )</span>
+<span id="cb4-10"></span>
+<span id="cb4-11">knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>(star, <span class="at" style="color: #657422;">align =</span> <span class="st" style="color: #20794D;">"c"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: center;">coord</th>
+<th style="text-align: center;">x</th>
+<th style="text-align: center;">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.00000</td>
+<td style="text-align: center;">100.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">22.45140</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">95.10565</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">36.32713</td>
+<td style="text-align: center;">-11.8034</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">58.77853</td>
+<td style="text-align: center;">-80.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.00000</td>
+<td style="text-align: center;">-38.1966</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">-58.77853</td>
+<td style="text-align: center;">-80.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">-36.32713</td>
+<td style="text-align: center;">-11.8034</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">-95.10565</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">-22.45140</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">0.00000</td>
+<td style="text-align: center;">100.0000</td>
+</tr>
+</tbody>
+</table>
+<p>Star coordinates.</p>
+</div>
+</div>
+<p>Now, let’s include the star coordinates (and the paths) within the red plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">red <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;">geom_polygon</span>(<span class="at" style="color: #657422;">data =</span> star, <span class="at" style="color: #657422;">mapping =</span> <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> x, <span class="at" style="color: #657422;">y =</span> y))</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/index_files/figure-html/plot03-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Almost there.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The next step is to paint the star in white color, and also fix the coordinates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">pt <span class="ot" style="color: #003B4F;">&lt;-</span> red <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb6-2">    <span class="fu" style="color: #4758AB;">geom_polygon</span>(<span class="at" style="color: #657422;">data =</span> star, <span class="at" style="color: #657422;">mapping =</span> <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> x, <span class="at" style="color: #657422;">y =</span> y),</span>
+<span id="cb6-3">                 <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"white"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb6-4">    <span class="fu" style="color: #4758AB;">coord_equal</span>()</span>
+<span id="cb6-5"></span>
+<span id="cb6-6">pt </span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/index_files/figure-html/plot04-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">The workers party flag!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our PT flag is ready!</p>
+<p>Just to complete, we can include the number of the party in the middle of the star, the number 13!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">pt <span class="sc" style="color: #5E5E5E;">+</span></span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;">annotate</span>(<span class="at" style="color: #657422;">geom =</span> <span class="st" style="color: #20794D;">"text"</span>,</span>
+<span id="cb7-3">             <span class="at" style="color: #657422;">label =</span> <span class="dv" style="color: #AD0000;">13</span>,</span>
+<span id="cb7-4">             <span class="at" style="color: #657422;">x =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">4</span>,</span>
+<span id="cb7-5">             <span class="at" style="color: #657422;">y =</span> <span class="dv" style="color: #AD0000;">0</span>,</span>
+<span id="cb7-6">             <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">40</span>,</span>
+<span id="cb7-7">             <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/index_files/figure-html/plot05-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">It is ready!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We have our flag!</p>
+<p>The next step is to dress all red at October 30th 2022, vote in our great eletronic voting machines, and hope for the best!</p>
+<p>Make the L!</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-L" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.github.io/blogR/posts/002-star/L.jpg" class="img-fluid figure-img" width="640"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Faz o L!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+
+ ]]></description>
+  <category>code</category>
+  <category>ggplot</category>
+  <category>Lula</category>
+  <category>PT</category>
+  <category>R</category>
+  <category>star</category>
+  <guid>https://rsilveirafh.github.io/blogR/posts/002-star/index.html</guid>
+  <pubDate>Thu, 13 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://rsilveirafh.github.io/blogR/posts/002-star/image.png" medium="image" type="image/png" height="107" width="144"/>
+</item>
 <item>
   <title>Welcome to my blogR</title>
   <dc:creator>Ricardo</dc:creator>
