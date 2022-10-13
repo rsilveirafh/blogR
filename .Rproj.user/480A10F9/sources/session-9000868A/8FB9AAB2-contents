@@ -1,0 +1,36 @@
+---
+title: "Drawing a star in R with ggplot"
+subtitle: "Let's draw a star!"
+author: "Ricardo"
+date: "2022-10-13"
+categories: [R, ggplot, code, star, PT, Lula]
+image: "image.jpg"
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+
+In Brazil we are about to choose the next President for the 4 years ahead.
+
+I am a workers party supporter (PT, *Partido dos Trabalhadores*), with **[Lula](https://twitter.com/LulaOficial)** as our candidate.
+
+```{r}
+#| label: fig-lula
+#| fig-cap: Lulinha peace and love <3
+#| echo: false
+
+knitr::include_graphics("lula.jpeg")
+```
+
+With this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.
+
+First of all, we will need to load `ggplot2`, the package that we will use in this session:
+
+```{r p1}
+
+library(ggplot2)
+
+```
