@@ -149,7 +149,9 @@ knitr::include_graphics("L.jpg")
 
 ```
 
+Cheers,
 
+R.
 
 
 
