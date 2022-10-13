@@ -77,6 +77,6 @@ R.
 ```{r}
 #| echo: false
 
-sessioninfo::session_info()
+sessioninfo::session_info(info = "packages")
 ```
 
