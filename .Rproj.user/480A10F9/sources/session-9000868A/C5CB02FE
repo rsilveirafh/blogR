@@ -3,7 +3,7 @@
     "path": "~/git/blogR/posts/002-star/index.qmd",
     "project_path": "posts/002-star/index.qmd",
     "type": "quarto_markdown",
-    "hash": "0",
+    "hash": "2835987786",
     "contents": "",
     "dirty": false,
     "created": 1665622587819.0,
@@ -12,16 +12,16 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "5,33",
-        "scrollLine": "0",
+        "cursorPosition": "86,50",
+        "scrollLine": "73",
         "docOutlineVisible": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1665629280,
+    "lastKnownWriteTime": 1665629517,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1665629280907,
+    "last_content_update": 1665629517164,
     "read_only": false,
     "read_only_alternatives": []
 }

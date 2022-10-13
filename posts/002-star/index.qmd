@@ -82,12 +82,9 @@ To do this, let's create a `tibble` with the `x` and `y` coordinates (11 to clos
 r <- rep_len(x = c(100, 100 * sin(pi/10) / cos(pi/5)), 
 			 length.out = 11)
 
-star <- 
-  tibble(
-  	coord = 1:11,
-    x = r * sin(seq(0, 2 * pi, length.out = 11)),
-    y = r * cos(seq(0, 2 * pi, length.out = 11))
-  )
+star <- tibble(coord = 1:11,
+			   x = r * sin(seq(0, 2 * pi, length.out = 11)),
+			   y = r * cos(seq(0, 2 * pi, length.out = 11)))
 
 knitr::kable(star, align = "c")
 
