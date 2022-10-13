@@ -6,15 +6,15 @@ about:
   template: solana
   image-shape: rounded
   links:
-    - icon: instagram
-      text: Instagram
-      href: https://instagram.com/ricardosilveirafh
-    - icon: linkedin
-      text: LinkedIn
-      href: https://www.linkedin.com/in/rsilveirafh/
     - icon: github
       text: Github
       href: https://github.com/rsilveirafh
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/rsilveirafh/
+    - icon: instagram
+      text: Instagram
+      href: https://instagram.com/ricardosilveirafh
     - icon: envelope
       text: E-mail
       href: mailto:ricardodasilveira@gmail.com
