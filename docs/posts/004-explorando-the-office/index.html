@@ -536,6 +536,52 @@ $ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 <ol start="18" type="A">
 <li></li>
 </ol>
+<p>Adendo: O Felipe Magalhães me sugeriu ver quantas vezes falaram “<em>That’s what she said!</em>” na série, não aguentei de curiosidade. Aí está:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pacote para tratar com strings, também do tidyverse</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>twss <span class="ot">&lt;-</span> theoffice_pt <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># filtrando as falas que contém a famigerada frase</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(fala, <span class="st">"[Tt]hat's what she said?"</span>))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(twss)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 35
+Columns: 7
+$ id         &lt;dbl&gt; 2545, 2547, 5325, 6322, 6353, 7644, 8872, 9624, 10904, 1259…
+$ temporada  &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,…
+$ episodio   &lt;dbl&gt; 2, 2, 10, 12, 12, 17, 21, 1, 5, 10, 12, 17, 17, 20, 22, 2, …
+$ cena       &lt;dbl&gt; 24, 24, 2, 33, 38, 6, 22, 49, 59, 49, 41, 9, 23, 11, 68, 6,…
+$ fala       &lt;chr&gt; "That's what she said. Pam?", "That's what she sai [clears …
+$ personagem &lt;chr&gt; "Michael", "Michael", "Michael", "Dwight", "Michael", "Mich…
+$ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALS…</code></pre>
+</div>
+</div>
+<p><strong>35 falas</strong> com “<em>That’s what she said</em>”!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>twss <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(personagem) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tally</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(n))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 2
+   personagem              n
+   &lt;chr&gt;               &lt;int&gt;
+ 1 Michael                23
+ 2 Dwight                  3
+ 3 Creed                   1
+ 4 David                   1
+ 5 Deposition Reporter     1
+ 6 Everyone                1
+ 7 Holly                   1
+ 8 Jan                     1
+ 9 Jim                     1
+10 Pam                     1
+11 Stanley                 1</code></pre>
+</div>
+</div>
+<p>Claro que quem mais falou foi o <em>Michael</em>, mas o VAR vai ser chamado pra checar esse banco de dados aí 😅!</p>
 
 
 </section>

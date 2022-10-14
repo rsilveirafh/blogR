@@ -189,6 +189,27 @@ R.
 
 
 
+Adendo: O Felipe Magalhães me sugeriu ver quantas vezes falaram "*That's what she said!*" na série, não aguentei de curiosidade. Aí está:
+
+```{r}
+# pacote para tratar com strings, também do tidyverse
+library(stringr)
+
+twss <- theoffice_pt %>% 
+	# filtrando as falas que contém a famigerada frase
+	filter(str_detect(fala, "[Tt]hat's what she said?"))
+
+glimpse(twss)
+```
+
+**35 falas** com "*That's what she said*"!
 
 
+```{r}
+twss %>% 
+	group_by(personagem) %>% 
+	tally() %>% 
+	arrange(desc(n))
+```
 
+Claro que quem mais falou foi o *Michael*, mas o VAR vai ser chamado pra checar esse banco de dados aí 😅! 
