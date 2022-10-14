@@ -1,16 +1,13 @@
 ---
 title: "Drawing a star in R with ggplot"
 subtitle: "A star shines!"
-author: "Ricardo"
 date: "2022-10-13"
 categories: [code, ggplot2, Lula, PT, R, star]
 image: "image.png"
 draft: false
 ---
 
-```{r}
-#|label: setup
-#|include: false
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 

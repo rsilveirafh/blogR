@@ -18,6 +18,9 @@ about:
     - icon: envelope
       text: E-mail
       href: mailto:ricardodasilveira@gmail.com
+format:
+  html:
+    include-after-body: footer.html
 
 ---
 

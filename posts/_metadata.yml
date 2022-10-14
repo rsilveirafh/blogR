@@ -10,3 +10,6 @@ title-block-banner: true
 comments:
   giscus:
     repo: rsilveirafh/blogR
+    
+# Author name of all posts
+author: "Ricardo"

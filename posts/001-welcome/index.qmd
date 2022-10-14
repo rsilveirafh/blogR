@@ -1,6 +1,5 @@
 ---
 title: "Welcome to my blogR"
-author: "Ricardo"
 date: "2022-10-10"
 categories: [news]
 ---

@@ -88,7 +88,7 @@
     "href": "posts/003-ggplot-tip/index.html#history",
     "title": "A great ggplot tip!",
     "section": "History",
-    "text": "History\nSome time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within ggplot2.\nBut, as is well known, if you don’t save that, it will be lost forever.\nExcept when you have a great community in twitter, and there is a bunch of good people trying to help everyone!\nSome time ahead…\nI finally found it! Here it is:\n\n\n\n\n\nFigure 1: ggplot2 theme elements references, by Isabella Benabaye.\n\n\n\n\nI also found the post on her blog, with better quality images and/or a pdf file."
+    "text": "History\nSome time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within ggplot2.\nBut, as is well known, if you don’t save that, it will be lost forever.\nExcept when you have a great community on twitter, and there is a bunch of good people trying to help everyone!\nSome time ahead…\nI finally found it! Here it is:\n\n\n\n\n\nFigure 1: ggplot2 theme elements references, by Isabella Benabaye.\n\n\n\n\nI also found the post on her blog, with better quality images and/or a pdf file."
   },
   {
     "objectID": "posts/003-ggplot-tip/index.html#the-history-continues",
@@ -110,5 +110,19 @@
     "title": "Drawing a star in R with ggplot",
     "section": "Finishing",
     "text": "Finishing\nThe next step is to dress all red at October 30th 2022, vote in our great eletronic voting machines, and hope for the best!\nMake the L!\n\n\n\n\n\nFigure 3: Faz o L!\n\n\n\n\nCheers,"
+  },
+  {
+    "objectID": "posts/003-ggplot-tip/index.html#what-this-post-is-about",
+    "href": "posts/003-ggplot-tip/index.html#what-this-post-is-about",
+    "title": "A great ggplot tip!",
+    "section": "What this post is about?",
+    "text": "What this post is about?\n\nggplot2 tips"
+  },
+  {
+    "objectID": "posts/002-star/index.html#what-this-post-is-about",
+    "href": "posts/002-star/index.html#what-this-post-is-about",
+    "title": "Drawing a star in R with ggplot",
+    "section": "What this post is about?",
+    "text": "What this post is about?\n\nDrawing a star using ggplot2 in R Language."
   }
 ]
