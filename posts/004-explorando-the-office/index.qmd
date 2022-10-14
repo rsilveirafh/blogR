@@ -1,0 +1,194 @@
+---
+title: "Explorando o mundo de The Office"
+subtitle: "Uma breve manipulação de dados"
+date: "2022-10-15"
+categories: [pt-br, R, The Office, tidyverse]
+image: "https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif"
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+
+## Sobre o que é essa postagem?
+
+ - A melhor série de todos os tempos;
+ - Importando dados da internet;
+ - Coletando algumas informações utilizando `dplyr`.
+
+
+## História
+
+Estava eu pensando sobre uma nova postagem para o blog, quando recebi no meu telefone uma notificação do [reddit](https://www.reddit.com/r/datasets/comments/6yt3og/every_line_from_every_episode_of_the_office_us/), com o título "*Every line from Every Episode of 'The Office (US)'*" -- *Todas as falas de todos os episódios do The Office (EUA)*. Sem pensar duas vezes, fui dar uma olhada.
+
+Explicando:
+
+Nos idos de 2009 tive a felicidade de conhecer [The Office](https://pt.wikipedia.org/wiki/The_Office_(Estados_Unidos)), que se trata de uma série de comédia em formato de pseudodocumentário exibida pela rede estadunidense NBC (No Brasil dá pra assistir pela [prime](https://www.amazon.com.br/prime), bebês 😘. Esta é minha série favorita do coração (🦆 Boy, Camura, Sarah).
+
+```{r}
+#| label: fig-gif1
+#| fig-cap: Yeah baby!
+#| echo: false
+#| out-width: 50%
+
+knitr::include_graphics("https://media.giphy.com/media/IwAZ6dvvvaTtdI8SD5/giphy.gif")
+```
+
+Voltando:
+
+Após checar do que se tratava o banco de dados (BD), resolvi trazer pra cá, e mexer um pouco só pra ver o que conseguimos extrair dele.
+
+Pensei em mostrar somente uma breve manipulação de dados agora, depois podemos  transformar essas tabelas em belos gráficos 😉.
+
+
+
+
+## Mãos no computador
+
+Por primeiro, devemos fazer o download dos dados. Há, pelo menos, três formas diferentes de fazer isso:
+
+1. Utilizando o próprio BD cedido pelo usuário [misunderstoodpoetry](https://www.reddit.com/user/misunderstoodpoetry/).
+
+ - Os dados estão em uma planilha do google sheets;
+ - Para ter acesso pelo R, podemos utilizar o pacote `googlesheets4`, através da função `read_sheet()`, dessa forma:
+ 
+```{r}
+#| label: gsheets
+#| eval: false
+
+# carregando o pacote necessário
+library(googlesheets4) # ler diretamente do google sheets
+
+# colocando o BD em um objeto do tipo dataframe (ou tibble)
+theoffice <- read_sheet("https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534")
+```
+
+2. Utilizando o BD fornecido pelo usuário [Fabrizio Cominetti](https://www.kaggle.com/fabriziocominetti), lá no [Kaggle](https://www.kaggle.com/datasets/fabriziocominetti/the-office-lines) (em outro post trago mais detalhes sobre);
+
+ - Podemos fazer o download do BD utilizando uma API do Kaggle, utilizando o pacote [`kaggler`](https://github.com/mkearney/kaggler);
+ 
+3. Baixando os dados manualmente.
+
+ - Para ler o arquivo utilizarei o pacote `readr`, da família `tidyverse`:
+ 
+```{r}
+#| label: readr
+
+# carregando os pacotes necessários
+library(dplyr) # manipulação de dados
+library(readr) # função read_csv()
+
+# lendo o arquivo "the-office_lines.csv.zip"
+theoffice <- read_csv(here::here("posts/004-explorando-the-office/the-office-lines - scripts.csv"),
+					  show_col_types = FALSE)
+
+# resumindo os dados
+glimpse(theoffice)
+```
+
+Como podemos ver, o objeto `theoffice` contém **7 variáveis** e **59.909 observações** (ou "falas" dos personagens). 
+
+Para melhor visualização (somente das 6 primeiras observações):
+
+
+```{r}
+knitr::kable(head(theoffice, n = 6))
+```
+
+
+```{r}
+#| label: michael
+#| echo: false
+#| fig-cap: Tá bom, Michael.
+	
+knitr::include_graphics("https://media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif")
+```
+
+#### Renomeando as variáveis para pt-br
+
+Agora, já que é uma postagem em português, vamos traduzir os nomes das variáveis.
+
+```{r}
+theoffice_pt <- theoffice %>% 
+	rename(temporada = season,
+		   episodio = episode,
+		   cena = scene,
+		   fala = line_text,
+		   personagem = speaker,
+		   deletado = deleted)
+
+knitr::kable(head(theoffice_pt, n = 2))
+```
+
+Nomes das variáveis alteradas.
+
+#### Número de falas por temporada
+
+Bom, dessa vez vamos ver **quantas falas existiram em cada uma das 9 temporadas da série**:
+
+```{r}
+theoffice_pt %>% 
+	# agrupando por temporada
+	group_by(temporada) %>% 
+	# somando as observações
+	tally()
+```
+
+A função `tally()` faz uma soma do número de vezes que certo *grupo* aparece, dada na função `group_by()`. Nesse exemplo acima, ele pega cada um dos grupos dentro de temporada, e identifica quantas observações há em cada uma.
+
+A temporada que teve mais falas foi a **5ª** (que, inclusive, considero a melhor!), com **8170 falas**.
+
+#### Número de falas por personagem no 1º episódio
+
+Podemos também filtrar algumas informações, para ser mais específicos. Por exemplo, se quisermos saber quantas **falas** foram feitas **por personagem** no **primeiro episódio** da **primeira temporada** (~~a mais odiada~~):
+
+```{r}
+theoffice_pt %>% 
+	# filtramos a temporada 1 e o episódio 1
+	filter(temporada == 1 & episodio == 1) %>% 
+	# agrupamos por personagem
+	group_by(personagem) %>% 
+	# fazemos a somatória de observações
+	tally() %>% 
+	# organizando do número maior para o menor
+	arrange(desc(n))
+```
+
+
+
+
+## Finalizando
+
+Acho que já deu pra dar uma breve ideia do que conseguimos fazer com algumas poucas funções, em breve vamos explorar um pouco mais esses dados, e também brincar com visualizações.
+
+
+```{r}
+#| label: party
+#| echo: false
+#| fig-cap: É festa!
+	
+knitr::include_graphics("https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif")
+```
+
+
+Nesta sessão apresentei os seguintes pacotes:
+ 
+ - `dplyr`
+ - `googlesheets4`
+ - `readr`
+ 
+
+
+Até mais!
+
+Cheers,
+
+R.
+
+
+
+
+
+

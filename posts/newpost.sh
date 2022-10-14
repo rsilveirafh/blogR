@@ -20,9 +20,7 @@ image: "*.png"
 draft: true
 ---
 
-\`\`\`{r}
-#|label: setup
-#|include: false
+\`\`\`{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 \`\`\`
 
