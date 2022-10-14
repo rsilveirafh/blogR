@@ -72,9 +72,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -118,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="./about.html">Ricardo R. da Silveira Filho</a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/rsilveirafh"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/rsilveirafh/blogR"><i class="bi bi-github" role="img">
 </i> 
  </a>
   </li>  
@@ -166,21 +166,18 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="code,ggplot2,R,tips" data-listing-date-sort="1665716400000" data-listing-file-modified-sort="1665691337624" data-listing-reading-time-sort="0.86">
-<div class="thumbnail">
-<p><a href="./posts/003-ggplot-tip/index.html"> <img src="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/003-ggplot-tip/index.html">
-<h3 class="no-anchor listing-title">
+<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="code,ggplot2,R,tips" data-listing-date-sort="1665716400000" data-listing-file-modified-sort="1665709238260" data-listing-reading-time-sort="0.86">
+<a href="./posts/003-ggplot-tip/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
 A great ggplot tip!
-</h3>
-<div class="listing-subtitle">
-Learning about ggplot
-</div>
-</a>
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
 code
@@ -195,36 +192,31 @@ R
 tips
 </div>
 </div>
-<a href="./posts/003-ggplot-tip/index.html">
-<div class="listing-description">
+<div class="card-text listing-description">
 Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>ggplot2</code>.
 </div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/003-ggplot-tip/index.html">
-<div class="listing-date">
-Oct 14, 2022
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Ricardo
 </div>
+<div class="listing-date">
+Oct 14, 2022
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="code,ggplot2,Lula,PT,R,star" data-listing-date-sort="1665630000000" data-listing-file-modified-sort="1665691328308" data-listing-reading-time-sort="2.01">
-<div class="thumbnail">
-<p><a href="./posts/002-star/index.html"> <img src="./posts/002-star/image.png" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/002-star/index.html">
-<h3 class="no-anchor listing-title">
+<div class="g-col-1" data-index="1" data-categories="code,ggplot2,Lula,PT,R,star" data-listing-date-sort="1665630000000" data-listing-file-modified-sort="1665709197841" data-listing-reading-time-sort="2.01">
+<a href="./posts/002-star/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/002-star/image.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
 Drawing a star in R with ggplot
-</h3>
-<div class="listing-subtitle">
-A star shines!
-</div>
-</a>
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
 code
@@ -245,57 +237,50 @@ R
 star
 </div>
 </div>
-<a href="./posts/002-star/index.html">
-<div class="listing-description">
+<div class="card-text listing-description">
 In Brazil we are about to choose the next President for the 4 years ahead.
 </div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/002-star/index.html">
-<div class="listing-date">
-Oct 13, 2022
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Ricardo
 </div>
+<div class="listing-date">
+Oct 13, 2022
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="news" data-listing-date-sort="1665370800000" data-listing-file-modified-sort="1665622922873" data-listing-reading-time-sort="0.01">
-<div class="thumbnail">
-<p><a href="./posts/001-welcome/index.html"> <img src="./posts/001-welcome/welcome.gif" class="thumnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/001-welcome/index.html">
-<h3 class="no-anchor listing-title">
+<div class="g-col-1" data-index="2" data-categories="news" data-listing-date-sort="1665370800000" data-listing-file-modified-sort="1665622922873" data-listing-reading-time-sort="0.01">
+<a href="./posts/001-welcome/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/001-welcome/welcome.gif" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
 Welcome to my blogR
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
 news
 </div>
 </div>
-<a href="./posts/001-welcome/index.html">
-<div class="listing-description">
+<div class="card-text listing-description">
 Arriving here!
 </div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/001-welcome/index.html">
-<div class="listing-date">
-Oct 10, 2022
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Ricardo
 </div>
-</a>
+<div class="listing-date">
+Oct 10, 2022
 </div>
+</div>
+</div>
+</div>
+</a>
 </div>
 </div>
 <div class="listing-no-matching d-none">

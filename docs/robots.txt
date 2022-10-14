@@ -1,1 +1,1 @@
-Sitemap: https://rsilveirafh.github.io/blogR/sitemap.xml
+Sitemap: https://rsilveirafh.netlify.app/sitemap.xml
