@@ -10,7 +10,351 @@
 <atom:link href="https://rsilveirafh.netlify.app/index-r.xml" rel="self" type="application/rss+xml"/>
 <description>%>%ing the World</description>
 <generator>quarto-1.1.251</generator>
-<lastBuildDate>Fri, 14 Oct 2022 03:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 15 Oct 2022 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Explorando o mundo de The Office</title>
+  <dc:creator>Ricardo</dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="sobre-o-que-é-essa-postagem" class="level2">
+<h2 class="anchored" data-anchor-id="sobre-o-que-é-essa-postagem">Sobre o que é essa postagem?</h2>
+<ul>
+<li>A melhor série de todos os tempos;</li>
+<li>Importando dados da internet;</li>
+<li>Coletando algumas informações utilizando <code>dplyr</code>.</li>
+</ul>
+</section>
+<section id="história" class="level2">
+<h2 class="anchored" data-anchor-id="história">História</h2>
+<p>Estava eu pensando sobre uma nova postagem para o blog, quando recebi no meu telefone uma notificação do <a href="https://www.reddit.com/r/datasets/comments/6yt3og/every_line_from_every_episode_of_the_office_us/">reddit</a>, com o título “<em>Every line from Every Episode of ‘The Office (US)’</em>” – <em>Todas as falas de todos os episódios do The Office (EUA)</em>. Sem pensar duas vezes, fui dar uma olhada.</p>
+<p>Explicando:</p>
+<p>Nos idos de 2009 tive a felicidade de conhecer <a href="https://pt.wikipedia.org/wiki/The_Office_(Estados_Unidos)">The Office</a>, que se trata de uma série de comédia em formato de pseudodocumentário exibida pela rede estadunidense NBC (No Brasil dá pra assistir pela <a href="https://www.amazon.com.br/prime">prime</a>, bebês 😘. Esta é minha série favorita do coração (🦆 Boy, Camura, Sarah).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-gif1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/IwAZ6dvvvaTtdI8SD5/giphy.gif" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Yeah baby!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Voltando:</p>
+<p>Após checar do que se tratava o banco de dados (BD), resolvi trazer pra cá, e mexer um pouco só pra ver o que conseguimos extrair dele.</p>
+<p>Pensei em mostrar somente uma breve manipulação de dados agora, depois podemos transformar essas tabelas em belos gráficos 😉.</p>
+</section>
+<section id="mãos-no-computador" class="level2">
+<h2 class="anchored" data-anchor-id="mãos-no-computador">Mãos no computador</h2>
+<p>Por primeiro, devemos fazer o download dos dados. Há, pelo menos, três formas diferentes de fazer isso:</p>
+<ol type="1">
+<li>Utilizando o próprio BD cedido pelo usuário <a href="https://www.reddit.com/user/misunderstoodpoetry/">misunderstoodpoetry</a>.</li>
+</ol>
+<ul>
+<li>Os dados estão em uma planilha do google sheets;</li>
+<li>Para ter acesso pelo R, podemos utilizar o pacote <code>googlesheets4</code>, através da função <code>read_sheet()</code>, dessa forma:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># carregando o pacote necessário</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(googlesheets4) <span class="co" style="color: #5E5E5E;"># ler diretamente do google sheets</span></span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;"># colocando o BD em um objeto do tipo dataframe (ou tibble)</span></span>
+<span id="cb1-5">theoffice <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read_sheet</span>(<span class="st" style="color: #20794D;">"https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534"</span>)</span></code></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Utilizando o BD fornecido pelo usuário <a href="https://www.kaggle.com/fabriziocominetti">Fabrizio Cominetti</a>, lá no <a href="https://www.kaggle.com/datasets/fabriziocominetti/the-office-lines">Kaggle</a> (em outro post trago mais detalhes sobre);</li>
+</ol>
+<ul>
+<li>Podemos fazer o download do BD utilizando uma API do Kaggle, utilizando o pacote <a href="https://github.com/mkearney/kaggler"><code>kaggler</code></a>;</li>
+</ul>
+<ol start="3" type="1">
+<li>Baixando os dados manualmente.</li>
+</ol>
+<ul>
+<li>Para ler o arquivo utilizarei o pacote <code>readr</code>, da família <code>tidyverse</code>:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;"># carregando os pacotes necessários</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;"># manipulação de dados</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;">library</span>(readr) <span class="co" style="color: #5E5E5E;"># função read_csv()</span></span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="co" style="color: #5E5E5E;"># lendo o arquivo "the-office_lines.csv.zip"</span></span>
+<span id="cb2-6">theoffice <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read_csv</span>(here<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">here</span>(<span class="st" style="color: #20794D;">"posts/004-explorando-the-office/the-office-lines - scripts.csv"</span>),</span>
+<span id="cb2-7">                      <span class="at" style="color: #657422;">show_col_types =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span>
+<span id="cb2-8"></span>
+<span id="cb2-9"><span class="co" style="color: #5E5E5E;"># resumindo os dados</span></span>
+<span id="cb2-10"><span class="fu" style="color: #4758AB;">glimpse</span>(theoffice)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 59,909
+Columns: 7
+$ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…
+$ season    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ episode   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ scene     &lt;dbl&gt; 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 7, …
+$ line_text &lt;chr&gt; "All right Jim. Your quarterlies look very good. How are thi…
+$ speaker   &lt;chr&gt; "Michael", "Jim", "Michael", "Jim", "Michael", "Michael", "M…
+$ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALS…</code></pre>
+</div>
+</div>
+<p>Como podemos ver, o objeto <code>theoffice</code> contém <strong>7 variáveis</strong> e <strong>59.909 observações</strong> (ou “falas” dos personagens).</p>
+<p>Para melhor visualização (somente das 6 primeiras observações):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>(<span class="fu" style="color: #4758AB;">head</span>(theoffice, <span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">6</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 92%">
+<col style="width: 1%">
+<col style="width: 1%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: right;">season</th>
+<th style="text-align: right;">episode</th>
+<th style="text-align: right;">scene</th>
+<th style="text-align: left;">line_text</th>
+<th style="text-align: left;">speaker</th>
+<th style="text-align: left;">deleted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">All right Jim. Your quarterlies look very good. How are things at the library?</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Oh, I told you. I couldn’t close it. So…</td>
+<td style="text-align: left;">Jim</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">So you’ve come to the master for guidance? Is this what you’re saying, grasshopper?</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Actually, you called me in here, but yeah.</td>
+<td style="text-align: left;">Jim</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">All right. Well, let me show you how it’s done.</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">[on the phone] Yes, I’d like to speak to your office manager, please. Yes, hello. This is Michael Scott. I am the Regional Manager of Dunder Mifflin Paper Products. Just wanted to talk to you manager-a-manger. [quick cut scene] All right. Done deal. Thank you very much, sir. You’re a gentleman and a scholar. Oh, I’m sorry. OK. I’m sorry. My mistake. [hangs up] That was a woman I was talking to, so… She had a very low voice. Probably a smoker, so… [Clears throat] So that’s the way it’s done.</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Tá bom, Michael.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="renomeando-as-variáveis-para-pt-br" class="level4">
+<h4 class="anchored" data-anchor-id="renomeando-as-variáveis-para-pt-br">Renomeando as variáveis para pt-br</h4>
+<p>Agora, já que é uma postagem em português, vamos traduzir os nomes das variáveis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">theoffice_pt <span class="ot" style="color: #003B4F;">&lt;-</span> theoffice <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;">rename</span>(<span class="at" style="color: #657422;">temporada =</span> season,</span>
+<span id="cb5-3">           <span class="at" style="color: #657422;">episodio =</span> episode,</span>
+<span id="cb5-4">           <span class="at" style="color: #657422;">cena =</span> scene,</span>
+<span id="cb5-5">           <span class="at" style="color: #657422;">fala =</span> line_text,</span>
+<span id="cb5-6">           <span class="at" style="color: #657422;">personagem =</span> speaker,</span>
+<span id="cb5-7">           <span class="at" style="color: #657422;">deletado =</span> deleted)</span>
+<span id="cb5-8"></span>
+<span id="cb5-9">knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>(<span class="fu" style="color: #4758AB;">head</span>(theoffice_pt, <span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">2</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 2%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 3%">
+<col style="width: 62%">
+<col style="width: 8%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: right;">temporada</th>
+<th style="text-align: right;">episodio</th>
+<th style="text-align: right;">cena</th>
+<th style="text-align: left;">fala</th>
+<th style="text-align: left;">personagem</th>
+<th style="text-align: left;">deletado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">All right Jim. Your quarterlies look very good. How are things at the library?</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Oh, I told you. I couldn’t close it. So…</td>
+<td style="text-align: left;">Jim</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Nomes das variáveis alteradas.</p>
+</section>
+<section id="número-de-falas-por-temporada" class="level4">
+<h4 class="anchored" data-anchor-id="número-de-falas-por-temporada">Número de falas por temporada</h4>
+<p>Bom, dessa vez vamos ver <strong>quantas falas existiram em cada uma das 9 temporadas da série</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">theoffice_pt <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb6-2">    <span class="co" style="color: #5E5E5E;"># agrupando por temporada</span></span>
+<span id="cb6-3">    <span class="fu" style="color: #4758AB;">group_by</span>(temporada) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb6-4">    <span class="co" style="color: #5E5E5E;"># somando as observações</span></span>
+<span id="cb6-5">    <span class="fu" style="color: #4758AB;">tally</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+  temporada     n
+      &lt;dbl&gt; &lt;int&gt;
+1         1  1996
+2         2  7492
+3         3  7483
+4         4  5642
+5         5  8170
+6         6  7630
+7         7  7302
+8         8  7083
+9         9  7111</code></pre>
+</div>
+</div>
+<p>A função <code>tally()</code> faz uma soma do número de vezes que certo <em>grupo</em> aparece, dada na função <code>group_by()</code>. Nesse exemplo acima, ele pega cada um dos grupos dentro de temporada, e identifica quantas observações há em cada uma.</p>
+<p>A temporada que teve mais falas foi a <strong>5ª</strong> (que, inclusive, considero a melhor!), com <strong>8170 falas</strong>.</p>
+</section>
+<section id="número-de-falas-por-personagem-no-1º-episódio" class="level4">
+<h4 class="anchored" data-anchor-id="número-de-falas-por-personagem-no-1º-episódio">Número de falas por personagem no 1º episódio</h4>
+<p>Podemos também filtrar algumas informações, para ser mais específicos. Por exemplo, se quisermos saber quantas <strong>falas</strong> foram feitas <strong>por personagem</strong> no <strong>primeiro episódio</strong> da <strong>primeira temporada</strong> (<del>a mais odiada</del>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">theoffice_pt <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-2">    <span class="co" style="color: #5E5E5E;"># filtramos a temporada 1 e o episódio 1</span></span>
+<span id="cb8-3">    <span class="fu" style="color: #4758AB;">filter</span>(temporada <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> episodio <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">1</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-4">    <span class="co" style="color: #5E5E5E;"># agrupamos por personagem</span></span>
+<span id="cb8-5">    <span class="fu" style="color: #4758AB;">group_by</span>(personagem) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-6">    <span class="co" style="color: #5E5E5E;"># fazemos a somatória de observações</span></span>
+<span id="cb8-7">    <span class="fu" style="color: #4758AB;">tally</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb8-8">    <span class="co" style="color: #5E5E5E;"># organizando do número maior para o menor</span></span>
+<span id="cb8-9">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(n))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 2
+   personagem                  n
+   &lt;chr&gt;                   &lt;int&gt;
+ 1 Michael                    97
+ 2 Pam                        46
+ 3 Jim                        37
+ 4 Dwight                     35
+ 5 Jan                        12
+ 6 Ryan                       10
+ 7 Oscar                       6
+ 8 Angela                      5
+ 9 Roy                         5
+10 Stanley                     5
+11 Documentary Crew Member     3
+12 Todd Packer                 3
+13 Kevin                       2
+14 Phyllis                     2
+15 Man                         1
+16 Michel                      1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="finalizando" class="level2">
+<h2 class="anchored" data-anchor-id="finalizando">Finalizando</h2>
+<p>Acho que já deu pra dar uma breve ideia do que conseguimos fazer com algumas poucas funções, em breve vamos explorar um pouco mais esses dados, e também brincar com visualizações.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">É festa!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Nesta sessão apresentei os seguintes pacotes:</p>
+<ul>
+<li><code>dplyr</code></li>
+<li><code>googlesheets4</code></li>
+<li><code>readr</code></li>
+</ul>
+<p>Até mais!</p>
+<p>Cheers,</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>pt-br</category>
+  <category>R</category>
+  <category>The Office</category>
+  <category>tidyverse</category>
+  <guid>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</guid>
+  <pubDate>Sat, 15 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif" medium="image" type="image/gif"/>
+</item>
 <item>
   <title>A great ggplot tip!</title>
   <dc:creator>Ricardo</dc:creator>
