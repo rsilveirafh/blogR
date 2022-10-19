@@ -291,7 +291,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ol type="1">
 <li>Carregar o banco de dados <code>starwars</code>;</li>
 <li>Filtrar por indivíduos com <em>altura</em> <u>maior que 150cm</u>;</li>
-<li>Agrupar por <em>especie</em> e por <em>gênero</em>;</li>
+<li>Agrupar por <em>gênero</em>;</li>
 <li>Sumariar pela <u>média</u>;</li>
 <li>Ordenar do valor <em>maior</em> para o <em>menor.</em></li>
 </ol>
@@ -337,10 +337,9 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="fu">group_by</span>(</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(dados_starwars, altura <span class="sc">&gt;</span> <span class="dv">150</span>), </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            genero), </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">media_massa =</span> <span class="fu">mean</span>(massa, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">desc</span>(media_massa))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(dados_starwars, altura <span class="sc">&gt;</span> <span class="dv">150</span>), genero), </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">media_massa =</span> <span class="fu">mean</span>(massa, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">desc</span>(media_massa))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa

@@ -104,7 +104,7 @@ O objetivo é:
 
 1. Carregar o banco de dados `starwars`;
 2. Filtrar por indivíduos com *altura* [maior que 150cm]{.underline};
-3. Agrupar por *especie* e por *gênero*;
+3. Agrupar por *gênero*;
 3. Sumariar pela [média]{.underline};
 5. Ordenar do valor *maior* para o *menor.*
 
@@ -140,8 +140,7 @@ glimpse(dados_starwars)
 arrange(
 	summarise(
 		group_by(
-			filter(dados_starwars, altura > 150), 
-			genero), 
+			filter(dados_starwars, altura > 150), genero), 
 		media_massa = mean(massa, na.rm = TRUE)),
 	desc(media_massa))
 ```
