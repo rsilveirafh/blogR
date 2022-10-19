@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 
 ## História
 
-Dado que este blog é dedicado para pessoas em quaiquer nível de aprendizado em `R`, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.
+Dado que este blog é dedicado para pessoas em quaisquer nível de aprendizado em `R`, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.
 
 Considero a linguagem `R` bastante objetiva na sua sintaxe básica, e a forma de estruturação desenvolvida pelo [Hadley](https://twitter.com/hadleywickham) e equipe, o [*tidy data*](https://vita.had.co.nz/papers/tidy-data.html), torna a linguagem ainda mais "simples" para que nós, meros mortais, possamos entendê-la.
 
@@ -183,7 +183,7 @@ dados_starwars |>
 
 ## Finalizando
 
-Eu sou super fã do pipe `magrittr` `%>%`, e estou tentando me acostumar com o pipe built-in do R `|>`, para melhorar a performance de meus códigos. 
+Eu sou super fã do pipe `magrittr` `%>%`, e estou tentando me acostumar com o *pipe built-in* do `R` `|>`, para melhorar a performance de meus códigos. 
 
 As formas aninhadas e de múltiplos objetos utilizei bastante enquanto aprendia a linguagem, mas dificilmente as utilizo hoje em dia.
 
