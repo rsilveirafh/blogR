@@ -1,0 +1,205 @@
+---
+title: "Como e porquê usar o *pipe* ( `%>%`  e  `|>` )?"
+subtitle: "Entendendo o mundo do *tidy data*"
+author: "Ricardo"
+date: "2022-10-18"
+categories: [ensinandoR, pipe, pt-br, R, tidyverse]
+image: "http://hexb.in/hexagons/pipe.png"
+draft: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+## Sobre o que é essa postagem?
+
+-   Demonstrar o conceito de *tidy data*.
+-   Utilizar o *pipe* (`%>%` e `|>`).
+
+## História
+
+Dado que este blog é dedicado para pessoas em quaiquer nível de aprendizado em `R`, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.
+
+Considero a linguagem `R` bastante objetiva na sua sintaxe básica, e a forma de estruturação desenvolvida pelo [Hadley](https://twitter.com/hadleywickham) e equipe, o [*tidy data*](https://vita.had.co.nz/papers/tidy-data.html), torna a linguagem ainda mais "simples" para que nós, meros mortais, possamos entendê-la.
+
+O *tidy data*, basicamente, é a padronização dos bancos de dados. Para que seja considerado *tidy*, o banco de dados obedecer as seguintes regras:
+
+1.  Cada **coluna** é uma [variável]{.underline};
+2.  Cada **linha** é uma [observação]{.underline};
+3.  Cada **célula** possui somente um valor.
+
+O antônimo de uma tabela *tidy*, é uma tabela *messy* (do inglês, bagunçada).
+
+------------------------------------------------------------------------
+
+O dia-a-dia de um errezêiro é uma jornada de pegar dados "crus" (*raw*) e transformá-los em dados limpos e utilizáveis. Nessa jornada, são realizadas transformações de variáveis, filtragens, sumários, etc.
+
+Para uma melhor leitura dos códigos por nós, seres humanes, foi desenvolvido o operador *pipe* `%>%`. O *pipe* desse formato têm sido usado há algum tempo no pacote `magrittr`, e sua função é unir uma sequência de funções, pegando o resultado anterior, e utilizando na próxima linha.
+
+> Desde a versão R 4.1, o R estabeleceu o uso de um *pipe* próprio, embutido no seu código fonte, é o `|>`.
+> Existem algumas diferenças na forma que o R lê ambos, mas isso fica para outro post.
+
+Para ilustrar, utilizarei os passos para fazer um bolo:
+
+0.  Juntar ingredientes
+1.  Assar;
+2.  Mexer;
+3.  Decorar;
+4.  Cortar;
+5.  Servir.
+
+Na sintaxe do `R` base, essa seria a forma de utilização:
+
+```{r}
+#| eval: false
+servir(cortar(decorar(assar(mexer(ingredientes)))))
+
+   5  (  4   (   3   (  2  (  1  (     0      )))))
+```
+
+Ou seja,
+
+0.  Juntamos os ingredientes;
+1.  Mexemos 0;
+2.  Assamos o resultado de 1;
+3.  Decoramos o resultado de 2;
+4.  Cortamos o resultado de 3;
+5.  Servimos o resultado de 4.
+
+------------------------------------------------------------------------
+
+Porém, utilizando o *pipe*, o código ficaria assim:
+
+> O atalho de teclado para o pipe é `CONTROL + SHIFT + M`.
+
+```{r}
+#| eval: false
+ingredientes %>%
+	mexer() %>%
+	assar() %>%
+	decorar() %>%
+	cortar() %>%
+	servir()
+```
+
+
+Ou, ilustrando:
+
+```{r}
+#| label: gif-baking
+#| echo: false
+knitr::include_graphics("baking.gif")
+```
+
+
+Na hora que estamos trabalhando com dados reais, isso faz uma grande diferença.
+
+
+## Mãos no R
+
+Para melhor ilustrar, vamos fazer umas manipulações simples em uns bancos de dados, utilizando 3 métodos diferentes: *aninhado*, *objetos múltiplos* e *pipes*.
+
+O objetivo é:
+
+1. Carregar o banco de dados `starwars`;
+2. Filtrar por indivíduos com *altura* [maior que 150cm]{.underline};
+3. Agrupar por *especie* e por *gênero*;
+3. Sumariar pela [média]{.underline};
+5. Ordenar do valor *maior* para o *menor.*
+
+> Utilizarei o banco de dados `starwars`, incluído no pacote `dados`.
+> Saiba mais sobre o pacote e a iniciativa aqui: [https://cienciadedatos.github.io/dados/](https://cienciadedatos.github.io/dados/)
+
+```{r}
+#| eval: false
+# para instalar o pacote pelo GitHub:
+remotes::install_github("cienciadedatos/dados")
+```
+
+```{r}
+#| eval: false
+# para instalar o pacote pelo CRAN:
+install.packages("dados")
+```
+
+```{r}
+# para carregar os pacotes:
+library(dados)
+library(dplyr)
+
+# para carregar o banco de dados `dados_starwars`, e ver um sumário
+glimpse(dados_starwars)
+```
+
+
+
+**[Aninhado]{.underline}**
+
+```{r}
+arrange(
+	summarise(
+		group_by(
+			filter(dados_starwars, altura > 150), 
+			genero), 
+		media_massa = mean(massa, na.rm = TRUE)),
+	desc(media_massa))
+```
+
+
+**[Objetos múltiplos]{.underline}**
+
+```{r}
+a <- filter(dados_starwars, altura > 150)
+b <- group_by(a, genero)
+c <- summarise(b, media_massa = mean(massa, na.rm = TRUE))
+d <- arrange(c, desc(media_massa))
+d
+```
+
+
+**[Pipe `magrittr`]{.underline}**
+
+```{r}
+dados_starwars %>% 
+	filter(altura > 150) %>% 
+	group_by(genero) %>% 
+	summarise(media_massa = mean(massa, na.rm = TRUE)) %>% 
+	arrange(desc(media_massa))
+```
+
+
+**[Pipe R `base`]{.underline}**
+
+```{r}
+dados_starwars |> 
+	filter(altura > 150) |> 
+	group_by(genero) |> 
+	summarise(media_massa = mean(massa, na.rm = TRUE)) |> 
+	arrange(desc(media_massa))
+```
+
+
+
+## Finalizando
+
+Eu sou super fã do pipe `magrittr` `%>%`, e estou tentando me acostumar com o pipe built-in do R `|>`, para melhorar a performance de meus códigos. 
+
+As formas aninhadas e de múltiplos objetos utilizei bastante enquanto aprendia a linguagem, mas dificilmente as utilizo hoje em dia.
+
+E então, qual forma de programar em `R` você prefere?
+
+Até a próxima!
+
+Cheers,
+
+R.
+
+
+
+
+
+
+
+
+

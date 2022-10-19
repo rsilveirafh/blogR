@@ -34,7 +34,7 @@
   </url>
   <url>
     <loc>https://rsilveirafh.netlify.app/index.html</loc>
-    <lastmod>2022-10-14T21:19:54.840Z</lastmod>
+    <lastmod>2022-10-19T01:43:01.531Z</lastmod>
   </url>
   <url>
     <loc>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index.html</loc>
@@ -55,5 +55,9 @@
   <url>
     <loc>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</loc>
     <lastmod>2022-10-14T21:19:54.524Z</lastmod>
+  </url>
+  <url>
+    <loc>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</loc>
+    <lastmod>2022-10-19T01:43:00.859Z</lastmod>
   </url>
 </urlset>

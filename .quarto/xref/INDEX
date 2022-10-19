@@ -28,5 +28,11 @@
   },
   "posts/004-explorando-the-office/index.qmd": {
     "index.html": "01d17909"
+  },
+  "posts/005-dplyr-count-tally/index.qmd": {
+    "index.html": "cd09503c"
+  },
+  "posts/005-pipe/index.qmd": {
+    "index.html": "28446876"
   }
 }

@@ -10,7 +10,224 @@
 <atom:link href="https://rsilveirafh.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>%>%ing the World</description>
 <generator>quarto-1.1.251</generator>
-<lastBuildDate>Sat, 15 Oct 2022 03:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 18 Oct 2022 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Como e porquê usar o pipe ( %>% e |> )?</title>
+  <dc:creator>Ricardo</dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="sobre-o-que-é-essa-postagem" class="level2">
+<h2 class="anchored" data-anchor-id="sobre-o-que-é-essa-postagem">Sobre o que é essa postagem?</h2>
+<ul>
+<li>Demonstrar o conceito de <em>tidy data</em>.</li>
+<li>Utilizar o <em>pipe</em> (<code>%&gt;%</code> e <code>|&gt;</code>).</li>
+</ul>
+</section>
+<section id="história" class="level2">
+<h2 class="anchored" data-anchor-id="história">História</h2>
+<p>Dado que este blog é dedicado para pessoas em quaiquer nível de aprendizado em <code>R</code>, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.</p>
+<p>Considero a linguagem <code>R</code> bastante objetiva na sua sintaxe básica, e a forma de estruturação desenvolvida pelo <a href="https://twitter.com/hadleywickham">Hadley</a> e equipe, o <a href="https://vita.had.co.nz/papers/tidy-data.html"><em>tidy data</em></a>, torna a linguagem ainda mais “simples” para que nós, meros mortais, possamos entendê-la.</p>
+<p>O <em>tidy data</em>, basicamente, é a padronização dos bancos de dados. Para que seja considerado <em>tidy</em>, o banco de dados obedecer as seguintes regras:</p>
+<ol type="1">
+<li>Cada <strong>coluna</strong> é uma <u>variável</u>;</li>
+<li>Cada <strong>linha</strong> é uma <u>observação</u>;</li>
+<li>Cada <strong>célula</strong> possui somente um valor.</li>
+</ol>
+<p>O antônimo de uma tabela <em>tidy</em>, é uma tabela <em>messy</em> (do inglês, bagunçada).</p>
+<hr>
+<p>O dia-a-dia de um errezêiro é uma jornada de pegar dados “crus” (<em>raw</em>) e transformá-los em dados limpos e utilizáveis. Nessa jornada, são realizadas transformações de variáveis, filtragens, sumários, etc.</p>
+<p>Para uma melhor leitura dos códigos por nós, seres humanes, foi desenvolvido o operador <em>pipe</em> <code>%&gt;%</code>. O <em>pipe</em> desse formato têm sido usado há algum tempo no pacote <code>magrittr</code>, e sua função é unir uma sequência de funções, pegando o resultado anterior, e utilizando na próxima linha.</p>
+<blockquote class="blockquote">
+<p>Desde a versão R 4.1, o R estabeleceu o uso de um <em>pipe</em> próprio, embutido no seu código fonte, é o <code>|&gt;</code>. Existem algumas diferenças na forma que o R lê ambos, mas isso fica para outro post.</p>
+</blockquote>
+<p>Para ilustrar, utilizarei os passos para fazer um bolo:</p>
+<ol start="0" type="1">
+<li>Juntar ingredientes</li>
+<li>Assar;</li>
+<li>Mexer;</li>
+<li>Decorar;</li>
+<li>Cortar;</li>
+<li>Servir.</li>
+</ol>
+<p>Na sintaxe do <code>R</code> base, essa seria a forma de utilização:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">servir</span>(<span class="fu" style="color: #4758AB;">cortar</span>(<span class="fu" style="color: #4758AB;">decorar</span>(<span class="fu" style="color: #4758AB;">assar</span>(<span class="fu" style="color: #4758AB;">mexer</span>(ingredientes)))))</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">   <span class="dv" style="color: #AD0000;">5</span>  (  <span class="dv" style="color: #AD0000;">4</span>   (   <span class="dv" style="color: #AD0000;">3</span>   (  <span class="dv" style="color: #AD0000;">2</span>  (  <span class="dv" style="color: #AD0000;">1</span>  (     <span class="dv" style="color: #AD0000;">0</span>      )))))</span></code></pre></div>
+</div>
+<p>Ou seja,</p>
+<ol start="0" type="1">
+<li>Juntamos os ingredientes;</li>
+<li>Mexemos 0;</li>
+<li>Assamos o resultado de 1;</li>
+<li>Decoramos o resultado de 2;</li>
+<li>Cortamos o resultado de 3;</li>
+<li>Servimos o resultado de 4.</li>
+</ol>
+<hr>
+<p>Porém, utilizando o <em>pipe</em>, o código ficaria assim:</p>
+<blockquote class="blockquote">
+<p>O atalho de teclado para o pipe é <code>CONTROL + SHIFT + M</code>.</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">ingredientes <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb2-2">    <span class="fu" style="color: #4758AB;">mexer</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb2-3">    <span class="fu" style="color: #4758AB;">assar</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb2-4">    <span class="fu" style="color: #4758AB;">decorar</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb2-5">    <span class="fu" style="color: #4758AB;">cortar</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span></span>
+<span id="cb2-6">    <span class="fu" style="color: #4758AB;">servir</span>()</span></code></pre></div>
+</div>
+<p>Ou, ilustrando:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="https://rsilveirafh.netlify.app/posts/005-pipe/baking.gif" class="img-fluid"></p>
+</div>
+</div>
+<p>Na hora que estamos trabalhando com dados reais, isso faz uma grande diferença.</p>
+</section>
+<section id="mãos-no-r" class="level2">
+<h2 class="anchored" data-anchor-id="mãos-no-r">Mãos no R</h2>
+<p>Para melhor ilustrar, vamos fazer umas manipulações simples em uns bancos de dados, utilizando 3 métodos diferentes: <em>aninhado</em>, <em>objetos múltiplos</em> e <em>pipes</em>.</p>
+<p>O objetivo é:</p>
+<ol type="1">
+<li>Carregar o banco de dados <code>starwars</code>;</li>
+<li>Filtrar por indivíduos com <em>altura</em> <u>maior que 150cm</u>;</li>
+<li>Agrupar por <em>especie</em> e por <em>gênero</em>;</li>
+<li>Sumariar pela <u>média</u>;</li>
+<li>Ordenar do valor <em>maior</em> para o <em>menor.</em></li>
+</ol>
+<blockquote class="blockquote">
+<p>Utilizarei o banco de dados <code>starwars</code>, incluído no pacote <code>dados</code>. Saiba mais sobre o pacote e a iniciativa aqui: <a href="https://cienciadedatos.github.io/dados/">https://cienciadedatos.github.io/dados/</a></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># para instalar o pacote pelo GitHub:</span></span>
+<span id="cb3-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"cienciadedatos/dados"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;"># para instalar o pacote pelo CRAN:</span></span>
+<span id="cb4-2"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"dados"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;"># para carregar os pacotes:</span></span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;">library</span>(dados)</span>
+<span id="cb5-3"><span class="fu" style="color: #4758AB;">library</span>(dplyr)</span>
+<span id="cb5-4"></span>
+<span id="cb5-5"><span class="co" style="color: #5E5E5E;"># para carregar o banco de dados `dados_starwars`, e ver um sumário</span></span>
+<span id="cb5-6"><span class="fu" style="color: #4758AB;">glimpse</span>(dados_starwars)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 87
+Columns: 14
+$ nome            &lt;chr&gt; "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Le…
+$ altura          &lt;int&gt; 172, 167, 96, 202, 150, 178, 165, 97, 183, 182, 188, 1…
+$ massa           &lt;dbl&gt; 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32.0, 84.0…
+$ cor_do_cabelo   &lt;chr&gt; "Loiro", NA, NA, "Nenhum", "Castanho", "Castanho, Cinz…
+$ cor_da_pele     &lt;chr&gt; "Branca clara", "Ouro", "Branca, Azul", "Branca", "Cla…
+$ cor_dos_olhos   &lt;chr&gt; "Azul", "Amarelo", "Vermelho", "Amarelo", "Castanho", …
+$ ano_nascimento  &lt;dbl&gt; 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA, 24.0, 5…
+$ sexo_biologico  &lt;chr&gt; "Macho", "Nenhum", "Nenhum", "Macho", "Fêmea", "Macho"…
+$ genero          &lt;chr&gt; "Masculino", "Masculino", "Masculino", "Masculino", "F…
+$ planeta_natal   &lt;chr&gt; "Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan…
+$ especie         &lt;chr&gt; "Humano", "Droide", "Droide", "Humano", "Humano", "Hum…
+$ filmes          &lt;list&gt; &lt;"The Empire Strikes Back", "Revenge of the Sith", "R…
+$ veiculos        &lt;list&gt; &lt;"Snowspeeder", "Imperial Speeder Bike"&gt;, &lt;&gt;, &lt;&gt;, &lt;&gt;,…
+$ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &lt;&gt;, "TIE Advanced…</code></pre>
+</div>
+</div>
+<p><strong><u>Aninhado</u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;">arrange</span>(</span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;">summarise</span>(</span>
+<span id="cb7-3">        <span class="fu" style="color: #4758AB;">group_by</span>(</span>
+<span id="cb7-4">            <span class="fu" style="color: #4758AB;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>), </span>
+<span id="cb7-5">            genero), </span>
+<span id="cb7-6">        <span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)),</span>
+<span id="cb7-7">    <span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+<p><strong><u>Objetos múltiplos</u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">a <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>)</span>
+<span id="cb9-2">b <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">group_by</span>(a, genero)</span>
+<span id="cb9-3">c <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">summarise</span>(b, <span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>))</span>
+<span id="cb9-4">d <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">arrange</span>(c, <span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span>
+<span id="cb9-5">d</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+<p><strong><u>Pipe <code>magrittr</code></u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">dados_starwars <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-2">    <span class="fu" style="color: #4758AB;">filter</span>(altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-3">    <span class="fu" style="color: #4758AB;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-4">    <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
+<span id="cb11-5">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+<p><strong><u>Pipe R <code>base</code></u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">dados_starwars <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
+<span id="cb13-2">    <span class="fu" style="color: #4758AB;">filter</span>(altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>) <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
+<span id="cb13-3">    <span class="fu" style="color: #4758AB;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
+<span id="cb13-4">    <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
+<span id="cb13-5">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+</section>
+<section id="finalizando" class="level2">
+<h2 class="anchored" data-anchor-id="finalizando">Finalizando</h2>
+<p>Eu sou super fã do pipe <code>magrittr</code> <code>%&gt;%</code>, e estou tentando me acostumar com o pipe built-in do R <code>|&gt;</code>, para melhorar a performance de meus códigos.</p>
+<p>As formas aninhadas e de múltiplos objetos utilizei bastante enquanto aprendia a linguagem, mas dificilmente as utilizo hoje em dia.</p>
+<p>E então, qual forma de programar em <code>R</code> você prefere?</p>
+<p>Até a próxima!</p>
+<p>Cheers,</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>ensinandoR</category>
+  <category>pipe</category>
+  <category>pt-br</category>
+  <category>R</category>
+  <category>tidyverse</category>
+  <guid>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</guid>
+  <pubDate>Tue, 18 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="http://hexb.in/hexagons/pipe.png" medium="image" type="image/png"/>
+</item>
 <item>
   <title>Explorando o mundo de The Office</title>
   <dc:creator>Ricardo</dc:creator>
