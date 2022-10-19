@@ -226,7 +226,7 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
   <category>tidyverse</category>
   <guid>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</guid>
   <pubDate>Tue, 18 Oct 2022 03:00:00 GMT</pubDate>
-  <media:content url="http://hexb.in/hexagons/pipe.png" medium="image" type="image/png"/>
+  <media:content url="https://magrittr.tidyverse.org/logo.png" medium="image" type="image/png"/>
 </item>
 <item>
   <title>Explorando o mundo de The Office</title>
