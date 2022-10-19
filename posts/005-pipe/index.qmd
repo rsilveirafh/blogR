@@ -140,7 +140,8 @@ glimpse(dados_starwars)
 arrange(
 	summarise(
 		group_by(
-			filter(dados_starwars, altura > 150), genero), 
+			filter(dados_starwars, altura > 150), 
+			genero), 
 		media_massa = mean(massa, na.rm = TRUE)),
 	desc(media_massa))
 ```
