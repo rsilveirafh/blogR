@@ -75,12 +75,12 @@ Porém, utilizando o *pipe*, o código ficaria assim:
 
 ```{r}
 #| eval: false
-ingredientes %>%
-	mexer() %>%
-	assar() %>%
-	decorar() %>%
-	cortar() %>%
-	servir()
+ingredientes %>%    # 0
+	mexer() %>%     # 1
+	assar() %>%     # 2
+	decorar() %>%   # 3
+	cortar() %>%    # 4
+	servir()        # 5
 ```
 
 
