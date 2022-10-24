@@ -29,9 +29,9 @@
 </section>
 <section id="história" class="level2">
 <h2 class="anchored" data-anchor-id="história">História</h2>
-<p>Dado que este blog é dedicado para pessoas em quaiquer nível de aprendizado em <code>R</code>, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.</p>
+<p>Dado que este blog é dedicado para pessoas em quaisquer nível de aprendizado em <code>R</code>, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.</p>
 <p>Considero a linguagem <code>R</code> bastante objetiva na sua sintaxe básica, e a forma de estruturação desenvolvida pelo <a href="https://twitter.com/hadleywickham">Hadley</a> e equipe, o <a href="https://vita.had.co.nz/papers/tidy-data.html"><em>tidy data</em></a>, torna a linguagem ainda mais “simples” para que nós, meros mortais, possamos entendê-la.</p>
-<p>O <em>tidy data</em>, basicamente, é a padronização dos bancos de dados. Para que seja considerado <em>tidy</em>, o banco de dados obedecer as seguintes regras:</p>
+<p>O <em>tidy data</em>, basicamente, é a padronização dos bancos de dados. Para que seja considerado <em>tidy</em>, o banco de dados deve obedecer às seguintes regras:</p>
 <ol type="1">
 <li>Cada <strong>coluna</strong> é uma <u>variável</u>;</li>
 <li>Cada <strong>linha</strong> é uma <u>observação</u>;</li>
@@ -40,7 +40,7 @@
 <p>O antônimo de uma tabela <em>tidy</em>, é uma tabela <em>messy</em> (do inglês, bagunçada).</p>
 <hr>
 <p>O dia-a-dia de um errezêiro é uma jornada de pegar dados “crus” (<em>raw</em>) e transformá-los em dados limpos e utilizáveis. Nessa jornada, são realizadas transformações de variáveis, filtragens, sumários, etc.</p>
-<p>Para uma melhor leitura dos códigos por nós, seres humanes, foi desenvolvido o operador <em>pipe</em> <code>%&gt;%</code>. O <em>pipe</em> desse formato têm sido usado há algum tempo no pacote <code>magrittr</code>, e sua função é unir uma sequência de funções, pegando o resultado anterior, e utilizando na próxima linha.</p>
+<p>Para uma melhor leitura dos códigos por nós, seres humanes, foi desenvolvido o operador <em>pipe</em> <code>%&gt;%</code>. O <em>pipe</em> nesse formato têm sido usado há algum tempo no pacote <code>magrittr</code>, e sua função é unir uma sequência de funções, pegando o resultado anterior, e utilizando na próxima linha.</p>
 <blockquote class="blockquote">
 <p>Desde a versão R 4.1, o R estabeleceu o uso de um <em>pipe</em> próprio, embutido no seu código fonte, é o <code>|&gt;</code>. Existem algumas diferenças na forma que o R lê ambos, mas isso fica para outro post.</p>
 </blockquote>
@@ -627,8 +627,8 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 
 
 
-<section id="what-this-post-is-about" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-post-is-about">What this post is about?</h2>
+<section id="what-is-this-post-about" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-this-post-about">What is this post about?</h2>
 <ul>
 <li><code>ggplot2</code> tips</li>
 </ul>
@@ -696,8 +696,8 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 
 
 
-<section id="what-this-post-is-about" class="level2">
-<h2 class="anchored" data-anchor-id="what-this-post-is-about">What this post is about?</h2>
+<section id="what-is-this-post-about" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-this-post-about">What is this post about?</h2>
 <ul>
 <li>Drawing a star using <code>ggplot2</code> in R Language.</li>
 </ul>

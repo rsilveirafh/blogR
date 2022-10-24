@@ -1,23 +1,182 @@
 ---
-title: "A great title"
-subtitle: "Learning dplyr verbs"
+title: "Data wrangling with `dplyr`"
+subtitle: "Learning `dplyr` verbs I"
 author: "Ricardo"
 date: "2022-10-24"
-categories: [R, tags]
-image: "*.png"
-draft: true
+categories: [data wrangling, dplyr, en, R, tidying]
+image: "https://dplyr.tidyverse.org/logo.png"
+draft: false
 ---
 
-\`\`\`{r setup, include=FALSE}
-knitr::opts_chunk\$set(echo=TRUE, warning=FALSE, message=FALSE)
-\`\`\`
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
 
-## What this post is about?
+## What is this post about?
 
-
+-   What is the `dplyr` package?
+-   Presenting `arrange()` and `filter()`.
 
 ## History
 
+Hadley Wickham, one of the minds behind the [*tidyverse*](https://www.tidyverse.org/), argues in his tidy data [*paper*](https://vita.had.co.nz/papers/tidy-data.html) that around **80%** of data analysis is spent on the process of cleaning and preparing the data.
+
+Given all this work and repetition of tasks, some of the *tidyverse* R packages were designed to maintain good and *reproducible* ways to handle different datasets.
+
+The `dplyr` package, according with my ~~humble~~ opinion, is the flagship of *tidyverse* when the objective is fixing messy data.
+
+I decided then to present some functions of the main *tidyverse* packages. We are starting with the `dplyr` functions `arange()` and `filter()`.
+
+## Hands on
+
+Firts of all we need to load the `dplyr` package:
+
+```{r}
+library(dplyr)
+```
+
+If you do not have it yet, just install using:
+
+```{r}
+#| eval: false
+install.packages("dplyr")
+```
+
+We will use the Palmer Archipelago (Antarctica) penguin dataset, wich you can load and add into an R object like this:
+
+```{r}
+# install.packages("palmerpenguins")
+penguins <- palmerpenguins::penguins
+
+glimpse(penguins)
+```
+
+> You can read more about this dataset at [Allison Horst](https://github.com/allisonhorst/palmerpenguins) Github page.
+
+```{r}
+#| label: fig-penguins
+#| fig-cap: Meet the Palmer penguins. Artwork by @allison_horst.
+#| echo: false
+knitr::include_graphics("https://github.com/allisonhorst/palmerpenguins/raw/main/man/figures/lter_penguins.png")
+```
+
+### `arrange()`
+
+The first `dplyr` function is `arrange()`.
+
+One thing that I like in the `dplyr` functions, is that they represent the *actions* of what they pretend to do. For instance, `arrange()` will literally *arrange* the dataset based in one or more columns, at the ascending or descending order (default is ascending).
+
+In the example below, we are sorting the dataset based on the name of the species:
+
+```{r}
+penguins |> 
+	arrange(species)
+```
+
+> If you want to know more about the pipe (|>), check my previous [post](https://rsilveirafh.netlify.app/posts/005-pipe/) (in brazilian portuguese).
+
+Now, let's arrange the dataset based on the *island* by descending order, and *species* by ascending order:
+
+```{r}
+penguins |> 
+	arrange(desc(island), species)
+```
+
+The two variables above were alphabetically sorted, now we can try the same using the *body_mass_g* numeric variable:
+
+```{r}
+penguins |> 
+	arrange(body_mass_g)
+```
+
+The lightest measured penguin weighed *2,700 g*, it was from the *Chinstrap* species from the *Dream* Island.
+
+What about the heaviest?
+
+```{r}
+penguins |> 
+	arrange(desc(body_mass_g))
+```
+
+The heaviest was a *Gentoo*, from *Biscoe* Island, and weighed *6,300 g*.
+
+### `filter()`
+
+The `filter()` function is one of the more important at the `dplyr` package.
+
+According to its name, `filter()` will subset the observations (**rows**) of the dataset based on a given rule.
+
+To retain the values, the proposed rules must produce a **TRUE** value for all conditions.
+
+> To do such conditions, some relational operators are necessary, here is a list of them:
+>
+> | Operator | Description              |
+> |----------|--------------------------|
+> | \<       | Less than                |
+> | \>       | Greater than             |
+> | \<=      | Less than or equal to    |
+> | \>=      | Greater than or equal to |
+> | ==       | Equal to                 |
+> | !=       | Not equal to             |
+>
+> : Relational operators in R
+
+Let's start using only one condition.
+
+First, we want to pick only the penguins that weight *less than 3,000 g* (or 3 kg):
+
+```{r}
+penguins |> 
+	filter(body_mass_g < 3000)
+```
+
+The result is a filtered dataset containing only *9 penguins*.
+
+Now we want to filter only the female in the `penguins` data:
+
+```{r}
+penguins |> 
+	filter(sex == "female")
+```
+
+There are *165 female* penguins on this dataset (the total is 344).
+
+We can filter the dataset based in more than one condition. We want to subset the data by the *male*, *Adelie* species, that were collected at the *Dream* Island:
+
+```{r}
+penguins |> 
+	filter(sex == "male",
+		   species == "Adelie",
+		   island == "Dream") |> 
+	knitr::kable() # only to show the whole data
+```
+
+If we need to subset more than one information in a single variable, we can use the `%in%` operator. For example, we want the penguins that have *flipper_length_mm* *smaller than 180*, that were collected at the years of *2007* and *2009*:
+
+```{r}
+penguins |> 
+	filter(flipper_length_mm < 180,
+		   year %in% c(2007, 2009)) |> # the `c()` stands for "concatenate" 
+	knitr::kable()
+```
+
+So, *7* out of *344* penguins were collected at *2007* or *2009* and had flippers lengths *smaller than 180 mm*.
 
 
 ## Finishing
+
+There is a lot more to do, and a lot of specific details at the `filter()` function, but the main idea of this post is just to do a glimpse of what it does.
+
+In this post, we explored:
+
+- `dplyr` package
+	- `arrange()` function;
+	- `filter()` function.
+
+I hope you have enjoyed.
+
+See you soon.
+
+Cheers,
+
+R.

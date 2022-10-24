@@ -34,5 +34,8 @@
   },
   "posts/005-pipe/index.qmd": {
     "index.html": "28446876"
+  },
+  "posts/006-dplyr-01/index.qmd": {
+    "index.html": "eb9e8ff1"
   }
 }
