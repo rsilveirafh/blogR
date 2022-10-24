@@ -35,7 +35,7 @@ O antônimo de uma tabela *tidy*, é uma tabela *messy* (do inglês, bagunçada)
 
 O dia-a-dia de um errezêiro é uma jornada de pegar dados "crus" (*raw*) e transformá-los em dados limpos e utilizáveis. Nessa jornada, são realizadas transformações de variáveis, filtragens, sumários, etc.
 
-Para uma melhor leitura dos códigos por nós, seres humanes, foi desenvolvido o operador *pipe* `%>%`. O *pipe* desse formato têm sido usado há algum tempo no pacote `magrittr`, e sua função é unir uma sequência de funções, pegando o resultado anterior, e utilizando na próxima linha.
+Para uma melhor leitura dos códigos por nós, seres humanes, foi desenvolvido o operador *pipe* `%>%`. O *pipe* nesse formato têm sido usado há algum tempo no pacote `magrittr`, e sua função é unir uma sequência de funções, pegando o resultado anterior, e utilizando na próxima linha.
 
 > Desde a versão R 4.1, o R estabeleceu o uso de um *pipe* próprio, embutido no seu código fonte, é o `|>`.
 > Existem algumas diferenças na forma que o R lê ambos, mas isso fica para outro post.

@@ -1,0 +1,23 @@
+---
+title: "A great title"
+subtitle: "Learning dplyr verbs"
+author: "Ricardo"
+date: "2022-10-24"
+categories: [R, tags]
+image: "*.png"
+draft: true
+---
+
+\`\`\`{r setup, include=FALSE}
+knitr::opts_chunk\$set(echo=TRUE, warning=FALSE, message=FALSE)
+\`\`\`
+
+## What this post is about?
+
+
+
+## History
+
+
+
+## Finishing

@@ -21,7 +21,7 @@ draft: true
 ---
 
 \`\`\`{r setup, include=FALSE}
-knitr::opts_chunk`$set(echo=TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk\$set(echo=TRUE, warning=FALSE, message=FALSE)
 \`\`\`
 
 ## What this post is about?
