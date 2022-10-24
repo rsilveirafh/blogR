@@ -1,7 +1,6 @@
 ---
 title: "Data wrangling with `dplyr`"
 subtitle: "Learning `dplyr` verbs I"
-author: "Ricardo"
 date: "2022-10-24"
 categories: [data wrangling, dplyr, en, R, tidying]
 image: "https://dplyr.tidyverse.org/logo.png"

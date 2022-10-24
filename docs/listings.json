@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/006-dplyr-01/index.html",
       "/posts/005-pipe/index.html",
       "/posts/004-explorando-the-office/index.html",
       "/posts/003-ggplot-tip/index.html",
