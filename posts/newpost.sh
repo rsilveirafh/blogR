@@ -13,7 +13,6 @@ cat > $name/index.qmd <<EOF
 ---
 title: "A great title"
 subtitle: "A great subtitle"
-author: "Ricardo"
 date: "2022-XX-XX"
 categories: [R, tags]
 image: "*.png"

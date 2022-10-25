@@ -1,0 +1,31 @@
+---
+title: "Manipulando dados com `dplyr`"
+subtitle: "Aprendendo funções do `dplyr` II"
+date: "2022-10-25"
+categories: [data wrangling, dplyr, pt-br, R, tidying]
+image: "https://dplyr.tidyverse.org/logo.png"
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+## Sobre o que é esse post?
+
+- Mostrando um pouco mais do pacote `dplyr`.
+- Apresentando as funções `rename()`, `select()` e `mutate()`.
+
+
+## História
+
+
+
+
+## Mãos no computador
+
+
+
+## Finalizando
+
+
