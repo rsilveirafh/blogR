@@ -9,6 +9,9 @@ about:
     - icon: github
       text: Github
       href: https://github.com/rsilveirafh
+    - icon: file-pdf
+      text: Resume
+      href: https://github.com/rsilveirafh/blogR/blob/6013efef2292427bfbead7f12d6dcff443c1be08/Curriculum-Vitae-RRdSF.pdf
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/rsilveirafh/
@@ -28,6 +31,7 @@ I am a brazilian biologist and data scientist, curious about all sort of things.
 
 Feel yourself at home ^^
 
+(CV - en)[Curriculum-Vitae-RRdSF.pdf]
 
 
 ## Education
