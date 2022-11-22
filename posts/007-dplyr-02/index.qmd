@@ -1,7 +1,7 @@
 ---
-title: "Manipulando dados com `dplyr`"
-subtitle: "Aprendendo funções do `dplyr` II"
-date: "2022-10-25"
+title: "Manipulando dados com `{dplyr}`"
+subtitle: "Aprendendo funções do `{dplyr}` II"
+date: "2022-11-22"
 categories: [data wrangling, dplyr, pt-br, R, tidying]
 image: "https://dplyr.tidyverse.org/logo.png"
 draft: true
@@ -13,17 +13,20 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 
 ## Sobre o que é esse post?
 
-- Mostrando um pouco mais do pacote `dplyr`.
+- Mostrando um pouco mais do pacote `{dplyr}`.
 - Apresentando as funções `rename()`, `select()` e `mutate()`.
 
 
 ## História
 
+Após o post `{dplyr}` I, onde ensinei sobre as duas primeiras funções do pacote `{dplyr}`, o `arrange()` e o `filter()`, que têm a função de modificar um banco de dados a partir de suas observações (linhas), agora é hora de fazer modificações nas variáveis (colunas) de um banco de dados.
 
+Portanto, vamos direto aos códigos...
 
 
 ## Mãos no computador
 
+A função `rename()`
 
 
 ## Finalizando
