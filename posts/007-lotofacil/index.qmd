@@ -1,0 +1,32 @@
+---
+title: "Lotofácil"
+subtitle: "Explorando os números da Lotofácil"
+date: "2022-06-14"
+categories: [R, loteria, lotofácil]
+image: "logo.png"
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+
+## A história da Lotofácil?
+
+A Lotofácil é uma das loterias mais populares do Brasil, sendo introduzida em 2003 pela Caixa Econômica Federal. Ela foi criada com o objetivo de oferecer aos jogadores uma modalidade mais acessível e com maiores chances de ganhar. 
+
+
+
+### Apresentação da Lotofácil como uma das principais loterias do Brasil.
+
+### Breve visão geral dos tópicos a serem abordados.
+
+
+
+## History
+
+
+
+## Finishing
+
+

@@ -1,5 +1,5 @@
 ---
-title: "Data wrangling with `dplyr`"
+title: "Data wrangling with `{dplyr}`"
 subtitle: "Learning `{dplyr}` functions - `arrange()` and `filter()`"
 date: "2022-10-24"
 categories: [data wrangling, dplyr, en, R, tidying]

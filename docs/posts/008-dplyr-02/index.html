@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ricardo">
+<meta name="dcterms.date" content="2022-11-22">
 
-<title>#blogR</title>
+<title>#blogR - Manipulando dados com {dplyr}</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,26 +25,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -62,51 +62,20 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <style>html{ scroll-behavior: smooth; }</style>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
-<link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="#blogR" href="index.xml"></head>
+<link rel="stylesheet" href="../../styles.css">
+</head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">#blogR</span>
     </a>
   </div>
@@ -117,7 +86,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
+    <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">Ricardo R. da Silveira Filho</span></a>
   </li>  
   <li class="nav-item compact">
@@ -139,278 +108,75 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Manipulando dados com <code>{dplyr}</code></h1>
+            <p class="subtitle lead">Aprendendo funções do <code>{dplyr}</code> II</p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">data wrangling</div>
+                <div class="quarto-category">dplyr</div>
+                <div class="quarto-category">pt-br</div>
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">tidying</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Ricardo </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 22, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(6)</span></div><div class="category" data-category="Lula">Lula <span class="quarto-category-count">(1)</span></div><div class="category" data-category="PT">PT <span class="quarto-category-count">(1)</span></div><div class="category" data-category="R">R <span class="quarto-category-count">(5)</span></div><div class="category" data-category="The Office">The Office <span class="quarto-category-count">(1)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="data wrangling">data wrangling <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dplyr">dplyr <span class="quarto-category-count">(1)</span></div><div class="category" data-category="en">en <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ensinandoR">ensinandoR <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ggplot2">ggplot2 <span class="quarto-category-count">(2)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div><div class="category" data-category="pipe">pipe <span class="quarto-category-count">(1)</span></div><div class="category" data-category="pt-br">pt-br <span class="quarto-category-count">(2)</span></div><div class="category" data-category="star">star <span class="quarto-category-count">(1)</span></div><div class="category" data-category="tidying">tidying <span class="quarto-category-count">(1)</span></div><div class="category" data-category="tidyverse">tidyverse <span class="quarto-category-count">(2)</span></div><div class="category" data-category="tips">tips <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">#blogR</h1>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-</header>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<section id="sobre-o-que-é-esse-post" class="level2">
+<h2 class="anchored" data-anchor-id="sobre-o-que-é-esse-post">Sobre o que é esse post?</h2>
+<ul>
+<li>Mostrando um pouco mais do pacote <code>{dplyr}</code>.</li>
+<li>Apresentando as funções <code>rename()</code>, <code>select()</code> e <code>mutate()</code>.</li>
+</ul>
+</section>
+<section id="história" class="level2">
+<h2 class="anchored" data-anchor-id="história">História</h2>
+<p>Após o post <code>{dplyr}</code> I, onde ensinei sobre as duas primeiras funções do pacote <code>{dplyr}</code>, o <code>arrange()</code> e o <code>filter()</code>, que têm a função de modificar um banco de dados a partir de suas observações (linhas), agora é hora de fazer modificações nas variáveis (colunas) de um banco de dados.</p>
+<p>Portanto, vamos direto aos códigos…</p>
+</section>
+<section id="mãos-no-computador" class="level2">
+<h2 class="anchored" data-anchor-id="mãos-no-computador">Mãos no computador</h2>
+<p>A função <code>rename()</code></p>
+</section>
+<section id="finalizando" class="level2">
+<h2 class="anchored" data-anchor-id="finalizando">Finalizando</h2>
 
-<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
-<div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="data wrangling,dplyr,en,R,tidying" data-listing-date-sort="1666580400000" data-listing-file-modified-sort="1686767867493" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
-<a href="./posts/006-dplyr-01/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="https://dplyr.tidyverse.org/logo.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Data wrangling with <code>{dplyr}</code>
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('data wrangling'); return false;">
-data wrangling
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('dplyr'); return false;">
-dplyr
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('en'); return false;">
-en
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('tidying'); return false;">
-tidying
-</div>
-</div>
-<div class="card-text listing-description">
-Hadley Wickham, one of the minds behind the <em>tidyverse</em>, argues in his tidy data <em>paper</em> that around <strong>80%</strong> …
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Ricardo
-</div>
-<div class="listing-date">
-Oct 24, 2022
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="1" data-categories="ensinandoR,pipe,pt-br,R,tidyverse" data-listing-date-sort="1666062000000" data-listing-file-modified-sort="1666151725820" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
-<a href="./posts/005-pipe/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="https://magrittr.tidyverse.org/logo.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Como e porquê usar o <em>pipe</em> ( <code>%&gt;%</code> e <code>|&gt;</code> )?
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('ensinandoR'); return false;">
-ensinandoR
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('pipe'); return false;">
-pipe
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('pt-br'); return false;">
-pt-br
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('tidyverse'); return false;">
-tidyverse
-</div>
-</div>
-<div class="card-text listing-description">
-Dado que este blog é dedicado para pessoas em quaisquer nível de aprendizado em <code>R</code>, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Ricardo
-</div>
-<div class="listing-date">
-Oct 18, 2022
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="2" data-categories="pt-br,R,The Office,tidyverse" data-listing-date-sort="1665802800000" data-listing-file-modified-sort="1665782391380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
-<a href="./posts/004-explorando-the-office/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Explorando o mundo de The Office
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('pt-br'); return false;">
-pt-br
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('The Office'); return false;">
-The Office
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('tidyverse'); return false;">
-tidyverse
-</div>
-</div>
-<div class="card-text listing-description">
-Estava eu pensando sobre uma nova postagem para o blog, quando recebi no meu telefone uma notificação do reddit, com o título “<em>E…</em><em></em>
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Ricardo
-</div>
-<div class="listing-date">
-Oct 15, 2022
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="3" data-categories="code,ggplot2,R,tips" data-listing-date-sort="1665716400000" data-listing-file-modified-sort="1666644547620" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<a href="./posts/003-ggplot-tip/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-A great ggplot tip!
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('ggplot2'); return false;">
-ggplot2
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('tips'); return false;">
-tips
-</div>
-</div>
-<div class="card-text listing-description">
-Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>ggplot2</code>.
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Ricardo
-</div>
-<div class="listing-date">
-Oct 14, 2022
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="4" data-categories="code,ggplot2,Lula,PT,R,star" data-listing-date-sort="1665630000000" data-listing-file-modified-sort="1666644531220" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
-<a href="./posts/002-star/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="./posts/002-star/image.png" class="thumbnail-image card-img" style="height: 150px;">
-</p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Drawing a star in R with ggplot
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('ggplot2'); return false;">
-ggplot2
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('Lula'); return false;">
-Lula
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('PT'); return false;">
-PT
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('star'); return false;">
-star
-</div>
-</div>
-<div class="card-text listing-description">
-In Brazil we are about to choose the next President for the 4 years ahead.
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Ricardo
-</div>
-<div class="listing-date">
-Oct 13, 2022
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="5" data-categories="news" data-listing-date-sort="1665370800000" data-listing-file-modified-sort="1665766530610" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<a href="./posts/001-welcome/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="posts/001-welcome/welcome.gif" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Welcome to my blogR
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
-news
-</div>
-</div>
-<div class="card-text listing-description">
-Arriving here!
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Ricardo
-</div>
-<div class="listing-date">
-Oct 10, 2022
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -759,6 +525,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<script src="https://giscus.app/client.js" data-repo="rsilveirafh/blogR" data-repo-id="R_kgDOIM_PHw" data-category="General" data-category-id="DIC_kwDOIM_PH84CR97l" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -774,5 +542,5 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

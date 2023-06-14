@@ -8,12 +8,12 @@
 <title>#blogR</title>
 <link>https://rsilveirafh.netlify.app/index.html</link>
 <atom:link href="https://rsilveirafh.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
-<description>%>%ing the World</description>
-<generator>quarto-1.1.251</generator>
+<description>%&gt;%ing the World</description>
+<generator>quarto-1.3.340</generator>
 <lastBuildDate>Mon, 24 Oct 2022 03:00:00 GMT</lastBuildDate>
 <item>
-  <title>Data wrangling with dplyr</title>
-  <dc:creator>Ricardo</dc:creator>
+  <title>Data wrangling with {dplyr}</title>
+  <dc:creator>Ricardo </dc:creator>
   <link>https://rsilveirafh.netlify.app/posts/006-dplyr-01/index.html</link>
   <description><![CDATA[ 
 
@@ -23,7 +23,7 @@
 <section id="what-is-this-post-about" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-this-post-about">What is this post about?</h2>
 <ul>
-<li>What is the <code>dplyr</code> package?</li>
+<li>What is the <code>{dplyr}</code> package?</li>
 <li>Presenting <code>arrange()</code> and <code>filter()</code>.</li>
 </ul>
 </section>
@@ -31,25 +31,39 @@
 <h2 class="anchored" data-anchor-id="history">History</h2>
 <p>Hadley Wickham, one of the minds behind the <a href="https://www.tidyverse.org/"><em>tidyverse</em></a>, argues in his tidy data <a href="https://vita.had.co.nz/papers/tidy-data.html"><em>paper</em></a> that around <strong>80%</strong> of data analysis is spent on the process of cleaning and preparing the data.</p>
 <p>Given all this work and repetition of tasks, some of the <em>tidyverse</em> R packages were designed to maintain good and <em>reproducible</em> ways to handle different datasets.</p>
-<p>The <code>dplyr</code> package, according with my <del>humble</del> opinion, is the flagship of <em>tidyverse</em> when the objective is fixing messy data.</p>
-<p>I decided then to present some functions of the main <em>tidyverse</em> packages. We are starting with the <code>dplyr</code> functions <code>arange()</code> and <code>filter()</code>.</p>
+<p>The <code>{dplyr}</code> package, according with my <del>humble</del> opinion, is the flagship of <em>tidyverse</em> when the objective is fixing messy data.</p>
+<p>I decided then to present some functions of the main <em>tidyverse</em> packages. We are starting with the <code>{dplyr}</code> functions <code>arrange()</code> and <code>filter()</code>.</p>
 </section>
 <section id="hands-on" class="level2">
 <h2 class="anchored" data-anchor-id="hands-on">Hands on</h2>
-<p>Firts of all we need to load the <code>dplyr</code> package:</p>
+<p>Firts of all we need to load the <code>{dplyr}</code> package:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(dplyr)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr)</span></code></pre></div>
 </div>
 <p>If you do not have it yet, just install using:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"dplyr"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dplyr"</span>)</span></code></pre></div>
 </div>
 <p>We will use the Palmer Archipelago (Antarctica) penguin dataset, wich you can load and add into an R object like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># install.packages("palmerpenguins")</span></span>
-<span id="cb3-2">penguins <span class="ot" style="color: #003B4F;">&lt;-</span> palmerpenguins<span class="sc" style="color: #5E5E5E;">::</span>penguins</span>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># install.packages("palmerpenguins")</span></span>
+<span id="cb3-2">penguins <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> palmerpenguins<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>penguins</span>
 <span id="cb3-3"></span>
-<span id="cb3-4"><span class="fu" style="color: #4758AB;">glimpse</span>(penguins)</span></code></pre></div>
+<span id="cb3-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(penguins)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 344
 Columns: 8
@@ -71,19 +85,23 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 <div id="fig-penguins" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/006-dplyr-01/https:/github.com/allisonhorst/palmerpenguins/raw/main/man/figures/lter_penguins.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: Meet the Palmer penguins. Artwork by <span class="citation" data-cites="allison_horst">@allison_horst</span>.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Meet the Palmer penguins. Artwork by <span class="citation" data-cites="allison_horst">@allison_horst</span>.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <section id="arrange" class="level3">
 <h3 class="anchored" data-anchor-id="arrange"><code>arrange()</code></h3>
-<p>The first <code>dplyr</code> function is <code>arrange()</code>.</p>
-<p>One thing that I like in the <code>dplyr</code> functions, is that they represent the <em>actions</em> of what they pretend to do. For instance, <code>arrange()</code> will literally <em>arrange</em> the dataset based in one or more columns, at the ascending or descending order (default is ascending).</p>
+<p>The first <code>{dplyr}</code> function is <code>arrange()</code>.</p>
+<p>One thing that I like in the <code>{dplyr}</code> functions, is that they represent the <em>actions</em> of what they pretend to do. For instance, <code>arrange()</code> will literally <em>arrange</em> the dataset based in one or more columns, at the ascending or descending order (default is ascending).</p>
 <p>In the example below, we are sorting the dataset based on the name of the species:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb5-2">    <span class="fu" style="color: #4758AB;">arrange</span>(species)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(species)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -98,7 +116,8 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
  8 Adelie  Torgersen           39.2          19.6               195        4675
  9 Adelie  Torgersen           34.1          18.1               193        3475
 10 Adelie  Torgersen           42            20.2               190        4250
-# … with 334 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
@@ -106,8 +125,14 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 </blockquote>
 <p>Now, let’s arrange the dataset based on the <em>island</em> by descending order, and <em>species</em> by ascending order:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb7-2">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(island), species)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(island), species)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -122,35 +147,47 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
  8 Adelie  Torgersen           39.2          19.6               195        4675
  9 Adelie  Torgersen           34.1          18.1               193        3475
 10 Adelie  Torgersen           42            20.2               190        4250
-# … with 334 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 </div>
 <p>The two variables above were alphabetically sorted, now we can try the same using the <em>body_mass_g</em> numeric variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb9-2">    <span class="fu" style="color: #4758AB;">arrange</span>(body_mass_g)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb9-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(body_mass_g)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
-   species   island    bill_length_mm bill_depth_mm flipper_length_… body_mass_g
-   &lt;fct&gt;     &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt;
- 1 Chinstrap Dream               46.9          16.6              192        2700
- 2 Adelie    Biscoe              36.5          16.6              181        2850
- 3 Adelie    Biscoe              36.4          17.1              184        2850
- 4 Adelie    Biscoe              34.5          18.1              187        2900
- 5 Adelie    Dream               33.1          16.1              178        2900
- 6 Adelie    Torgersen           38.6          17                188        2900
- 7 Chinstrap Dream               43.2          16.6              187        2900
- 8 Adelie    Biscoe              37.9          18.6              193        2925
- 9 Adelie    Dream               37.5          18.9              179        2975
-10 Adelie    Dream               37            16.9              185        3000
-# … with 334 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+   species   island   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;     &lt;fct&gt;             &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Chinstrap Dream              46.9          16.6               192        2700
+ 2 Adelie    Biscoe             36.5          16.6               181        2850
+ 3 Adelie    Biscoe             36.4          17.1               184        2850
+ 4 Adelie    Biscoe             34.5          18.1               187        2900
+ 5 Adelie    Dream              33.1          16.1               178        2900
+ 6 Adelie    Torgers…           38.6          17                 188        2900
+ 7 Chinstrap Dream              43.2          16.6               187        2900
+ 8 Adelie    Biscoe             37.9          18.6               193        2925
+ 9 Adelie    Dream              37.5          18.9               179        2975
+10 Adelie    Dream              37            16.9               185        3000
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 </div>
 <p>The lightest measured penguin weighed <em>2,700 g</em>, it was from the <em>Chinstrap</em> species from the <em>Dream</em> Island.</p>
 <p>What about the heaviest?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb11-2">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(body_mass_g))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb11-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(body_mass_g))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
    species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -165,14 +202,15 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
  8 Gentoo  Biscoe           49.3          15.7               217        5850
  9 Gentoo  Biscoe           55.1          16                 230        5850
 10 Gentoo  Biscoe           49.5          16.2               229        5800
-# … with 334 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 </div>
 <p>The heaviest was a <em>Gentoo</em>, from <em>Biscoe</em> Island, and weighed <em>6,300 g</em>.</p>
 </section>
 <section id="filter" class="level3">
 <h3 class="anchored" data-anchor-id="filter"><code>filter()</code></h3>
-<p>The <code>filter()</code> function is one of the more important at the <code>dplyr</code> package.</p>
+<p>The <code>filter()</code> function is one of the more important at the <code>{dplyr}</code> package.</p>
 <p>According to its name, <code>filter()</code> will subset the observations (<strong>rows</strong>) of the dataset based on a given rule.</p>
 <p>To retain the values, the proposed rules must produce a <strong>TRUE</strong> value for all conditions.</p>
 <blockquote class="blockquote">
@@ -216,29 +254,45 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 <p>Let’s start using only one condition.</p>
 <p>First, we want to pick only the penguins that weight <em>less than 3,000 g</em> (or 3 kg):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb13-2">    <span class="fu" style="color: #4758AB;">filter</span>(body_mass_g <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="dv" style="color: #AD0000;">3000</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(body_mass_g <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3000</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 8
-  species island bill_length_mm bill_depth_mm flipper_length_… body_mass_g sex  
-  &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;            &lt;int&gt;       &lt;int&gt; &lt;fct&gt;
-1 Adelie  Dream            37.5          18.9              179        2975 &lt;NA&gt; 
-2 Adelie  Biscoe           34.5          18.1              187        2900 fema…
-3 Adelie  Biscoe           36.5          16.6              181        2850 fema…
-4 Adelie  Biscoe           36.4          17.1              184        2850 fema…
-5 Adelie  Dream            33.1          16.1              178        2900 fema…
-6 Adelie  Biscoe           37.9          18.6              193        2925 fema…
-7 Adelie  Torge…           38.6          17                188        2900 fema…
-8 Chinst… Dream            43.2          16.6              187        2900 fema…
-9 Chinst… Dream            46.9          16.6              192        2700 fema…
-# … with 1 more variable: year &lt;int&gt;</code></pre>
+  species   island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;     &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie    Dream               37.5          18.9               179        2975
+2 Adelie    Biscoe              34.5          18.1               187        2900
+3 Adelie    Biscoe              36.5          16.6               181        2850
+4 Adelie    Biscoe              36.4          17.1               184        2850
+5 Adelie    Dream               33.1          16.1               178        2900
+6 Adelie    Biscoe              37.9          18.6               193        2925
+7 Adelie    Torgersen           38.6          17                 188        2900
+8 Chinstrap Dream               43.2          16.6               187        2900
+9 Chinstrap Dream               46.9          16.6               192        2700
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 </div>
 <p>The result is a filtered dataset containing only <em>9 penguins</em>.</p>
 <p>Now we want to filter only the female in the <code>penguins</code> data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb15-2">    <span class="fu" style="color: #4758AB;">filter</span>(sex <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"female"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb15-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(sex <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"female"</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 165 × 8
    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -253,19 +307,44 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
  8 Adelie  Torgersen           34.4          18.4               184        3325
  9 Adelie  Biscoe              37.8          18.3               174        3400
 10 Adelie  Biscoe              35.9          19.2               189        3800
-# … with 155 more rows, and 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+# ℹ 155 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
 </div>
 </div>
 <p>There are <em>165 female</em> penguins on this dataset (the total is 344).</p>
 <p>We can filter the dataset based in more than one condition. We want to subset the data by the <em>male</em>, <em>Adelie</em> species, that were collected at the <em>Dream</em> Island:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb17-2">    <span class="fu" style="color: #4758AB;">filter</span>(sex <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"male"</span>,</span>
-<span id="cb17-3">           species <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Adelie"</span>,</span>
-<span id="cb17-4">           island <span class="sc" style="color: #5E5E5E;">==</span> <span class="st" style="color: #20794D;">"Dream"</span>) <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb17-5">    knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>() <span class="co" style="color: #5E5E5E;"># only to show the whole data</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(sex <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"male"</span>,</span>
+<span id="cb17-3">           species <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Adelie"</span>,</span>
+<span id="cb17-4">           island <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Dream"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-5">    knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>() <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># only to show the whole data</span></span></code></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <colgroup>
 <col style="width: 9%">
 <col style="width: 8%">
@@ -575,12 +654,36 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 </div>
 <p>If we need to subset more than one information in a single variable, we can use the <code>%in%</code> operator. For example, we want the penguins that have <em>flipper_length_mm</em> <em>smaller than 180</em>, that were collected at the years of <em>2007</em> and <em>2009</em>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">penguins <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb18-2">    <span class="fu" style="color: #4758AB;">filter</span>(flipper_length_mm <span class="sc" style="color: #5E5E5E;">&lt;</span> <span class="dv" style="color: #AD0000;">180</span>,</span>
-<span id="cb18-3">           year <span class="sc" style="color: #5E5E5E;">%in%</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">2007</span>, <span class="dv" style="color: #AD0000;">2009</span>)) <span class="sc" style="color: #5E5E5E;">|&gt;</span> <span class="co" style="color: #5E5E5E;"># the `c()` stands for "concatenate" </span></span>
-<span id="cb18-4">    knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(flipper_length_mm <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">180</span>,</span>
+<span id="cb18-3">           year <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2007</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2009</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the `c()` stands for "concatenate" </span></span>
+<span id="cb18-4">    knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>()</span></code></pre></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped small">
 <colgroup>
 <col style="width: 10%">
 <col style="width: 10%">
@@ -686,7 +789,7 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 <p>There is a lot more to do, and a lot of specific details at the <code>filter()</code> function, but the main idea of this post is just to do a glimpse of what it does.</p>
 <p>In this post, we explored:</p>
 <ul>
-<li><code>dplyr</code> package
+<li><code>{dplyr}</code> package
 <ul>
 <li><code>arrange()</code> function;</li>
 <li><code>filter()</code> function.</li>
@@ -713,8 +816,8 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
   <media:content url="https://dplyr.tidyverse.org/logo.png" medium="image" type="image/png"/>
 </item>
 <item>
-  <title>Como e porquê usar o pipe ( %>% e |> )?</title>
-  <dc:creator>Ricardo</dc:creator>
+  <title>Como e porquê usar o pipe ( %&gt;% e |&gt; )?</title>
+  <dc:creator>Ricardo </dc:creator>
   <link>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</link>
   <description><![CDATA[ 
 
@@ -756,9 +859,31 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 </ol>
 <p>Na sintaxe do <code>R</code> base, essa seria a forma de utilização:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">servir</span>(<span class="fu" style="color: #4758AB;">cortar</span>(<span class="fu" style="color: #4758AB;">decorar</span>(<span class="fu" style="color: #4758AB;">assar</span>(<span class="fu" style="color: #4758AB;">mexer</span>(ingredientes)))))</span>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">servir</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cortar</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">decorar</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">assar</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mexer</span>(ingredientes)))))</span>
 <span id="cb1-2"></span>
-<span id="cb1-3">   <span class="dv" style="color: #AD0000;">5</span>  (  <span class="dv" style="color: #AD0000;">4</span>   (   <span class="dv" style="color: #AD0000;">3</span>   (  <span class="dv" style="color: #AD0000;">2</span>  (  <span class="dv" style="color: #AD0000;">1</span>  (     <span class="dv" style="color: #AD0000;">0</span>      )))))</span></code></pre></div>
+<span id="cb1-3">   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>  (  <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>   (   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>   (  <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>  (  <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>  (     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>      )))))</span></code></pre></div>
 </div>
 <p>Ou seja,</p>
 <ol start="0" type="1">
@@ -775,12 +900,44 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 <p>O atalho de teclado para o pipe é <code>CONTROL + SHIFT + M</code>.</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">ingredientes <span class="sc" style="color: #5E5E5E;">%&gt;%</span>    <span class="co" style="color: #5E5E5E;"># 0</span></span>
-<span id="cb2-2">    <span class="fu" style="color: #4758AB;">mexer</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span>     <span class="co" style="color: #5E5E5E;"># 1</span></span>
-<span id="cb2-3">    <span class="fu" style="color: #4758AB;">assar</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span>     <span class="co" style="color: #5E5E5E;"># 2</span></span>
-<span id="cb2-4">    <span class="fu" style="color: #4758AB;">decorar</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span>   <span class="co" style="color: #5E5E5E;"># 3</span></span>
-<span id="cb2-5">    <span class="fu" style="color: #4758AB;">cortar</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span>    <span class="co" style="color: #5E5E5E;"># 4</span></span>
-<span id="cb2-6">    <span class="fu" style="color: #4758AB;">servir</span>()        <span class="co" style="color: #5E5E5E;"># 5</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">ingredientes <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0</span></span>
+<span id="cb2-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mexer</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>     <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1</span></span>
+<span id="cb2-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">assar</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>     <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2</span></span>
+<span id="cb2-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">decorar</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3</span></span>
+<span id="cb2-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cortar</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 4</span></span>
+<span id="cb2-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">servir</span>()        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 5</span></span></code></pre></div>
 </div>
 <p>Ou, ilustrando:</p>
 <div class="cell">
@@ -805,20 +962,44 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 <p>Utilizarei o banco de dados <code>starwars</code>, incluído no pacote <code>dados</code>. Saiba mais sobre o pacote e a iniciativa aqui: <a href="https://cienciadedatos.github.io/dados/">https://cienciadedatos.github.io/dados/</a></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># para instalar o pacote pelo GitHub:</span></span>
-<span id="cb3-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"cienciadedatos/dados"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para instalar o pacote pelo GitHub:</span></span>
+<span id="cb3-2">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cienciadedatos/dados"</span>)</span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;"># para instalar o pacote pelo CRAN:</span></span>
-<span id="cb4-2"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"dados"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para instalar o pacote pelo CRAN:</span></span>
+<span id="cb4-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dados"</span>)</span></code></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;"># para carregar os pacotes:</span></span>
-<span id="cb5-2"><span class="fu" style="color: #4758AB;">library</span>(dados)</span>
-<span id="cb5-3"><span class="fu" style="color: #4758AB;">library</span>(dplyr)</span>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para carregar os pacotes:</span></span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dados)</span>
+<span id="cb5-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr)</span>
 <span id="cb5-4"></span>
-<span id="cb5-5"><span class="co" style="color: #5E5E5E;"># para carregar o banco de dados `dados_starwars`, e ver um sumário</span></span>
-<span id="cb5-6"><span class="fu" style="color: #4758AB;">glimpse</span>(dados_starwars)</span></code></pre></div>
+<span id="cb5-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para carregar o banco de dados `dados_starwars`, e ver um sumário</span></span>
+<span id="cb5-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(dados_starwars)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 87
 Columns: 14
@@ -840,13 +1021,35 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 </div>
 <p><strong><u>Aninhado</u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;">arrange</span>(</span>
-<span id="cb7-2">    <span class="fu" style="color: #4758AB;">summarise</span>(</span>
-<span id="cb7-3">        <span class="fu" style="color: #4758AB;">group_by</span>(</span>
-<span id="cb7-4">            <span class="fu" style="color: #4758AB;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>), </span>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(</span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(</span>
+<span id="cb7-3">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(</span>
+<span id="cb7-4">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>), </span>
 <span id="cb7-5">            genero), </span>
-<span id="cb7-6">        <span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)),</span>
-<span id="cb7-7">    <span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span></code></pre></div>
+<span id="cb7-6">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)),</span>
+<span id="cb7-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa
@@ -858,10 +1061,40 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 </div>
 <p><strong><u>Objetos múltiplos</u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">a <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>)</span>
-<span id="cb9-2">b <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">group_by</span>(a, genero)</span>
-<span id="cb9-3">c <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">summarise</span>(b, <span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>))</span>
-<span id="cb9-4">d <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">arrange</span>(c, <span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>)</span>
+<span id="cb9-2">b <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(a, genero)</span>
+<span id="cb9-3">c <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(b, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>))</span>
+<span id="cb9-4">d <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(c, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span>
 <span id="cb9-5">d</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
@@ -874,11 +1107,41 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 </div>
 <p><strong><u>Pipe <code>magrittr</code></u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">dados_starwars <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb11-2">    <span class="fu" style="color: #4758AB;">filter</span>(altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb11-3">    <span class="fu" style="color: #4758AB;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb11-4">    <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb11-5">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">dados_starwars <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa
@@ -890,11 +1153,41 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 </div>
 <p><strong><u>Pipe R <code>base</code></u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">dados_starwars <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb13-2">    <span class="fu" style="color: #4758AB;">filter</span>(altura <span class="sc" style="color: #5E5E5E;">&gt;</span> <span class="dv" style="color: #AD0000;">150</span>) <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb13-3">    <span class="fu" style="color: #4758AB;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb13-4">    <span class="fu" style="color: #4758AB;">summarise</span>(<span class="at" style="color: #657422;">media_massa =</span> <span class="fu" style="color: #4758AB;">mean</span>(massa, <span class="at" style="color: #657422;">na.rm =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;">|&gt;</span> </span>
-<span id="cb13-5">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(media_massa))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">dados_starwars <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa
@@ -931,7 +1224,7 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 </item>
 <item>
   <title>Explorando o mundo de The Office</title>
-  <dc:creator>Ricardo</dc:creator>
+  <dc:creator>Ricardo </dc:creator>
   <link>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</link>
   <description><![CDATA[ 
 
@@ -976,11 +1269,25 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 <li>Para ter acesso pelo R, podemos utilizar o pacote <code>googlesheets4</code>, através da função <code>read_sheet()</code>, dessa forma:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># carregando o pacote necessário</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(googlesheets4) <span class="co" style="color: #5E5E5E;"># ler diretamente do google sheets</span></span>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># carregando o pacote necessário</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(googlesheets4) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ler diretamente do google sheets</span></span>
 <span id="cb1-3"></span>
-<span id="cb1-4"><span class="co" style="color: #5E5E5E;"># colocando o BD em um objeto do tipo dataframe (ou tibble)</span></span>
-<span id="cb1-5">theoffice <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read_sheet</span>(<span class="st" style="color: #20794D;">"https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534"</span>)</span></code></pre></div>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># colocando o BD em um objeto do tipo dataframe (ou tibble)</span></span>
+<span id="cb1-5">theoffice <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sheet</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534"</span>)</span></code></pre></div>
 </div>
 <ol start="2" type="1">
 <li>Utilizando o BD fornecido pelo usuário <a href="https://www.kaggle.com/fabriziocominetti">Fabrizio Cominetti</a>, lá no <a href="https://www.kaggle.com/datasets/fabriziocominetti/the-office-lines">Kaggle</a> (em outro post trago mais detalhes sobre);</li>
@@ -995,16 +1302,46 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 <li>Para ler o arquivo utilizarei o pacote <code>readr</code>, da família <code>tidyverse</code>:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;"># carregando os pacotes necessários</span></span>
-<span id="cb2-2"><span class="fu" style="color: #4758AB;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;"># manipulação de dados</span></span>
-<span id="cb2-3"><span class="fu" style="color: #4758AB;">library</span>(readr) <span class="co" style="color: #5E5E5E;"># função read_csv()</span></span>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># carregando os pacotes necessários</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># manipulação de dados</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(readr) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># função read_csv()</span></span>
 <span id="cb2-4"></span>
-<span id="cb2-5"><span class="co" style="color: #5E5E5E;"># lendo o arquivo "the-office_lines.csv.zip"</span></span>
-<span id="cb2-6">theoffice <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">read_csv</span>(here<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">here</span>(<span class="st" style="color: #20794D;">"posts/004-explorando-the-office/the-office-lines - scripts.csv"</span>),</span>
-<span id="cb2-7">                      <span class="at" style="color: #657422;">show_col_types =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span>
+<span id="cb2-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># lendo o arquivo "the-office_lines.csv.zip"</span></span>
+<span id="cb2-6">theoffice <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_csv</span>(here<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/004-explorando-the-office/the-office-lines - scripts.csv"</span>),</span>
+<span id="cb2-7">                      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">show_col_types =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
 <span id="cb2-8"></span>
-<span id="cb2-9"><span class="co" style="color: #5E5E5E;"># resumindo os dados</span></span>
-<span id="cb2-10"><span class="fu" style="color: #4758AB;">glimpse</span>(theoffice)</span></code></pre></div>
+<span id="cb2-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># resumindo os dados</span></span>
+<span id="cb2-10"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(theoffice)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 59,909
 Columns: 7
@@ -1020,7 +1357,17 @@ $ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 <p>Como podemos ver, o objeto <code>theoffice</code> contém <strong>7 variáveis</strong> e <strong>59.909 observações</strong> (ou “falas” dos personagens).</p>
 <p>Para melhor visualização (somente das 6 primeiras observações):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>(<span class="fu" style="color: #4758AB;">head</span>(theoffice, <span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">6</span>))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(theoffice, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>))</span></code></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <colgroup>
@@ -1116,15 +1463,43 @@ $ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 <h4 class="anchored" data-anchor-id="renomeando-as-variáveis-para-pt-br">Renomeando as variáveis para pt-br</h4>
 <p>Agora, já que é uma postagem em português, vamos traduzir os nomes das variáveis.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">theoffice_pt <span class="ot" style="color: #003B4F;">&lt;-</span> theoffice <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb5-2">    <span class="fu" style="color: #4758AB;">rename</span>(<span class="at" style="color: #657422;">temporada =</span> season,</span>
-<span id="cb5-3">           <span class="at" style="color: #657422;">episodio =</span> episode,</span>
-<span id="cb5-4">           <span class="at" style="color: #657422;">cena =</span> scene,</span>
-<span id="cb5-5">           <span class="at" style="color: #657422;">fala =</span> line_text,</span>
-<span id="cb5-6">           <span class="at" style="color: #657422;">personagem =</span> speaker,</span>
-<span id="cb5-7">           <span class="at" style="color: #657422;">deletado =</span> deleted)</span>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">theoffice_pt <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> theoffice <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rename</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">temporada =</span> season,</span>
+<span id="cb5-3">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">episodio =</span> episode,</span>
+<span id="cb5-4">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cena =</span> scene,</span>
+<span id="cb5-5">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fala =</span> line_text,</span>
+<span id="cb5-6">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">personagem =</span> speaker,</span>
+<span id="cb5-7">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">deletado =</span> deleted)</span>
 <span id="cb5-8"></span>
-<span id="cb5-9">knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>(<span class="fu" style="color: #4758AB;">head</span>(theoffice_pt, <span class="at" style="color: #657422;">n =</span> <span class="dv" style="color: #AD0000;">2</span>))</span></code></pre></div>
+<span id="cb5-9">knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(theoffice_pt, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span></code></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <colgroup>
@@ -1176,11 +1551,23 @@ $ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 <h4 class="anchored" data-anchor-id="número-de-falas-por-temporada">Número de falas por temporada</h4>
 <p>Bom, dessa vez vamos ver <strong>quantas falas existiram em cada uma das 9 temporadas da série</strong>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">theoffice_pt <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb6-2">    <span class="co" style="color: #5E5E5E;"># agrupando por temporada</span></span>
-<span id="cb6-3">    <span class="fu" style="color: #4758AB;">group_by</span>(temporada) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb6-4">    <span class="co" style="color: #5E5E5E;"># somando as observações</span></span>
-<span id="cb6-5">    <span class="fu" style="color: #4758AB;">tally</span>()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb6-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># agrupando por temporada</span></span>
+<span id="cb6-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(temporada) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb6-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># somando as observações</span></span>
+<span id="cb6-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tally</span>()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 2
   temporada     n
@@ -1203,15 +1590,51 @@ $ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 <h4 class="anchored" data-anchor-id="número-de-falas-por-personagem-no-1º-episódio">Número de falas por personagem no 1º episódio</h4>
 <p>Podemos também filtrar algumas informações, para ser mais específicos. Por exemplo, se quisermos saber quantas <strong>falas</strong> foram feitas <strong>por personagem</strong> no <strong>primeiro episódio</strong> da <strong>primeira temporada</strong> (<del>a mais odiada</del>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">theoffice_pt <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-2">    <span class="co" style="color: #5E5E5E;"># filtramos a temporada 1 e o episódio 1</span></span>
-<span id="cb8-3">    <span class="fu" style="color: #4758AB;">filter</span>(temporada <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">&amp;</span> episodio <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">1</span>) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-4">    <span class="co" style="color: #5E5E5E;"># agrupamos por personagem</span></span>
-<span id="cb8-5">    <span class="fu" style="color: #4758AB;">group_by</span>(personagem) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-6">    <span class="co" style="color: #5E5E5E;"># fazemos a somatória de observações</span></span>
-<span id="cb8-7">    <span class="fu" style="color: #4758AB;">tally</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb8-8">    <span class="co" style="color: #5E5E5E;"># organizando do número maior para o menor</span></span>
-<span id="cb8-9">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(n))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># filtramos a temporada 1 e o episódio 1</span></span>
+<span id="cb8-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(temporada <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> episodio <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># agrupamos por personagem</span></span>
+<span id="cb8-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(personagem) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-6">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># fazemos a somatória de observações</span></span>
+<span id="cb8-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tally</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-8">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># organizando do número maior para o menor</span></span>
+<span id="cb8-9">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 2
    personagem                  n
@@ -1262,14 +1685,32 @@ $ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 </ol>
 <p>Adendo: O Felipe Magalhães me sugeriu ver quantas vezes falaram “<em>That’s what she said!</em>” na série, não aguentei de curiosidade. Aí está:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;"># pacote para tratar com strings, também do tidyverse</span></span>
-<span id="cb10-2"><span class="fu" style="color: #4758AB;">library</span>(stringr)</span>
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># pacote para tratar com strings, também do tidyverse</span></span>
+<span id="cb10-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(stringr)</span>
 <span id="cb10-3"></span>
-<span id="cb10-4">twss <span class="ot" style="color: #003B4F;">&lt;-</span> theoffice_pt <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb10-5">    <span class="co" style="color: #5E5E5E;"># filtrando as falas que contém a famigerada frase</span></span>
-<span id="cb10-6">    <span class="fu" style="color: #4758AB;">filter</span>(<span class="fu" style="color: #4758AB;">str_detect</span>(fala, <span class="st" style="color: #20794D;">"[Tt]hat's what she said?"</span>))</span>
+<span id="cb10-4">twss <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> theoffice_pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb10-5">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># filtrando as falas que contém a famigerada frase</span></span>
+<span id="cb10-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str_detect</span>(fala, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[Tt]hat's what she said?"</span>))</span>
 <span id="cb10-7"></span>
-<span id="cb10-8"><span class="fu" style="color: #4758AB;">glimpse</span>(twss)</span></code></pre></div>
+<span id="cb10-8"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(twss)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 35
 Columns: 7
@@ -1284,10 +1725,24 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </div>
 <p><strong>35 falas</strong> com “<em>That’s what she said</em>”!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">twss <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb12-2">    <span class="fu" style="color: #4758AB;">group_by</span>(personagem) <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb12-3">    <span class="fu" style="color: #4758AB;">tally</span>() <span class="sc" style="color: #5E5E5E;">%&gt;%</span> </span>
-<span id="cb12-4">    <span class="fu" style="color: #4758AB;">arrange</span>(<span class="fu" style="color: #4758AB;">desc</span>(n))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">twss <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb12-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(personagem) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb12-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tally</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb12-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 11 × 2
    personagem              n
@@ -1321,7 +1776,7 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </item>
 <item>
   <title>A great ggplot tip!</title>
-  <dc:creator>Ricardo</dc:creator>
+  <dc:creator>Ricardo </dc:creator>
   <link>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index.html</link>
   <description><![CDATA[ 
 
@@ -1390,7 +1845,7 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </item>
 <item>
   <title>Drawing a star in R with ggplot</title>
-  <dc:creator>Ricardo</dc:creator>
+  <dc:creator>Ricardo </dc:creator>
   <link>https://rsilveirafh.netlify.app/posts/002-star/index.html</link>
   <description><![CDATA[ 
 
@@ -1423,12 +1878,22 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 <h2 class="anchored" data-anchor-id="hands-on">Hands on!</h2>
 <p>First of all, we will need to load <code>dplyr</code> and <code>ggplot2</code>, the package of functions that we will use in this session:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;"># data wrangling</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(ggplot2) <span class="co" style="color: #5E5E5E;"># plots</span></span></code></pre></div>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># data wrangling</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># plots</span></span></code></pre></div>
 </div>
 <p>Let’s start by creating our blank canvas:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">ggplot</span>()</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>()</span></code></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1440,9 +1905,29 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </div>
 <p>Now we can ask to ggplot to put a void theme (without texts or axis), and then to add a red background:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">red <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ggplot</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb3-2">    <span class="fu" style="color: #4758AB;">theme_void</span>() <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb3-3">    <span class="fu" style="color: #4758AB;">theme</span>(<span class="at" style="color: #657422;">plot.background =</span> <span class="fu" style="color: #4758AB;">element_rect</span>(<span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"red"</span>))</span>
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">red <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_void</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">plot.background =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>))</span>
 <span id="cb3-4"></span>
 <span id="cb3-5">red</span></code></pre></div>
 <div class="cell-output-display">
@@ -1467,14 +1952,102 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </div>
 <p>To do this, let’s create a <code>tibble</code> with the <code>x</code> and <code>y</code> coordinates (11 to close the polygon):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">r <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">rep_len</span>(<span class="at" style="color: #657422;">x =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">100</span>, <span class="dv" style="color: #AD0000;">100</span> <span class="sc" style="color: #5E5E5E;">*</span> <span class="fu" style="color: #4758AB;">sin</span>(pi<span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">10</span>) <span class="sc" style="color: #5E5E5E;">/</span> <span class="fu" style="color: #4758AB;">cos</span>(pi<span class="sc" style="color: #5E5E5E;">/</span><span class="dv" style="color: #AD0000;">5</span>)), </span>
-<span id="cb4-2">             <span class="at" style="color: #657422;">length.out =</span> <span class="dv" style="color: #AD0000;">11</span>)</span>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">r <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep_len</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sin</span>(pi<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cos</span>(pi<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)), </span>
+<span id="cb4-2">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length.out =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)</span>
 <span id="cb4-3"></span>
-<span id="cb4-4">star <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">tibble</span>(<span class="at" style="color: #657422;">coord =</span> <span class="dv" style="color: #AD0000;">1</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">11</span>,</span>
-<span id="cb4-5">               <span class="at" style="color: #657422;">x =</span> r <span class="sc" style="color: #5E5E5E;">*</span> <span class="fu" style="color: #4758AB;">sin</span>(<span class="fu" style="color: #4758AB;">seq</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">*</span> pi, <span class="at" style="color: #657422;">length.out =</span> <span class="dv" style="color: #AD0000;">11</span>)),</span>
-<span id="cb4-6">               <span class="at" style="color: #657422;">y =</span> r <span class="sc" style="color: #5E5E5E;">*</span> <span class="fu" style="color: #4758AB;">cos</span>(<span class="fu" style="color: #4758AB;">seq</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">*</span> pi, <span class="at" style="color: #657422;">length.out =</span> <span class="dv" style="color: #AD0000;">11</span>)))</span>
+<span id="cb4-4">star <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tibble</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coord =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>,</span>
+<span id="cb4-5">               <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> r <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sin</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> pi, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length.out =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)),</span>
+<span id="cb4-6">               <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> r <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cos</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> pi, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length.out =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)))</span>
 <span id="cb4-7"></span>
-<span id="cb4-8">knitr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">kable</span>(star, <span class="at" style="color: #657422;">align =</span> <span class="st" style="color: #20794D;">"c"</span>)</span></code></pre></div>
+<span id="cb4-8">knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(star, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">align =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"c"</span>)</span></code></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped">
 <thead>
@@ -1547,8 +2120,22 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </div>
 <p>Now, let’s include the star coordinates (and the paths) within the red plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">red <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb5-2">    <span class="fu" style="color: #4758AB;">geom_polygon</span>(<span class="at" style="color: #657422;">data =</span> star, <span class="at" style="color: #657422;">mapping =</span> <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> x, <span class="at" style="color: #657422;">y =</span> y))</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">red <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_polygon</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> star, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mapping =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> y))</span></code></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1560,10 +2147,34 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </div>
 <p>The next step is to paint the star in white color, and also fix the coordinates:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">pt <span class="ot" style="color: #003B4F;">&lt;-</span> red <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb6-2">    <span class="fu" style="color: #4758AB;">geom_polygon</span>(<span class="at" style="color: #657422;">data =</span> star, <span class="at" style="color: #657422;">mapping =</span> <span class="fu" style="color: #4758AB;">aes</span>(<span class="at" style="color: #657422;">x =</span> x, <span class="at" style="color: #657422;">y =</span> y),</span>
-<span id="cb6-3">                 <span class="at" style="color: #657422;">fill =</span> <span class="st" style="color: #20794D;">"white"</span>) <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb6-4">    <span class="fu" style="color: #4758AB;">coord_equal</span>()</span>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">pt <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> red <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb6-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_polygon</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> star, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mapping =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> y),</span>
+<span id="cb6-3">                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"white"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb6-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coord_equal</span>()</span>
 <span id="cb6-5"></span>
 <span id="cb6-6">pt </span></code></pre></div>
 <div class="cell-output-display">
@@ -1578,13 +2189,43 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 <p>Our PT flag is ready!</p>
 <p>Just to complete, we can include the number of the party in the middle of the star, the number 13!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">pt <span class="sc" style="color: #5E5E5E;">+</span></span>
-<span id="cb7-2">    <span class="fu" style="color: #4758AB;">annotate</span>(<span class="at" style="color: #657422;">geom =</span> <span class="st" style="color: #20794D;">"text"</span>,</span>
-<span id="cb7-3">             <span class="at" style="color: #657422;">label =</span> <span class="dv" style="color: #AD0000;">13</span>,</span>
-<span id="cb7-4">             <span class="at" style="color: #657422;">x =</span> <span class="sc" style="color: #5E5E5E;">-</span><span class="dv" style="color: #AD0000;">4</span>,</span>
-<span id="cb7-5">             <span class="at" style="color: #657422;">y =</span> <span class="dv" style="color: #AD0000;">0</span>,</span>
-<span id="cb7-6">             <span class="at" style="color: #657422;">size =</span> <span class="dv" style="color: #AD0000;">40</span>,</span>
-<span id="cb7-7">             <span class="at" style="color: #657422;">color =</span> <span class="st" style="color: #20794D;">"red"</span>)</span></code></pre></div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">annotate</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geom =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"text"</span>,</span>
+<span id="cb7-3">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">label =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">13</span>,</span>
+<span id="cb7-4">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>,</span>
+<span id="cb7-5">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb7-6">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">40</span>,</span>
+<span id="cb7-7">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>)</span></code></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1631,7 +2272,7 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </item>
 <item>
   <title>Welcome to my blogR</title>
-  <dc:creator>Ricardo</dc:creator>
+  <dc:creator>Ricardo </dc:creator>
   <link>https://rsilveirafh.netlify.app/posts/001-welcome/index.html</link>
   <description><![CDATA[ 
 
@@ -1651,7 +2292,6 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
   <category>news</category>
   <guid>https://rsilveirafh.netlify.app/posts/001-welcome/index.html</guid>
   <pubDate>Mon, 10 Oct 2022 03:00:00 GMT</pubDate>
-  <media:content url="https://rsilveirafh.netlify.app/posts/001-welcome/welcome.gif" medium="image" type="image/gif"/>
 </item>
 </channel>
 </rss>

@@ -1,0 +1,14 @@
+{
+  "hash": "8a807b24695868a73131cca6913a333a",
+  "result": {
+    "markdown": "---\ntitle: \"Manipulando dados com `{dplyr}`\"\nsubtitle: \"Aprendendo funções do `{dplyr}` II\"\ndate: \"2022-11-22\"\ncategories: [data wrangling, dplyr, pt-br, R, tidying]\nimage: \"https://dplyr.tidyverse.org/logo.png\"\ndraft: true\n---\n\n\n\n\n## Sobre o que é esse post?\n\n- Mostrando um pouco mais do pacote `{dplyr}`.\n- Apresentando as funções `rename()`, `select()` e `mutate()`.\n\n\n## História\n\nApós o post `{dplyr}` I, onde ensinei sobre as duas primeiras funções do pacote `{dplyr}`, o `arrange()` e o `filter()`, que têm a função de modificar um banco de dados a partir de suas observações (linhas), agora é hora de fazer modificações nas variáveis (colunas) de um banco de dados.\n\nPortanto, vamos direto aos códigos...\n\n\n## Mãos no computador\n\nA função `rename()`\n\n\n## Finalizando\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

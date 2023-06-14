@@ -1,0 +1,14 @@
+{
+  "hash": "446dbbf11703c752eecee8582d261d66",
+  "result": {
+    "markdown": "---\ntitle: \"Lotofácil\"\nsubtitle: \"Explorando os números da Lotofácil\"\ndate: \"2022-06-14\"\ncategories: [R, loteria, lotofácil]\nimage: \"logo.png\"\ndraft: true\n---\n\n\n\n\n## Sobre o que é esta postagem?\n\n### Apresentação da Lotofácil como uma das principais loterias do Brasil.\n\n### Breve visão geral dos tópicos a serem abordados.\n\n\n\n## History\n\n\n\n## Finishing\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
