@@ -1,6 +1,6 @@
 ---
-title: "Data wrangling with `dplyr`"
-subtitle: "Learning `dplyr` functions I"
+title: "Data wrangling with `{dplyr}`"
+subtitle: "Learning `{dplyr}` functions - `arrange()` and `filter()`"
 date: "2022-10-24"
 categories: [data wrangling, dplyr, en, R, tidying]
 image: "https://dplyr.tidyverse.org/logo.png"
@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 
 ## What is this post about?
 
--   What is the `dplyr` package?
+-   What is the `{dplyr}` package?
 -   Presenting `arrange()` and `filter()`.
 
 ## History
@@ -22,13 +22,13 @@ Hadley Wickham, one of the minds behind the [*tidyverse*](https://www.tidyverse.
 
 Given all this work and repetition of tasks, some of the *tidyverse* R packages were designed to maintain good and *reproducible* ways to handle different datasets.
 
-The `dplyr` package, according with my ~~humble~~ opinion, is the flagship of *tidyverse* when the objective is fixing messy data.
+The `{dplyr}` package, according with my ~~humble~~ opinion, is the flagship of *tidyverse* when the objective is fixing messy data.
 
-I decided then to present some functions of the main *tidyverse* packages. We are starting with the `dplyr` functions `arange()` and `filter()`.
+I decided then to present some functions of the main *tidyverse* packages. We are starting with the `{dplyr}` functions `arrange()` and `filter()`.
 
 ## Hands on
 
-Firts of all we need to load the `dplyr` package:
+Firts of all we need to load the `{dplyr}` package:
 
 ```{r}
 library(dplyr)
@@ -61,9 +61,9 @@ knitr::include_graphics("https://github.com/allisonhorst/palmerpenguins/raw/main
 
 ### `arrange()`
 
-The first `dplyr` function is `arrange()`.
+The first `{dplyr}` function is `arrange()`.
 
-One thing that I like in the `dplyr` functions, is that they represent the *actions* of what they pretend to do. For instance, `arrange()` will literally *arrange* the dataset based in one or more columns, at the ascending or descending order (default is ascending).
+One thing that I like in the `{dplyr}` functions, is that they represent the *actions* of what they pretend to do. For instance, `arrange()` will literally *arrange* the dataset based in one or more columns, at the ascending or descending order (default is ascending).
 
 In the example below, we are sorting the dataset based on the name of the species:
 
@@ -101,7 +101,7 @@ The heaviest was a *Gentoo*, from *Biscoe* Island, and weighed *6,300 g*.
 
 ### `filter()`
 
-The `filter()` function is one of the more important at the `dplyr` package.
+The `filter()` function is one of the more important at the `{dplyr}` package.
 
 According to its name, `filter()` will subset the observations (**rows**) of the dataset based on a given rule.
 
@@ -168,7 +168,7 @@ There is a lot more to do, and a lot of specific details at the `filter()` funct
 
 In this post, we explored:
 
-- `dplyr` package
+- `{dplyr}` package
 	- `arrange()` function;
 	- `filter()` function.
 
