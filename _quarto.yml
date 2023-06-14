@@ -12,7 +12,7 @@ website:
     right: 
       - about.qmd
       - icon: github
-        href: https://github.com/rsilveirafh/blogR
+        href: https://github.com/rsilveirafh/
       - icon: envelope
         href: mailto:ricardodasilveira@gmail.com
 format:
