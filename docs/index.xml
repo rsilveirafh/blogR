@@ -1775,7 +1775,7 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
   <media:content url="https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif" medium="image" type="image/gif"/>
 </item>
 <item>
-  <title>A great ggplot tip!</title>
+  <title>A great {ggplot2} tip!</title>
   <dc:creator>Ricardo </dc:creator>
   <link>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index.html</link>
   <description><![CDATA[ 
@@ -1786,12 +1786,12 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <section id="what-is-this-post-about" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-this-post-about">What is this post about?</h2>
 <ul>
-<li><code>ggplot2</code> tips</li>
+<li><code>{ggplot2}</code> tips</li>
 </ul>
 </section>
 <section id="history" class="level2">
 <h2 class="anchored" data-anchor-id="history">History</h2>
-<p>Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>ggplot2</code>.</p>
+<p>Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>{ggplot2}</code>.</p>
 <p>But, as is well known, if you don’t save that, it will be lost forever.</p>
 <p>Except when you have a great community on <a href="http://twitter.com/">twitter</a>, and there is a bunch of good people trying to help everyone!</p>
 <p><em>Some time ahead…</em></p>
@@ -1801,7 +1801,7 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <div id="fig-ggplot" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/https:/isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="img-fluid figure-img"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;1: ggplot2 theme elements references, by Isabella Benabaye.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;1: ggplot2 theme elements references, by Isabella Benabaye.</figcaption>
 </figure>
 </div>
 </div>
@@ -1816,12 +1816,12 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <div id="fig-tweet" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index_files/figure-html/fig-tweet-1.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<p></p><figcaption class="figure-caption">Figure&nbsp;2: Henry Wang’s tweet.</figcaption><p></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Henry Wang’s tweet.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>And, he also made a nice <a href="https://henrywang.nl/ggplot2-theme-elements-demonstration/">post</a> about the subject (where you can download his version of <code>ggplot2</code> theme elements demonstration).</p>
+<p>And, he also made a nice <a href="https://henrywang.nl/ggplot2-theme-elements-demonstration/">post</a> about the subject (where you can download his version of <code>{ggplot2}</code> theme elements demonstration).</p>
 </section>
 <section id="finishing" class="level2">
 <h2 class="anchored" data-anchor-id="finishing">Finishing</h2>

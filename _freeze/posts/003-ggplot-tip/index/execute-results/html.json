@@ -1,0 +1,16 @@
+{
+  "hash": "3b0f87867c2383ca6272d4e03dced4ec",
+  "result": {
+    "markdown": "---\ntitle: \"A great `{ggplot2}` tip!\"\nsubtitle: \"Learning about theme elements\"\ndate: \"2022-10-14\"\ncategories: [code, ggplot2, R, tips]\nimage: \"https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png\"\ndraft: false\n---\n\n\n\n\n## What is this post about?\n\n- `{ggplot2}` tips\n\n\n## History\n\nSome time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within `{ggplot2}`.\n\nBut, as is well known, if you don't save that, it will be lost forever.\n\nExcept when you have a great community on [twitter](http://twitter.com/), and there is a bunch of good people trying to help everyone!\n\n*Some time ahead...*\n\nI finally found it! Here it is:\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![ggplot2 theme elements references, by Isabella Benabaye.](https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png){#fig-ggplot}\n:::\n:::\n\n\n\nI also found the [post](https://isabella-b.com/blog/ggplot2-theme-elements-reference/) on her blog, with better quality [images](https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.png) and/or a [pdf](https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.pdf) file.\n\n\n## The history continues...\n\nMore interesting: actually, she had her idea after this twitter post from Henry Wang:\n\n\n::: {.cell}\n::: {.cell-output-display}\n![Henry Wang's tweet.](index_files/figure-html/fig-tweet-1.png){#fig-tweet width=70%}\n:::\n:::\n\n\n\nAnd, he also made a nice [post](https://henrywang.nl/ggplot2-theme-elements-demonstration/) about the subject (where you can download his version of `{ggplot2}` theme elements demonstration).\n\n\n## Finishing\n\nThat's it, enjoy the creativity and good ideas from all these people, soon I'll bring some more.\n\nThanks for the reading, cheers!\n\nR.\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

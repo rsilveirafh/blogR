@@ -1,5 +1,5 @@
 ---
-title: "A great ggplot tip!"
+title: "A great `{ggplot2}` tip!"
 subtitle: "Learning about theme elements"
 date: "2022-10-14"
 categories: [code, ggplot2, R, tips]
@@ -13,12 +13,12 @@ knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 
 ## What is this post about?
 
-- `ggplot2` tips
+- `{ggplot2}` tips
 
 
 ## History
 
-Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within `ggplot2`.
+Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within `{ggplot2}`.
 
 But, as is well known, if you don't save that, it will be lost forever.
 
@@ -56,7 +56,7 @@ tweetrmd::tweet_screenshot("https://twitter.com/henrywangnl/status/1259396196713
 ```
 
 
-And, he also made a nice [post](https://henrywang.nl/ggplot2-theme-elements-demonstration/) about the subject (where you can download his version of `ggplot2` theme elements demonstration).
+And, he also made a nice [post](https://henrywang.nl/ggplot2-theme-elements-demonstration/) about the subject (where you can download his version of `{ggplot2}` theme elements demonstration).
 
 
 ## Finishing

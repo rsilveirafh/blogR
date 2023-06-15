@@ -18,7 +18,7 @@
     "href": "index.html",
     "title": "#blogR",
     "section": "",
-    "text": "Data wrangling with {dplyr}\n\n\n\ndata wrangling\n\n\ndplyr\n\n\nen\n\n\nR\n\n\ntidying\n\n\n\n\n\n\n\nRicardo\n\n\nOct 24, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nComo e porquê usar o pipe ( %&gt;% e |&gt; )?\n\n\n\nensinandoR\n\n\npipe\n\n\npt-br\n\n\nR\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 18, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExplorando o mundo de The Office\n\n\n\npt-br\n\n\nR\n\n\nThe Office\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nA great ggplot tip!\n\n\n\ncode\n\n\nggplot2\n\n\nR\n\n\ntips\n\n\n\n\n\n\n\nRicardo\n\n\nOct 14, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDrawing a star in R with ggplot\n\n\n\ncode\n\n\nggplot2\n\n\nLula\n\n\nPT\n\n\nR\n\n\nstar\n\n\n\n\n\n\n\nRicardo\n\n\nOct 13, 2022\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to my blogR\n\n\n\nnews\n\n\n\n\n\n\n\nRicardo\n\n\nOct 10, 2022\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Data wrangling with {dplyr}\n\n\n\ndata wrangling\n\n\ndplyr\n\n\nen\n\n\nR\n\n\ntidying\n\n\n\n\n\n\n\nRicardo\n\n\nOct 24, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nComo e porquê usar o pipe ( %&gt;% e |&gt; )?\n\n\n\nensinandoR\n\n\npipe\n\n\npt-br\n\n\nR\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 18, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExplorando o mundo de The Office\n\n\n\npt-br\n\n\nR\n\n\nThe Office\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nA great {ggplot2} tip!\n\n\n\ncode\n\n\nggplot2\n\n\nR\n\n\ntips\n\n\n\n\n\n\n\nRicardo\n\n\nOct 14, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDrawing a star in R with ggplot\n\n\n\ncode\n\n\nggplot2\n\n\nLula\n\n\nPT\n\n\nR\n\n\nstar\n\n\n\n\n\n\n\nRicardo\n\n\nOct 13, 2022\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to my blogR\n\n\n\nnews\n\n\n\n\n\n\n\nRicardo\n\n\nOct 10, 2022\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html#education",
@@ -79,28 +79,28 @@
   {
     "objectID": "posts/003-ggplot-tip/index.html",
     "href": "posts/003-ggplot-tip/index.html",
-    "title": "A great ggplot tip!",
+    "title": "A great {ggplot2} tip!",
     "section": "",
-    "text": "ggplot2 tips"
+    "text": "{ggplot2} tips"
   },
   {
     "objectID": "posts/003-ggplot-tip/index.html#history",
     "href": "posts/003-ggplot-tip/index.html#history",
-    "title": "A great ggplot tip!",
+    "title": "A great {ggplot2} tip!",
     "section": "History",
-    "text": "History\nSome time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within ggplot2.\nBut, as is well known, if you don’t save that, it will be lost forever.\nExcept when you have a great community on twitter, and there is a bunch of good people trying to help everyone!\nSome time ahead…\nI finally found it! Here it is:\n\n\n\n\n\nFigure 1: ggplot2 theme elements references, by Isabella Benabaye.\n\n\n\n\nI also found the post on her blog, with better quality images and/or a pdf file."
+    "text": "History\nSome time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within {ggplot2}.\nBut, as is well known, if you don’t save that, it will be lost forever.\nExcept when you have a great community on twitter, and there is a bunch of good people trying to help everyone!\nSome time ahead…\nI finally found it! Here it is:\n\n\n\n\n\nFigure 1: ggplot2 theme elements references, by Isabella Benabaye.\n\n\n\n\nI also found the post on her blog, with better quality images and/or a pdf file."
   },
   {
     "objectID": "posts/003-ggplot-tip/index.html#the-history-continues",
     "href": "posts/003-ggplot-tip/index.html#the-history-continues",
-    "title": "A great ggplot tip!",
+    "title": "A great {ggplot2} tip!",
     "section": "The history continues…",
-    "text": "The history continues…\nMore interesting: actually, she had her idea after this twitter post from Henry Wang:\n\n\n\n\n\nFigure 2: Henry Wang’s tweet.\n\n\n\n\nAnd, he also made a nice post about the subject (where you can download his version of ggplot2 theme elements demonstration)."
+    "text": "The history continues…\nMore interesting: actually, she had her idea after this twitter post from Henry Wang:\n\n\n\n\n\nFigure 2: Henry Wang’s tweet.\n\n\n\n\nAnd, he also made a nice post about the subject (where you can download his version of {ggplot2} theme elements demonstration)."
   },
   {
     "objectID": "posts/003-ggplot-tip/index.html#finishing",
     "href": "posts/003-ggplot-tip/index.html#finishing",
-    "title": "A great ggplot tip!",
+    "title": "A great {ggplot2} tip!",
     "section": "Finishing",
     "text": "Finishing\nThat’s it, enjoy the creativity and good ideas from all these people, soon I’ll bring some more.\nThanks for the reading, cheers!"
   },
@@ -215,5 +215,12 @@
     "title": "Data wrangling with {dplyr}",
     "section": "",
     "text": "What is the {dplyr} package?\nPresenting arrange() and filter()."
+  },
+  {
+    "objectID": "posts/003-ggplot-tip/index.html#what-is-this-post-about",
+    "href": "posts/003-ggplot-tip/index.html#what-is-this-post-about",
+    "title": "A great {ggplot2} tip!",
+    "section": "",
+    "text": "{ggplot2} tips"
   }
 ]
