@@ -1,0 +1,273 @@
+---
+title: "Medindo a cobertura de Dossel no R"
+subtitle: "Explorando o pacote `{coveR}`"
+date: "2022-06-21"
+categories: [coveR, ecologia, R, tags]
+image: "https://gitlab.com/fchianucci/coveR/-/raw/master/inst/extdata/coveR-logo_HR.png"
+draft: true
+---
+
+
+```{r}
+#| include: false
+
+# set knitr options
+knitr::opts_chunk$set(warning = FALSE, message = FALSE,
+                      knitr.table.format = "html")
+
+# set scientific notation to be displayed as numbers
+options(scipen = 999)
+
+# set locale to brazilian portuguese
+Sys.setlocale(category = "LC_TIME", locale = "pt_BR.UTF-8")
+```
+
+
+## 0. Pacotes utilizados na sessão
+
+```{r}
+library(coveR)      # imagens de cobertura
+library(cowplot)    # organizar plots
+library(here)       # localização de arquivos
+library(kableExtra) # tabelas
+library(knitr)      # tabelas/imagens
+library(patchwork)  # organizar plots
+library(tidyverse)  # manipulação de dados
+```
+
+- Necessário instalar os pacotes `{EBImage}`, `{exiftoolr}` e `{coveR}`, ver abaixo:
+
+```{r}
+#| eval: false
+# Repositório BiocManager:
+install.packages("BiocManager")
+
+# Pacote {EBImage}
+BiocManager::install("EBImage")
+
+# Pacote {exiftoolr} + instalação
+devtools::install_github("JoshOBrien/exiftoolr")
+exiftoolr::install_exiftool()
+
+# Pacote {coveR}
+devtools::install_git("https://gitlab.com/fchianucci/coveR")
+```
+
+
+---
+
+# 1. Dados iniciais
+
+
+### 1.1. Criar o objeto principal
+
+- Criando objeto `image`
+
+```{r}
+image <- here("posts/007-coveR/pics/pt03_ang.png")
+```
+
+```{r}
+#| fig-cap: "Imagem gerada a partir de um celular com lente angular no Ponto 03."
+#| fig-height: 100
+#| fig-align: left
+#| echo: false
+knitr::include_graphics(image)
+```
+
+
+- O canal azul é preferido porque permite um maior contraste entre os pixels do céu e do dossel
+- Isso é ilustrado a seguir:
+
+```{r}
+#| fig-cap: "Imagem gerada a partir de um celular com lente angular no Ponto 03."
+#| fig-align: left
+#| echo: false
+
+p1 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_ang.png"))
+p2 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_ang_mods/pt03_ang_red.png"))
+p3 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_ang_mods/pt03_ang_green.png"))
+p4 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_ang_mods/pt03_ang_blue.png"))
+
+plot_grid(p1, p2, p3, p4,
+          ncol = 2, 
+          nrow = 2,
+          labels = c("Original", "Red", "Green", "Blue"),
+          label_colour = "red",
+          label_x = -0.01,
+          label_y = 0.2)
+```
+
+
+### 1.2. Selecionar o canal azul
+
+- Selecionar o canal azul
+- Criando objeto `img_blue`
+- Função `open_blue()` importa a imagem transformando em um raster de canal único (azul)
+
+```{r}
+img_blue <- open_blue(image, which.blue = 3, exif = FALSE, crop = NULL)
+```
+
+```{r}
+#| fig-cap: "Imagem raster feita a partir de uma banda azul."
+#| fig-align: left
+#| echo: false
+sp::plot(img_blue)
+```
+
+
+### 1.3. Classificar os pixels e criar uma imagem binária
+
+- Imagem binária onde céu (*1*) e dossel (*0*)
+- A função `thd_blue()` recebe a imagem rasterizada azul e transforma em binária
+- Utiliza a função `auto_thresh()` do pacote `{autothresholdr}` para definir o thresholding (limites) da imagem 
+- O padrão é o método _"Minimum"_, mas existem 17 métodos diferentes que podem ser testados (<https://imagej.net/plugins/auto-threshold>)
+- Criando objetos `img_lim_min` (médoto _"Minimum"_) e `img_lim_def` (método _"Default"_)
+
+```{r}
+#| fig-cap: 'Imagem binária feita com o método "Minimum".'
+#| fig-align: left
+img_lim_min <- thd_blue(img_blue, method = "Minimum", display = TRUE)
+```
+
+```{r}
+#| fig-cap: 'Imagem binária feita com o método "Default".'
+#| fig-align: left
+img_lim_def <- thd_blue(img_blue, method = "Default", display = TRUE)
+```
+
+
+### 1.4. Segmentar e nomear as lacunas
+
+- Retornar os atributos do dossel requer uma classificação dos pixels (os valores *1* no raster binário)
+    - largos: lacunas entre o dossel
+    - pequenos: lacunas dentro do dossel
+- A função `label_gaps()` usa a função `bwlabel()` do pacote `{EBImage}` para atribuir um valor numérico para cada lacuna distinta
+
+```{r}
+img_min_gaps <- label_gaps(img_lim_min)
+```
+
+```{r}
+#| fig-cap: "Minimum"
+#| echo: false
+#| fig-align: left
+sp::plot(img_min_gaps)
+```
+
+```{r}
+img_def_gaps <- label_gaps(img_lim_def)
+```
+
+```{r}
+#| fig-cap: "Default"
+#| echo: false
+#| fig-align: left
+sp::plot(img_def_gaps)
+```
+
+
+### 1.5. Classificar lacunas baseadas no tamanho
+
+Existem basicamente dois métodos para classificar as lacunas a depender do seus tamanhos.
+
+- [Macfarlane et al., 2007](https://doi.org/10.1016/j.agrformet.2007.05.001)
+    - Considera lacunas grandes aquelas com 1,3% da área da imagem.
+- [Alivernini et al., 2018](https://doi.org/10.1007/s00468-018-1666-3)
+    - Se baseia na distribuição estatística do tamanho das lacunas dentro da imagem.
+    - Lacunas grandes são consideradas por $gL \ge \mu + \sqrt{{\sigma \over n}}$
+    - Comparado ao método anterior, este é dependente da densidade do dossel, já que o limite das lacunas grandes vão variar a cada imagem.
+    
+Os métodos são implementados na função `extract_gap()`:
+
+- Método _"Minimum"_
+```{r}
+# Macfarlane
+df_min_mac <- extract_gap(img_min_gaps, gapmethod = "macfarlane")
+kable(head(df_min_mac))
+
+# Alivernini
+df_min_ali <- extract_gap(img_min_gaps, gapmethod = "alivernini")
+kable(head(df_min_ali))
+```
+
+- Método _"Default"_
+```{r}
+# Macfarlane
+df_def_mac <- extract_gap(img_def_gaps, gapmethod = "macfarlane")
+kable(head(df_min_mac))
+
+# Alivernini
+df_def_ali <- extract_gap(img_def_gaps, gapmethod = "alivernini")
+kable(head(df_min_ali))
+```
+
+
+### 1.6. Recuperar atributos do dossel
+
+- Função `get_canopy()` para estimar os atributos do dossel.
+- Dentre eles:
+    - **Fração das Lacunas** ($FL$) = fração dos pixels das lacunas (nomeados por *1* na imagem binária): $FL = {Tp \over Np}$, onde $Tp$ é o número de pixels de lacuna, $Np$ é o número total de pixels;
+    - **Cobertura Foliar** ($CF$) = complemento da fração das lacunas: $CF = {1 - FL}$;
+    - **Cobertura do Dossel** ($CD$) = complemento da fração das lacunas grandes: $CD = 1 - {Tp \over Np}$;
+    - **Porosidade do Dossel** ($PD$) = fração das lacunas dentro dos dosséis: $PD = 1 - {CF \over CD}$
+
+
+```{r}
+#| eval: false
+df2 <- get_canopy(df1, k = 0.85)
+
+cnp.img <- canopy_raster(img3, df1)
+
+raster::plot(cnp.img)
+
+out <- coveR(image, 
+             which.blue = 3, 
+             method = "Minimum",
+             gapmethod = "alivernini",
+             k = 0.8, 
+             export.image = FALSE, 
+             exif = FALSE, 
+             crop = NULL)
+
+out
+```
+
+
+
+
+
+```{r}
+images <- dir(path = here("posts/007-coveR/pics/"), pattern = "*.png", full.names = TRUE)
+
+here::here()
+
+images |> 
+    purrr::map(coveR, method = "Minimum", gapmethod = "macfarlane") |> 
+    dplyr::bind_rows()
+```
+
+
+
+
+
+
+
+# References
+
+
+Craig Macfarlane, Andrew Grigg, Crystelle Evangelista,
+Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle,
+Agricultural and Forest Meteorology,
+Volume 146, Issues 1–2,
+2007,
+Pages 1-12
+
+
+Alivernini, A., Fares, S., Ferrara, C. et al. An objective image analysis method for estimation of canopy attributes from digital cover photography. Trees 32, 713–723 (2018). 
+
+Chianucci et al. 2022. "coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes." Trees (2022): 1-10.
+
+- Link: <https://link.springer.com/article/10.1007/s00468-022-02338-5>
+- GitLab: <https://gitlab.com/fchianucci/coveR>

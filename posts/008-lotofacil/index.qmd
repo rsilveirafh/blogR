@@ -38,7 +38,7 @@ library(tidyr)
 Carregando os dados
 
 ```{r}
-lotofacil <- read_csv("posts/007-lotofacil/lotofacil.csv") |> 
+lotofacil <- read_csv("/home/ricardo/Documents/git/blogR/posts/008-lotofacil/lotofacil.csv") |> 
 	clean_names()
 
 head(lotofacil)

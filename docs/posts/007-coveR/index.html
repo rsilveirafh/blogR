@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.340">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Ricardo">
+<meta name="dcterms.date" content="2022-06-21">
+
+<title>#blogR - Medindo a cobertura de Dossel no R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">#blogR</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">Ricardo R. da Silveira Filho</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/rsilveirafh/" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:ricardodasilveira@gmail.com" rel="" target=""><i class="bi bi-envelope" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Medindo a cobertura de Dossel no R</h1>
+            <p class="subtitle lead">Explorando o pacote <code>{coveR}</code></p>
+                                <div class="quarto-categories">
+                <div class="quarto-category">coveR</div>
+                <div class="quarto-category">ecologia</div>
+                <div class="quarto-category">R</div>
+                <div class="quarto-category">tags</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Ricardo </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 21, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="pacotes-utilizados-na-sessão" class="level2">
+<h2 class="anchored" data-anchor-id="pacotes-utilizados-na-sessão">0. Pacotes utilizados na sessão</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coveR)      <span class="co"># imagens de cobertura</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)    <span class="co"># organizar plots</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)       <span class="co"># localização de arquivos</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra) <span class="co"># tabelas</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)      <span class="co"># tabelas/imagens</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)  <span class="co"># organizar plots</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># manipulação de dados</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Necessário instalar os pacotes <code>{EBImage}</code>, <code>{exiftoolr}</code> e <code>{coveR}</code>, ver abaixo:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Repositório BiocManager:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {EBImage}</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"EBImage"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {exiftoolr} + instalação</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"JoshOBrien/exiftoolr"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>exiftoolr<span class="sc">::</span><span class="fu">install_exiftool</span>()</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {coveR}</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_git</span>(<span class="st">"https://gitlab.com/fchianucci/coveR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+<section id="dados-iniciais" class="level1">
+<h1>1. Dados iniciais</h1>
+<section id="criar-o-objeto-principal" class="level3">
+<h3 class="anchored" data-anchor-id="criar-o-objeto-principal">1.1. Criar o objeto principal</h3>
+<ul>
+<li>Criando objeto <code>image</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>image <span class="ot">&lt;-</span> <span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt03_ang.png"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="pics/pt03_ang.png" class="img-fluid figure-img" width="640"></p>
+<figcaption class="figure-caption">Imagem gerada a partir de um celular com lente angular no Ponto 03.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>O canal azul é preferido porque permite um maior contraste entre os pixels do céu e do dossel</li>
+<li>Isso é ilustrado a seguir:</li>
+</ul>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem gerada a partir de um celular com lente angular no Ponto 03.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="selecionar-o-canal-azul" class="level3">
+<h3 class="anchored" data-anchor-id="selecionar-o-canal-azul">1.2. Selecionar o canal azul</h3>
+<ul>
+<li>Selecionar o canal azul</li>
+<li>Criando objeto <code>img_blue</code></li>
+<li>Função <code>open_blue()</code> importa a imagem transformando em um raster de canal único (azul)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>img_blue <span class="ot">&lt;-</span> <span class="fu">open_blue</span>(image, <span class="at">which.blue =</span> <span class="dv">3</span>, <span class="at">exif =</span> <span class="cn">FALSE</span>, <span class="at">crop =</span> <span class="cn">NULL</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem raster feita a partir de uma banda azul.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classificar-os-pixels-e-criar-uma-imagem-binária" class="level3">
+<h3 class="anchored" data-anchor-id="classificar-os-pixels-e-criar-uma-imagem-binária">1.3. Classificar os pixels e criar uma imagem binária</h3>
+<ul>
+<li>Imagem binária onde céu (<em>1</em>) e dossel (<em>0</em>)</li>
+<li>A função <code>thd_blue()</code> recebe a imagem rasterizada azul e transforma em binária</li>
+<li>Utiliza a função <code>auto_thresh()</code> do pacote <code>{autothresholdr}</code> para definir o thresholding (limites) da imagem</li>
+<li>O padrão é o método <em>“Minimum”</em>, mas existem 17 métodos diferentes que podem ser testados (<a href="https://imagej.net/plugins/auto-threshold" class="uri">https://imagej.net/plugins/auto-threshold</a>)</li>
+<li>Criando objetos <code>img_lim_min</code> (médoto <em>“Minimum”</em>) e <code>img_lim_def</code> (método <em>“Default”</em>)</li>
+</ul>
+<div class="cell" data-layout-align="left">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>img_lim_min <span class="ot">&lt;-</span> <span class="fu">thd_blue</span>(img_blue, <span class="at">method =</span> <span class="st">"Minimum"</span>, <span class="at">display =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem binária feita com o método “Minimum”.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>img_lim_def <span class="ot">&lt;-</span> <span class="fu">thd_blue</span>(img_blue, <span class="at">method =</span> <span class="st">"Default"</span>, <span class="at">display =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem binária feita com o método “Default”.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="segmentar-e-nomear-as-lacunas" class="level3">
+<h3 class="anchored" data-anchor-id="segmentar-e-nomear-as-lacunas">1.4. Segmentar e nomear as lacunas</h3>
+<ul>
+<li>Retornar os atributos do dossel requer uma classificação dos pixels (os valores <em>1</em> no raster binário)
+<ul>
+<li>largos: lacunas entre o dossel</li>
+<li>pequenos: lacunas dentro do dossel</li>
+</ul></li>
+<li>A função <code>label_gaps()</code> usa a função <code>bwlabel()</code> do pacote <code>{EBImage}</code> para atribuir um valor numérico para cada lacuna distinta</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>img_min_gaps <span class="ot">&lt;-</span> <span class="fu">label_gaps</span>(img_lim_min)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Minimum</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>img_def_gaps <span class="ot">&lt;-</span> <span class="fu">label_gaps</span>(img_lim_def)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Default</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classificar-lacunas-baseadas-no-tamanho" class="level3">
+<h3 class="anchored" data-anchor-id="classificar-lacunas-baseadas-no-tamanho">1.5. Classificar lacunas baseadas no tamanho</h3>
+<p>Existem basicamente dois métodos para classificar as lacunas a depender do seus tamanhos.</p>
+<ul>
+<li><a href="https://doi.org/10.1016/j.agrformet.2007.05.001">Macfarlane et al., 2007</a>
+<ul>
+<li>Considera lacunas grandes aquelas com 1,3% da área da imagem.</li>
+</ul></li>
+<li><a href="https://doi.org/10.1007/s00468-018-1666-3">Alivernini et al., 2018</a>
+<ul>
+<li>Se baseia na distribuição estatística do tamanho das lacunas dentro da imagem.</li>
+<li>Lacunas grandes são consideradas por <span class="math inline">\(gL \ge \mu + \sqrt{{\sigma \over n}}\)</span></li>
+<li>Comparado ao método anterior, este é dependente da densidade do dossel, já que o limite das lacunas grandes vão variar a cada imagem.</li>
+</ul></li>
+</ul>
+<p>Os métodos são implementados na função <code>extract_gap()</code>:</p>
+<ul>
+<li>Método <em>“Minimum”</em></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df_min_mac <span class="ot">&lt;-</span> <span class="fu">extract_gap</span>(img_min_gaps, <span class="at">gapmethod =</span> <span class="st">"macfarlane"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(df_min_mac))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alivernini</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>df_min_ali <span class="ot">&lt;-</span> <span class="fu">extract_gap</span>(img_min_gaps, <span class="at">gapmethod =</span> <span class="st">"alivernini"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(df_min_ali))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gMN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gSD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gTHD</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: right;">796127.0000</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<ul>
+<li>Método <em>“Default”</em></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>df_def_mac <span class="ot">&lt;-</span> <span class="fu">extract_gap</span>(img_def_gaps, <span class="at">gapmethod =</span> <span class="st">"macfarlane"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(df_min_mac))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alivernini</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df_def_ali <span class="ot">&lt;-</span> <span class="fu">extract_gap</span>(img_def_gaps, <span class="at">gapmethod =</span> <span class="st">"alivernini"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(<span class="fu">head</span>(df_min_ali))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gMN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gSD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gTHD</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: right;">796127.0000</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="recuperar-atributos-do-dossel" class="level3">
+<h3 class="anchored" data-anchor-id="recuperar-atributos-do-dossel">1.6. Recuperar atributos do dossel</h3>
+<ul>
+<li>Função <code>get_canopy()</code> para estimar os atributos do dossel.</li>
+<li>Dentre eles:
+<ul>
+<li><strong>Fração das Lacunas</strong> (<span class="math inline">\(FL\)</span>) = fração dos pixels das lacunas (nomeados por <em>1</em> na imagem binária): <span class="math inline">\(FL = {Tp \over Np}\)</span>, onde <span class="math inline">\(Tp\)</span> é o número de pixels de lacuna, <span class="math inline">\(Np\)</span> é o número total de pixels;</li>
+<li><strong>Cobertura Foliar</strong> (<span class="math inline">\(CF\)</span>) = complemento da fração das lacunas: <span class="math inline">\(CF = {1 - FL}\)</span>;</li>
+<li><strong>Cobertura do Dossel</strong> (<span class="math inline">\(CD\)</span>) = complemento da fração das lacunas grandes: <span class="math inline">\(CD = 1 - {Tp \over Np}\)</span>;</li>
+<li><strong>Porosidade do Dossel</strong> (<span class="math inline">\(PD\)</span>) = fração das lacunas dentro dos dosséis: <span class="math inline">\(PD = 1 - {CF \over CD}\)</span></li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">get_canopy</span>(df1, <span class="at">k =</span> <span class="fl">0.85</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>cnp.img <span class="ot">&lt;-</span> <span class="fu">canopy_raster</span>(img3, df1)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>raster<span class="sc">::</span><span class="fu">plot</span>(cnp.img)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">coveR</span>(image, </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">which.blue =</span> <span class="dv">3</span>, </span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"Minimum"</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">gapmethod =</span> <span class="st">"alivernini"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">k =</span> <span class="fl">0.8</span>, </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">export.image =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">exif =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">crop =</span> <span class="cn">NULL</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>images <span class="ot">&lt;-</span> <span class="fu">dir</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/"</span>), <span class="at">pattern =</span> <span class="st">"*.png"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/home/ricardo/Documents/git/blogR"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>images <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">map</span>(coveR, <span class="at">method =</span> <span class="st">"Minimum"</span>, <span class="at">gapmethod =</span> <span class="st">"macfarlane"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">bind_rows</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   id        FC        CC         CP        Le         L
+1   pt03_ang_blue.png 0.7867985 0.9314966 0.15533936 3.0910351 3.4691600
+2  pt03_ang_green.png 0.8047005 0.9347078 0.13908873 3.2664422 3.6876902
+3    pt03_ang_red.png 0.5600220 0.6743522 0.16954084 1.6420610 2.3934937
+4        pt03_ang.png 0.6478898 0.7132389 0.09162304 2.0876222 3.4093855
+5     pt03_normal.png 0.1219629 0.1371821 0.11094149 0.2601328 0.6032588
+6        pt10_ang.png 0.9079427 0.9834237 0.07675324 4.7706883 5.0492110
+7     pt10_normal.png 0.9001671 1.0000000 0.09983290 4.6085150 4.6085150
+8        pt12_ang.png 0.8985213 1.0000000 0.10147868 4.5758131 4.5758131
+9     pt12_normal.png 0.9081239 1.0000000 0.09187609 4.7746290 4.7746290
+10       pt20_ang.png 0.6560661 0.7758553 0.15439635 2.1346115 2.8989559
+11    pt20_normal.png 0.5302192 0.6309549 0.15965592 1.5109781 2.3152690
+          CI   k  gapmethod   thd  method channel FileSize Camera Model
+1  0.8910039 0.5 macfarlane 0.013 Minimum       3   770461   &lt;NA&gt;  &lt;NA&gt;
+2  0.8857692 0.5 macfarlane 0.013 Minimum       3  1424666   &lt;NA&gt;  &lt;NA&gt;
+3  0.6860519 0.5 macfarlane 0.013 Minimum       3  1159745   &lt;NA&gt;  &lt;NA&gt;
+4  0.6123163 0.5 macfarlane 0.013 Minimum       3  1974863   &lt;NA&gt;  &lt;NA&gt;
+5  0.4312127 0.5 macfarlane 0.013 Minimum       3   404219   &lt;NA&gt;  &lt;NA&gt;
+6  0.9448384 0.5 macfarlane 0.013 Minimum       3  2543367   &lt;NA&gt;  &lt;NA&gt;
+7  1.0000000 0.5 macfarlane 0.013 Minimum       3  2239355   &lt;NA&gt;  &lt;NA&gt;
+8  1.0000000 0.5 macfarlane 0.013 Minimum       3  2353004   &lt;NA&gt;  &lt;NA&gt;
+9  1.0000000 0.5 macfarlane 0.013 Minimum       3  2032940   &lt;NA&gt;  &lt;NA&gt;
+10 0.7363380 0.5 macfarlane 0.013 Minimum       3  2374501   &lt;NA&gt;  &lt;NA&gt;
+11 0.6526145 0.5 macfarlane 0.013 Minimum       3  1660670   &lt;NA&gt;  &lt;NA&gt;
+   ImageSize Date  day month year
+1   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+2   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+3   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+4   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+5   1280 720 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+6   960 1280 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+7   720 1280 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+8   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+9   1280 720 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+10  1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
+11  1280 720 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<p>Craig Macfarlane, Andrew Grigg, Crystelle Evangelista, Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle, Agricultural and Forest Meteorology, Volume 146, Issues 1–2, 2007, Pages 1-12</p>
+<p>Alivernini, A., Fares, S., Ferrara, C. et al.&nbsp;An objective image analysis method for estimation of canopy attributes from digital cover photography. Trees 32, 713–723 (2018).</p>
+<p>Chianucci et al.&nbsp;2022. “coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes.” Trees (2022): 1-10.</p>
+<ul>
+<li>Link: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5" class="uri">https://link.springer.com/article/10.1007/s00468-022-02338-5</a></li>
+<li>GitLab: <a href="https://gitlab.com/fchianucci/coveR" class="uri">https://gitlab.com/fchianucci/coveR</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://giscus.app/client.js" data-repo="rsilveirafh/blogR" data-repo-id="R_kgDOIM_PHw" data-category="General" data-category-id="DIC_kwDOIM_PH84CR97l" data-mapping="title" data-reactions-enabled="1" data-emit-metadata="0" data-input-position="top" data-theme="light" data-lang="en" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Blog made with <a href="https://quarto.org/">Quarto</a>, by Ricardo da Silveira Filho.</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
