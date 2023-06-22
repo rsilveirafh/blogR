@@ -9,7 +9,7 @@
 <meta name="author" content="Ricardo">
 <meta name="dcterms.date" content="2022-06-21">
 
-<title>#blogR - Medindo a cobertura de Dossel no R</title>
+<title>#blogR - Cobertura de Dossel em imagens no R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -147,10 +147,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Medindo a cobertura de Dossel no R</h1>
+      <h1 class="title">Cobertura de Dossel em imagens no R</h1>
             <p class="subtitle lead">Explorando o pacote <code>{coveR}</code></p>
                                 <div class="quarto-categories">
                 <div class="quarto-category">coveR</div>
+                <div class="quarto-category">dossel</div>
                 <div class="quarto-category">ecologia</div>
                 <div class="quarto-category">R</div>
                 <div class="quarto-category">tags</div>
@@ -189,40 +190,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<section id="propósito" class="level2">
+<h2 class="anchored" data-anchor-id="propósito">Propósito</h2>
+<p>Surgiu uma demanda no laboratório, em que precisarei tirar medidas de cobertura de dossel de cada um dos <em>pitfall-traps</em> que estão instalados em campo.</p>
+<p>Para adiantar, resolvi estudar e criar uma rotina para este propósito.</p>
+<p>Abaixo explico brevemente cada um dos passos para sua realização.</p>
+</section>
 <section id="pacotes-utilizados-na-sessão" class="level2">
-<h2 class="anchored" data-anchor-id="pacotes-utilizados-na-sessão">0. Pacotes utilizados na sessão</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coveR)      <span class="co"># imagens de cobertura</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)    <span class="co"># organizar plots</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)       <span class="co"># localização de arquivos</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra) <span class="co"># tabelas</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)      <span class="co"># tabelas/imagens</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)  <span class="co"># organizar plots</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># manipulação de dados</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<h2 class="anchored" data-anchor-id="pacotes-utilizados-na-sessão">1. Pacotes utilizados na sessão</h2>
+<p>Após pesquisar bastante, encontrei o pacote <code>{coveR}</code>, que foi escrito pelo <em>Francesco Chianucci</em>. Você pode ter mais informações no seu artigo de lançamento: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5">veja aqui</a>.</p>
 <ul>
-<li>Necessário instalar os pacotes <code>{EBImage}</code>, <code>{exiftoolr}</code> e <code>{coveR}</code>, ver abaixo:</li>
+<li>Para que o <code>{coveR}</code> possa funcionar, são necessários os pacotes <code>{EBImage}</code> e <code>{exiftoolr}</code>, ver abaixo:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Repositório BiocManager:</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {EBImage}</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"EBImage"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {exiftoolr} + instalação</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"JoshOBrien/exiftoolr"</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>exiftoolr<span class="sc">::</span><span class="fu">install_exiftool</span>()</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {coveR}</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_git</span>(<span class="st">"https://gitlab.com/fchianucci/coveR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Repositório BiocManager:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {EBImage}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"EBImage"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {exiftoolr} + instalação</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"JoshOBrien/exiftoolr"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>exiftoolr<span class="sc">::</span><span class="fu">install_exiftool</span>()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Pacote {coveR}</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_git</span>(<span class="st">"https://gitlab.com/fchianucci/coveR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Eu penei um pouco para instalar tudo com sucesso, mas nada que algumas horas de briga com o Linux não resolvam =)</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coveR)      <span class="co"># imagens de cobertura</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cowplot)    <span class="co"># organizar plots</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)       <span class="co"># localização de arquivos</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra) <span class="co"># tabelas</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)      <span class="co"># tabelas/imagens</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)  <span class="co"># organizar plots</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># manipulação de dados</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr>
 </section>
 <section id="dados-iniciais" class="level1">
-<h1>1. Dados iniciais</h1>
+<h1>2. Dados iniciais</h1>
 <section id="criar-o-objeto-principal" class="level3">
-<h3 class="anchored" data-anchor-id="criar-o-objeto-principal">1.1. Criar o objeto principal</h3>
+<h3 class="anchored" data-anchor-id="criar-o-objeto-principal">2.1. Criar o objeto principal</h3>
 <ul>
 <li>Criando objeto <code>image</code></li>
 </ul>
@@ -255,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="selecionar-o-canal-azul" class="level3">
-<h3 class="anchored" data-anchor-id="selecionar-o-canal-azul">1.2. Selecionar o canal azul</h3>
+<h3 class="anchored" data-anchor-id="selecionar-o-canal-azul">2.2. Selecionar o canal azul</h3>
 <ul>
 <li>Selecionar o canal azul</li>
 <li>Criando objeto <code>img_blue</code></li>
@@ -276,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="classificar-os-pixels-e-criar-uma-imagem-binária" class="level3">
-<h3 class="anchored" data-anchor-id="classificar-os-pixels-e-criar-uma-imagem-binária">1.3. Classificar os pixels e criar uma imagem binária</h3>
+<h3 class="anchored" data-anchor-id="classificar-os-pixels-e-criar-uma-imagem-binária">2.3. Classificar os pixels e criar uma imagem binária</h3>
 <ul>
 <li>Imagem binária onde céu (<em>1</em>) e dossel (<em>0</em>)</li>
 <li>A função <code>thd_blue()</code> recebe a imagem rasterizada azul e transforma em binária</li>
@@ -308,7 +319,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="segmentar-e-nomear-as-lacunas" class="level3">
-<h3 class="anchored" data-anchor-id="segmentar-e-nomear-as-lacunas">1.4. Segmentar e nomear as lacunas</h3>
+<h3 class="anchored" data-anchor-id="segmentar-e-nomear-as-lacunas">2.4. Segmentar e nomear as lacunas</h3>
 <ul>
 <li>Retornar os atributos do dossel requer uma classificação dos pixels (os valores <em>1</em> no raster binário)
 <ul>
@@ -345,7 +356,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="classificar-lacunas-baseadas-no-tamanho" class="level3">
-<h3 class="anchored" data-anchor-id="classificar-lacunas-baseadas-no-tamanho">1.5. Classificar lacunas baseadas no tamanho</h3>
+<h3 class="anchored" data-anchor-id="classificar-lacunas-baseadas-no-tamanho">2.5. Classificar lacunas baseadas no tamanho</h3>
 <p>Existem basicamente dois métodos para classificar as lacunas a depender do seus tamanhos.</p>
 <ul>
 <li><a href="https://doi.org/10.1016/j.agrformet.2007.05.001">Macfarlane et al., 2007</a>
@@ -1012,7 +1023,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 <section id="recuperar-atributos-do-dossel" class="level3">
-<h3 class="anchored" data-anchor-id="recuperar-atributos-do-dossel">1.6. Recuperar atributos do dossel</h3>
+<h3 class="anchored" data-anchor-id="recuperar-atributos-do-dossel">2.6. Recuperar atributos do dossel</h3>
 <ul>
 <li>Função <code>get_canopy()</code> para estimar os atributos do dossel.</li>
 <li>Dentre eles:
@@ -1023,84 +1034,574 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><strong>Porosidade do Dossel</strong> (<span class="math inline">\(PD\)</span>) = fração das lacunas dentro dos dosséis: <span class="math inline">\(PD = 1 - {CF \over CD}\)</span></li>
 </ul></li>
 </ul>
+<p>Os outros atributos podem ser verificados no artigo do <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5">Chianucci et al.</a>.</p>
+<ul>
+<li>Método <em>“Minimum”</em></li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> <span class="fu">get_canopy</span>(df1, <span class="at">k =</span> <span class="fl">0.85</span>)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>cnp.img <span class="ot">&lt;-</span> <span class="fu">canopy_raster</span>(img3, df1)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>raster<span class="sc">::</span><span class="fu">plot</span>(cnp.img)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">coveR</span>(image, </span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">which.blue =</span> <span class="dv">3</span>, </span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">method =</span> <span class="st">"Minimum"</span>,</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">gapmethod =</span> <span class="st">"alivernini"</span>,</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">k =</span> <span class="fl">0.8</span>, </span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">export.image =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>             <span class="at">exif =</span> <span class="cn">FALSE</span>, </span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">crop =</span> <span class="cn">NULL</span>)</span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df2_min_mac <span class="ot">&lt;-</span> <span class="fu">get_canopy</span>(df_min_mac)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df2_min_mac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.091623</td>
+<td style="text-align: right;">2.087622</td>
+<td style="text-align: right;">3.409385</td>
+<td style="text-align: right;">0.6123163</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alivernini</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df2_min_ali <span class="ot">&lt;-</span> <span class="fu">get_canopy</span>(df_min_ali)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df2_min_ali)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.6785124</td>
+<td style="text-align: right;">0.0451319</td>
+<td style="text-align: right;">2.087622</td>
+<td style="text-align: right;">4.204288</td>
+<td style="text-align: right;">0.496546</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<ul>
+<li>Método <em>“Default”</em></li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>images <span class="ot">&lt;-</span> <span class="fu">dir</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/"</span>), <span class="at">pattern =</span> <span class="st">"*.png"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">here</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "/home/ricardo/Documents/git/blogR"</code></pre>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df2_def_mac <span class="ot">&lt;-</span> <span class="fu">get_canopy</span>(df_def_mac)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df2_def_mac)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.617063</td>
+<td style="text-align: right;">0.1469073</td>
+<td style="text-align: right;">1.494835</td>
+<td style="text-align: right;">2.366996</td>
+<td style="text-align: right;">0.6315324</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Default</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>images <span class="sc">|&gt;</span> </span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">map</span>(coveR, <span class="at">method =</span> <span class="st">"Minimum"</span>, <span class="at">gapmethod =</span> <span class="st">"macfarlane"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">bind_rows</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                   id        FC        CC         CP        Le         L
-1   pt03_ang_blue.png 0.7867985 0.9314966 0.15533936 3.0910351 3.4691600
-2  pt03_ang_green.png 0.8047005 0.9347078 0.13908873 3.2664422 3.6876902
-3    pt03_ang_red.png 0.5600220 0.6743522 0.16954084 1.6420610 2.3934937
-4        pt03_ang.png 0.6478898 0.7132389 0.09162304 2.0876222 3.4093855
-5     pt03_normal.png 0.1219629 0.1371821 0.11094149 0.2601328 0.6032588
-6        pt10_ang.png 0.9079427 0.9834237 0.07675324 4.7706883 5.0492110
-7     pt10_normal.png 0.9001671 1.0000000 0.09983290 4.6085150 4.6085150
-8        pt12_ang.png 0.8985213 1.0000000 0.10147868 4.5758131 4.5758131
-9     pt12_normal.png 0.9081239 1.0000000 0.09187609 4.7746290 4.7746290
-10       pt20_ang.png 0.6560661 0.7758553 0.15439635 2.1346115 2.8989559
-11    pt20_normal.png 0.5302192 0.6309549 0.15965592 1.5109781 2.3152690
-          CI   k  gapmethod   thd  method channel FileSize Camera Model
-1  0.8910039 0.5 macfarlane 0.013 Minimum       3   770461   &lt;NA&gt;  &lt;NA&gt;
-2  0.8857692 0.5 macfarlane 0.013 Minimum       3  1424666   &lt;NA&gt;  &lt;NA&gt;
-3  0.6860519 0.5 macfarlane 0.013 Minimum       3  1159745   &lt;NA&gt;  &lt;NA&gt;
-4  0.6123163 0.5 macfarlane 0.013 Minimum       3  1974863   &lt;NA&gt;  &lt;NA&gt;
-5  0.4312127 0.5 macfarlane 0.013 Minimum       3   404219   &lt;NA&gt;  &lt;NA&gt;
-6  0.9448384 0.5 macfarlane 0.013 Minimum       3  2543367   &lt;NA&gt;  &lt;NA&gt;
-7  1.0000000 0.5 macfarlane 0.013 Minimum       3  2239355   &lt;NA&gt;  &lt;NA&gt;
-8  1.0000000 0.5 macfarlane 0.013 Minimum       3  2353004   &lt;NA&gt;  &lt;NA&gt;
-9  1.0000000 0.5 macfarlane 0.013 Minimum       3  2032940   &lt;NA&gt;  &lt;NA&gt;
-10 0.7363380 0.5 macfarlane 0.013 Minimum       3  2374501   &lt;NA&gt;  &lt;NA&gt;
-11 0.6526145 0.5 macfarlane 0.013 Minimum       3  1660670   &lt;NA&gt;  &lt;NA&gt;
-   ImageSize Date  day month year
-1   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-2   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-3   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-4   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-5   1280 720 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-6   960 1280 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-7   720 1280 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-8   1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-9   1280 720 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-10  1280 960 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;
-11  1280 720 &lt;NA&gt; &lt;NA&gt;  &lt;NA&gt; &lt;NA&gt;</code></pre>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Alivernini</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>df2_def_ali <span class="ot">&lt;-</span> <span class="fu">get_canopy</span>(df_def_ali)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(df2_def_ali)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.5692228</td>
+<td style="text-align: right;">0.0752093</td>
+<td style="text-align: right;">1.494835</td>
+<td style="text-align: right;">2.945705</td>
+<td style="text-align: right;">0.5074625</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Default</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
 </div>
 </section>
+<section id="comparação" class="level3">
+<h3 class="anchored" data-anchor-id="comparação">2.7. Comparação</h3>
+<p>Para efeito de comparação, abaixo estão todos os bancos de dados produzidos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>a <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(methods,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">CF =</span> FC, </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">CD =</span> CC, </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">PD =</span> CP) <span class="sc">|&gt;</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">methods</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CF</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">PD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Minimum - Macfarlane</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.0916230</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Minimum - Alivernini</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.6785124</td>
+<td style="text-align: right;">0.0451319</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Default - Macfarlane</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.6170630</td>
+<td style="text-align: right;">0.1469073</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Minimum - Alivernini</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.5692228</td>
+<td style="text-align: right;">0.0752093</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
 </section>
-<section id="references" class="level1">
-<h1>References</h1>
-<p>Craig Macfarlane, Andrew Grigg, Crystelle Evangelista, Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle, Agricultural and Forest Meteorology, Volume 146, Issues 1–2, 2007, Pages 1-12</p>
-<p>Alivernini, A., Fares, S., Ferrara, C. et al.&nbsp;An objective image analysis method for estimation of canopy attributes from digital cover photography. Trees 32, 713–723 (2018).</p>
-<p>Chianucci et al.&nbsp;2022. “coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes.” Trees (2022): 1-10.</p>
+<section id="programação-funcional" class="level3">
+<h3 class="anchored" data-anchor-id="programação-funcional">2.8. Programação funcional</h3>
+<p>Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o processo para maiores volumes de dados.</p>
+<p>Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras: - ang: lente grande angular - normal: lente normal</p>
+<p>Abaixo, as imagens:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|echo: false</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt03_ang.png"</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt03_normal.png"</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt10_ang.png"</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>p4 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt10_normal.png"</span>))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt12_ang.png"</span>))</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>p6 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt12_normal.png"</span>))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>p7 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt20_ang.png"</span>))</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>p8 <span class="ot">&lt;-</span> <span class="fu">ggdraw</span>() <span class="sc">+</span> <span class="fu">draw_image</span>(<span class="fu">here</span>(<span class="st">"posts/007-coveR/pics/pt20_normal.png"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(p1, p2, p3, p4, p5, p6, p7, p8,</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">ncol =</span> <span class="dv">2</span>, </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">nrow =</span> <span class="dv">4</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">label_x =</span> <span class="sc">-</span><span class="fl">0.01</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">label_y =</span> <span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Do lado esquerdo, as imagens feitas com câmera grande angular, à direita, com câmera normal. Pontos: 03, 10, 12, e 20</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>O método utilizado foi o <em>Minimum</em>, e o método de medição de lacunas foi o <em>Macfarlane</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>images <span class="ot">&lt;-</span> <span class="fu">dir</span>(<span class="at">path =</span> <span class="fu">here</span>(<span class="st">"posts/007-coveR/pics"</span>), <span class="at">pattern =</span> <span class="st">"*.png"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>images <span class="sc">|&gt;</span> </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    purrr<span class="sc">::</span><span class="fu">map</span>(coveR, <span class="at">method =</span> <span class="st">"Minimum"</span>, <span class="at">gapmethod =</span> <span class="st">"macfarlane"</span>, <span class="at">exif =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">bind_rows</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.0916230</td>
+<td style="text-align: right;">2.0876222</td>
+<td style="text-align: right;">3.4093855</td>
+<td style="text-align: right;">0.6123163</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_normal.png</td>
+<td style="text-align: right;">0.1219629</td>
+<td style="text-align: right;">0.1371821</td>
+<td style="text-align: right;">0.1109415</td>
+<td style="text-align: right;">0.2601328</td>
+<td style="text-align: right;">0.6032588</td>
+<td style="text-align: right;">0.4312127</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt10_ang.png</td>
+<td style="text-align: right;">0.9079427</td>
+<td style="text-align: right;">0.9834237</td>
+<td style="text-align: right;">0.0767532</td>
+<td style="text-align: right;">4.7706883</td>
+<td style="text-align: right;">5.0492110</td>
+<td style="text-align: right;">0.9448384</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt10_normal.png</td>
+<td style="text-align: right;">0.9001671</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.0998329</td>
+<td style="text-align: right;">4.6085150</td>
+<td style="text-align: right;">4.6085150</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt12_ang.png</td>
+<td style="text-align: right;">0.8985213</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.1014787</td>
+<td style="text-align: right;">4.5758131</td>
+<td style="text-align: right;">4.5758131</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt12_normal.png</td>
+<td style="text-align: right;">0.9081239</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.0918761</td>
+<td style="text-align: right;">4.7746290</td>
+<td style="text-align: right;">4.7746290</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt20_ang.png</td>
+<td style="text-align: right;">0.6560661</td>
+<td style="text-align: right;">0.7758553</td>
+<td style="text-align: right;">0.1543963</td>
+<td style="text-align: right;">2.1346115</td>
+<td style="text-align: right;">2.8989559</td>
+<td style="text-align: right;">0.7363380</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt20_normal.png</td>
+<td style="text-align: right;">0.5302192</td>
+<td style="text-align: right;">0.6309549</td>
+<td style="text-align: right;">0.1596559</td>
+<td style="text-align: right;">1.5109781</td>
+<td style="text-align: right;">2.3152690</td>
+<td style="text-align: right;">0.6526145</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="resumo" class="level1">
+<h1>3. Resumo</h1>
+<p>Neste post, mostrei como:</p>
+<ul>
+<li>Fazer upload de imagens para o R;</li>
+<li>Rasterizar imagens;</li>
+<li>Transformar imagens rasterizadas para um formato binário;</li>
+<li>Transformar e classificar lacunas;</li>
+<li>Recuperar atributos de dossel através do pixelamento de imagens;</li>
+<li>Fazer o processo em lotes (batch).</li>
+</ul>
+<p>Qualquer dúvida, basta entrar em contato ;)</p>
+</section>
+<section id="referências" class="level1">
+<h1>4. Referências</h1>
+<p>Chianucci et al.&nbsp;2022. coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes. <strong>Trees</strong>, 1-10.</p>
 <ul>
 <li>Link: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5" class="uri">https://link.springer.com/article/10.1007/s00468-022-02338-5</a></li>
 <li>GitLab: <a href="https://gitlab.com/fchianucci/coveR" class="uri">https://gitlab.com/fchianucci/coveR</a></li>
 </ul>
+<p>Alivernini, A., Fares, S., Ferrara, C. <em>et al.</em> 2018. An objective image analysis method for estimation of canopy attributes from digital cover photography. <strong>Trees</strong> 32, 713–723.</p>
+<p>Macfarlane, Craig; Grigg, Andrew; Crystelle Evangelista. 2007. Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle. <strong>Agricultural and Forest Meteorology</strong> 146, 1–2: 1-12.</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
 
 
 </section>

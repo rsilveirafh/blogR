@@ -1,12 +1,19 @@
 ---
-title: "Medindo a cobertura de Dossel no R"
+title: "Cobertura de Dossel em imagens no R"
 subtitle: "Explorando o pacote `{coveR}`"
 date: "2022-06-21"
-categories: [coveR, ecologia, R, tags]
+categories: [coveR, dossel, ecologia, R, tags]
 image: "https://gitlab.com/fchianucci/coveR/-/raw/master/inst/extdata/coveR-logo_HR.png"
 draft: true
 ---
 
+## Propósito
+
+Surgiu uma demanda no laboratório, em que precisarei tirar medidas de cobertura de dossel de cada um dos *pitfall-traps* que estão instalados em campo.
+
+Para adiantar, resolvi estudar e criar uma rotina para este propósito.
+
+Abaixo explico brevemente cada um dos passos para sua realização.
 
 ```{r}
 #| include: false
@@ -23,19 +30,11 @@ Sys.setlocale(category = "LC_TIME", locale = "pt_BR.UTF-8")
 ```
 
 
-## 0. Pacotes utilizados na sessão
+## 1. Pacotes utilizados na sessão
 
-```{r}
-library(coveR)      # imagens de cobertura
-library(cowplot)    # organizar plots
-library(here)       # localização de arquivos
-library(kableExtra) # tabelas
-library(knitr)      # tabelas/imagens
-library(patchwork)  # organizar plots
-library(tidyverse)  # manipulação de dados
-```
+Após pesquisar bastante, encontrei o pacote `{coveR}`, que foi escrito pelo *Francesco Chianucci*. Você pode ter mais informações no seu artigo de lançamento: [veja aqui](https://link.springer.com/article/10.1007/s00468-022-02338-5).
 
-- Necessário instalar os pacotes `{EBImage}`, `{exiftoolr}` e `{coveR}`, ver abaixo:
+- Para que o `{coveR}` possa funcionar, são necessários os pacotes `{EBImage}` e `{exiftoolr}`, ver abaixo:
 
 ```{r}
 #| eval: false
@@ -52,14 +51,27 @@ exiftoolr::install_exiftool()
 # Pacote {coveR}
 devtools::install_git("https://gitlab.com/fchianucci/coveR")
 ```
+> Eu penei um pouco para instalar tudo com sucesso, mas nada que algumas horas de briga com o Linux não resolvam =)
+
+
+```{r}
+library(coveR)      # imagens de cobertura
+library(cowplot)    # organizar plots
+library(here)       # localização de arquivos
+library(kableExtra) # tabelas
+library(knitr)      # tabelas/imagens
+library(patchwork)  # organizar plots
+library(tidyverse)  # manipulação de dados
+```
+
 
 
 ---
 
-# 1. Dados iniciais
+# 2. Dados iniciais
 
 
-### 1.1. Criar o objeto principal
+### 2.1. Criar o objeto principal
 
 - Criando objeto `image`
 
@@ -99,7 +111,7 @@ plot_grid(p1, p2, p3, p4,
 ```
 
 
-### 1.2. Selecionar o canal azul
+### 2.2. Selecionar o canal azul
 
 - Selecionar o canal azul
 - Criando objeto `img_blue`
@@ -117,7 +129,7 @@ sp::plot(img_blue)
 ```
 
 
-### 1.3. Classificar os pixels e criar uma imagem binária
+### 2.3. Classificar os pixels e criar uma imagem binária
 
 - Imagem binária onde céu (*1*) e dossel (*0*)
 - A função `thd_blue()` recebe a imagem rasterizada azul e transforma em binária
@@ -138,7 +150,7 @@ img_lim_def <- thd_blue(img_blue, method = "Default", display = TRUE)
 ```
 
 
-### 1.4. Segmentar e nomear as lacunas
+### 2.4. Segmentar e nomear as lacunas
 
 - Retornar os atributos do dossel requer uma classificação dos pixels (os valores *1* no raster binário)
     - largos: lacunas entre o dossel
@@ -168,7 +180,7 @@ sp::plot(img_def_gaps)
 ```
 
 
-### 1.5. Classificar lacunas baseadas no tamanho
+### 2.5. Classificar lacunas baseadas no tamanho
 
 Existem basicamente dois métodos para classificar as lacunas a depender do seus tamanhos.
 
@@ -204,7 +216,7 @@ kable(head(df_min_ali))
 ```
 
 
-### 1.6. Recuperar atributos do dossel
+### 2.6. Recuperar atributos do dossel
 
 - Função `get_canopy()` para estimar os atributos do dossel.
 - Dentre eles:
@@ -213,61 +225,127 @@ kable(head(df_min_ali))
     - **Cobertura do Dossel** ($CD$) = complemento da fração das lacunas grandes: $CD = 1 - {Tp \over Np}$;
     - **Porosidade do Dossel** ($PD$) = fração das lacunas dentro dos dosséis: $PD = 1 - {CF \over CD}$
 
+Os outros atributos podem ser verificados no artigo do [Chianucci et al.](https://link.springer.com/article/10.1007/s00468-022-02338-5).
+
+- Método _"Minimum"_
+```{r}
+# Macfarlane
+df2_min_mac <- get_canopy(df_min_mac)
+kable(df2_min_mac)
+
+# Alivernini
+df2_min_ali <- get_canopy(df_min_ali)
+kable(df2_min_ali)
+```
+
+- Método _"Default"_
+```{r}
+# Macfarlane
+df2_def_mac <- get_canopy(df_def_mac)
+kable(df2_def_mac)
+
+# Alivernini
+df2_def_ali <- get_canopy(df_def_ali)
+kable(df2_def_ali)
+```
+
+### 2.7. Comparação
 
 ```{r}
-#| eval: false
-df2 <- get_canopy(df1, k = 0.85)
-
-cnp.img <- canopy_raster(img3, df1)
-
-raster::plot(cnp.img)
-
-out <- coveR(image, 
-             which.blue = 3, 
-             method = "Minimum",
-             gapmethod = "alivernini",
-             k = 0.8, 
-             export.image = FALSE, 
-             exif = FALSE, 
-             crop = NULL)
-
-out
+#| echo: false
+a <- rbind(df2_min_mac,
+		   df2_min_ali,
+		   df2_def_mac,
+		   df2_def_ali) |> 
+	cbind(methods = c("Minimum - Macfarlane",
+				  "Minimum - Alivernini",
+				  "Default - Macfarlane",
+				  "Minimum - Alivernini"))
 ```
 
 
+Para efeito de comparação, abaixo estão todos os bancos de dados produzidos:
+```{r}
+a |>
+	select(methods,
+		   CF = FC, 
+		   CD = CC, 
+		   PD = CP) |> 
+	kable()
+```
 
 
+### 2.8. Programação funcional
+
+Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o processo para maiores volumes de dados.
+
+Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras:
+- ang: lente grande angular
+- normal: lente normal
+
+Abaixo, as imagens:
+```{r}
+#|echo: false
+p1 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_ang.png"))
+p2 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_normal.png"))
+p3 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt10_ang.png"))
+p4 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt10_normal.png"))
+p5 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt12_ang.png"))
+p6 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt12_normal.png"))
+p7 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt20_ang.png"))
+p8 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt20_normal.png"))
+```
 
 ```{r}
-images <- dir(path = here("posts/007-coveR/pics/"), pattern = "*.png", full.names = TRUE)
+#| fig-cap: "Do lado esquerdo, as imagens feitas com câmera grande angular, à direita, com câmera normal. Pontos: 03, 10, 12, e 20"
+plot_grid(p1, p2, p3, p4, p5, p6, p7, p8,
+          ncol = 2, 
+          nrow = 4,
+          label_x = -0.01,
+          label_y = 0.2)
+```
 
-here::here()
+
+O método utilizado foi o *Minimum*, e o método de medição de lacunas foi o *Macfarlane*.
+
+```{r}
+images <- dir(path = here("posts/007-coveR/pics"), pattern = "*.png", full.names = TRUE)
 
 images |> 
-    purrr::map(coveR, method = "Minimum", gapmethod = "macfarlane") |> 
-    dplyr::bind_rows()
+    purrr::map(coveR, method = "Minimum", gapmethod = "macfarlane", exif = FALSE) |> 
+    dplyr::bind_rows() |> 
+	kable()
 ```
 
 
 
+---
+
+# 3. Resumo
+
+Neste post, mostrei como:
+
+- Fazer upload de imagens para o R;
+- Rasterizar imagens;
+- Transformar imagens rasterizadas para um formato binário;
+- Transformar e classificar lacunas;
+- Recuperar atributos de dossel através do pixelamento de imagens;
+- Fazer o processo em lotes (batch).
+
+Qualquer dúvida, basta entrar em contato ;)
 
 
+# 4. Referências
 
-
-# References
-
-
-Craig Macfarlane, Andrew Grigg, Crystelle Evangelista,
-Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle,
-Agricultural and Forest Meteorology,
-Volume 146, Issues 1–2,
-2007,
-Pages 1-12
-
-
-Alivernini, A., Fares, S., Ferrara, C. et al. An objective image analysis method for estimation of canopy attributes from digital cover photography. Trees 32, 713–723 (2018). 
-
-Chianucci et al. 2022. "coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes." Trees (2022): 1-10.
+Chianucci et al. 2022. coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes. **Trees**, 1-10.
 
 - Link: <https://link.springer.com/article/10.1007/s00468-022-02338-5>
 - GitLab: <https://gitlab.com/fchianucci/coveR>
+
+Alivernini, A., Fares, S., Ferrara, C. *et al.* 2018. An objective image analysis method for estimation of canopy attributes from digital cover photography. **Trees** 32, 713–723. 
+
+Macfarlane, Craig; Grigg, Andrew; Crystelle Evangelista. 2007. Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle. **Agricultural and Forest Meteorology** 146, 1–2: 1-12.
+
+
+
+R.
