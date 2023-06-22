@@ -335,6 +335,8 @@ Neste post, mostrei como:
 
 Qualquer dúvida, basta entrar em contato ;)
 
+R.
+
 
 ---
 
@@ -349,6 +351,3 @@ Alivernini, A., Fares, S., Ferrara, C. *et al.* 2018. An objective image analysi
 
 Macfarlane, Craig; Grigg, Andrew; Crystelle Evangelista. 2007. Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle. **Agricultural and Forest Meteorology** 146, 1–2: 1-12.
 
-
-
-R.
