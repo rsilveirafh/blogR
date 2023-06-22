@@ -260,7 +260,7 @@ a <- rbind(df2_min_mac,
 	cbind(methods = c("Minimum - Macfarlane",
 				  "Minimum - Alivernini",
 				  "Default - Macfarlane",
-				  "Minimum - Alivernini"))
+				  "Default - Alivernini"))
 ```
 
 
