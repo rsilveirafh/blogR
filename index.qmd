@@ -9,6 +9,10 @@ listing:
   filter-ui: false
   feed: 
     categories:
+    - Biology
+    - Data Science
+    - Ecology
+    - Herpetology
     - R
 page-layout: full
 title-block-banner: false
