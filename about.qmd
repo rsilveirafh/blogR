@@ -11,7 +11,7 @@ about:
       href: https://github.com/rsilveirafh
     - icon: file-pdf
       text: Resume
-      href: https://github.com/rsilveirafh/blogR/blob/6013efef2292427bfbead7f12d6dcff443c1be08/Curriculum-Vitae-RRdSF.pdf
+      href: https:/c
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/rsilveirafh/
@@ -51,7 +51,7 @@ Feel yourself at home ^^
 
 ## Experience
 
-**UFRN** | *Post-Doctoral Fellow* | 2022--
+**UFRN** | *Post-Doctoral Fellow* | 2022--2023
 
 **Conciso-TI** | *Head Data Scientist* | 2020--
 

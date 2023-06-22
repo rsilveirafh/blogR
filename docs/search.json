@@ -32,7 +32,7 @@
     "href": "about.html#experience",
     "title": "Ricardo R. da Silveira Filho",
     "section": "Experience",
-    "text": "Experience\nUFRN | Post-Doctoral Fellow | 2022–\nConciso-TI | Head Data Scientist | 2020–\nUNEMAT | Post-Doctoral Fellow | 2018–2019"
+    "text": "Experience\nUFRN | Post-Doctoral Fellow | 2022–2023\nConciso-TI | Head Data Scientist | 2020–\nUNEMAT | Post-Doctoral Fellow | 2018–2019"
   },
   {
     "objectID": "posts/001. welcome/index.html",
@@ -285,5 +285,12 @@
     "title": "Explorando o mundo de The Office",
     "section": "",
     "text": "A melhor série de todos os tempos;\nImportando dados da internet;\nColetando algumas informações utilizando dplyr."
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "#blogR",
+    "section": "",
+    "text": "&lt;iframe width=“800” height=“800 src=”images/resume_rrdsf.pdf”&gt;"
   }
 ]
