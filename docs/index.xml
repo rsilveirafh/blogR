@@ -3659,7 +3659,11 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 <section id="programação-funcional" class="level3">
 <h3 class="anchored" data-anchor-id="programação-funcional">2.8. Programação funcional</h3>
 <p>Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o processo para maiores volumes de dados.</p>
-<p>Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras: - ang: lente grande angular - normal: lente normal</p>
+<p>Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras:</p>
+<ul>
+<li>ang: lente grande angular</li>
+<li>normal: lente normal</li>
+</ul>
 <p>Abaixo, as imagens:</p>
 <div class="cell">
 <div class="cell-output-display">

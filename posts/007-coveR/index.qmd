@@ -280,6 +280,7 @@ a |>
 Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o processo para maiores volumes de dados.
 
 Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras:
+
 - ang: lente grande angular
 - normal: lente normal
 
