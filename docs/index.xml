@@ -2293,5 +2293,1822 @@ font-style: inherit;">"red"</span>)</span></code></pre></div>
   <guid>https://rsilveirafh.netlify.app/posts/001-welcome/index.html</guid>
   <pubDate>Mon, 10 Oct 2022 03:00:00 GMT</pubDate>
 </item>
+<item>
+  <title>Cobertura de Dossel em imagens no R</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/007-coveR/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="propósito" class="level2">
+<h2 class="anchored" data-anchor-id="propósito">Propósito</h2>
+<p>Surgiu uma demanda no laboratório, em que precisarei tirar medidas de cobertura de dossel de cada um dos <em>pitfall-traps</em> que estão instalados em campo.</p>
+<p>Para adiantar, resolvi estudar e criar uma rotina para este propósito.</p>
+<p>Abaixo explico brevemente cada um dos passos para sua realização.</p>
+</section>
+<section id="pacotes-utilizados-na-sessão" class="level2">
+<h2 class="anchored" data-anchor-id="pacotes-utilizados-na-sessão">1. Pacotes utilizados na sessão</h2>
+<p>Após pesquisar bastante, encontrei o pacote <code>{coveR}</code>, que foi escrito pelo <em>Francesco Chianucci</em>. Você pode ter mais informações no seu artigo de lançamento: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5">veja aqui</a>.</p>
+<ul>
+<li>Para que o <code>{coveR}</code> possa funcionar, são necessários os pacotes <code>{EBImage}</code> e <code>{exiftoolr}</code>, ver abaixo:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Repositório BiocManager:</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"BiocManager"</span>)</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Pacote {EBImage}</span></span>
+<span id="cb1-5">BiocManager<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"EBImage"</span>)</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Pacote {exiftoolr} + instalação</span></span>
+<span id="cb1-8">devtools<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"JoshOBrien/exiftoolr"</span>)</span>
+<span id="cb1-9">exiftoolr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_exiftool</span>()</span>
+<span id="cb1-10"></span>
+<span id="cb1-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Pacote {coveR}</span></span>
+<span id="cb1-12">devtools<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_git</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://gitlab.com/fchianucci/coveR"</span>)</span></code></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Eu penei um pouco para instalar tudo com sucesso, mas nada que algumas horas de briga com o Linux não resolvam =)</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(coveR)      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># imagens de cobertura</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(cowplot)    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># organizar plots</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(here)       <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># localização de arquivos</span></span>
+<span id="cb2-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(kableExtra) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># tabelas</span></span>
+<span id="cb2-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(knitr)      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># tabelas/imagens</span></span>
+<span id="cb2-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(patchwork)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># organizar plots</span></span>
+<span id="cb2-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(tidyverse)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># manipulação de dados</span></span></code></pre></div>
+</div>
+<hr>
+</section>
+<section id="dados-iniciais" class="level1">
+<h1>2. Dados iniciais</h1>
+<section id="criar-o-objeto-principal" class="level3">
+<h3 class="anchored" data-anchor-id="criar-o-objeto-principal">2.1. Criar o objeto principal</h3>
+<ul>
+<li>Criando objeto <code>image</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">image <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt03_ang.png"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/pics/pt03_ang.png" class="img-fluid figure-img" width="640"></p>
+<figcaption class="figure-caption">Imagem gerada a partir de um celular com lente angular no Ponto 03.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>O canal azul é preferido porque permite um maior contraste entre os pixels do céu e do dossel</li>
+<li>Isso é ilustrado a seguir:</li>
+</ul>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem gerada a partir de um celular com lente angular no Ponto 03.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="selecionar-o-canal-azul" class="level3">
+<h3 class="anchored" data-anchor-id="selecionar-o-canal-azul">2.2. Selecionar o canal azul</h3>
+<ul>
+<li>Selecionar o canal azul</li>
+<li>Criando objeto <code>img_blue</code></li>
+<li>Função <code>open_blue()</code> importa a imagem transformando em um raster de canal único (azul)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">img_blue <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">open_blue</span>(image, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">which.blue =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">exif =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">crop =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem raster feita a partir de uma banda azul.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classificar-os-pixels-e-criar-uma-imagem-binária" class="level3">
+<h3 class="anchored" data-anchor-id="classificar-os-pixels-e-criar-uma-imagem-binária">2.3. Classificar os pixels e criar uma imagem binária</h3>
+<ul>
+<li>Imagem binária onde céu (<em>1</em>) e dossel (<em>0</em>)</li>
+<li>A função <code>thd_blue()</code> recebe a imagem rasterizada azul e transforma em binária</li>
+<li>Utiliza a função <code>auto_thresh()</code> do pacote <code>{autothresholdr}</code> para definir o thresholding (limites) da imagem</li>
+<li>O padrão é o método <em>“Minimum”</em>, mas existem 17 métodos diferentes que podem ser testados (<a href="https://imagej.net/plugins/auto-threshold" class="uri">https://imagej.net/plugins/auto-threshold</a>)</li>
+<li>Criando objetos <code>img_lim_min</code> (médoto <em>“Minimum”</em>) e <code>img_lim_def</code> (método <em>“Default”</em>)</li>
+</ul>
+<div class="cell" data-layout-align="left">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">img_lim_min <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">thd_blue</span>(img_blue, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Minimum"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">display =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem binária feita com o método “Minimum”.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">img_lim_def <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">thd_blue</span>(img_blue, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Default"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">display =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem binária feita com o método “Default”.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="segmentar-e-nomear-as-lacunas" class="level3">
+<h3 class="anchored" data-anchor-id="segmentar-e-nomear-as-lacunas">2.4. Segmentar e nomear as lacunas</h3>
+<ul>
+<li>Retornar os atributos do dossel requer uma classificação dos pixels (os valores <em>1</em> no raster binário)
+<ul>
+<li>largos: lacunas entre o dossel</li>
+<li>pequenos: lacunas dentro do dossel</li>
+</ul></li>
+<li>A função <code>label_gaps()</code> usa a função <code>bwlabel()</code> do pacote <code>{EBImage}</code> para atribuir um valor numérico para cada lacuna distinta</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">img_min_gaps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">label_gaps</span>(img_lim_min)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Minimum</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">img_def_gaps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">label_gaps</span>(img_lim_def)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Default</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classificar-lacunas-baseadas-no-tamanho" class="level3">
+<h3 class="anchored" data-anchor-id="classificar-lacunas-baseadas-no-tamanho">2.5. Classificar lacunas baseadas no tamanho</h3>
+<p>Existem basicamente dois métodos para classificar as lacunas a depender do seus tamanhos.</p>
+<ul>
+<li><a href="https://doi.org/10.1016/j.agrformet.2007.05.001">Macfarlane et al., 2007</a>
+<ul>
+<li>Considera lacunas grandes aquelas com 1,3% da área da imagem.</li>
+</ul></li>
+<li><a href="https://doi.org/10.1007/s00468-018-1666-3">Alivernini et al., 2018</a>
+<ul>
+<li>Se baseia na distribuição estatística do tamanho das lacunas dentro da imagem.</li>
+<li>Lacunas grandes são consideradas por <img src="https://latex.codecogs.com/png.latex?gL%20%5Cge%20%5Cmu%20+%20%5Csqrt%7B%7B%5Csigma%20%5Cover%20n%7D%7D"></li>
+<li>Comparado ao método anterior, este é dependente da densidade do dossel, já que o limite das lacunas grandes vão variar a cada imagem.</li>
+</ul></li>
+</ul>
+<p>Os métodos são implementados na função <code>extract_gap()</code>:</p>
+<ul>
+<li>Método <em>“Minimum”</em></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb9-2">df_min_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_min_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"macfarlane"</span>)</span>
+<span id="cb9-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb10-2">df_min_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_min_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"alivernini"</span>)</span>
+<span id="cb10-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gMN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gSD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gTHD</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: right;">796127.0000</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<ul>
+<li>Método <em>“Default”</em></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb11-2">df_def_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_def_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"macfarlane"</span>)</span>
+<span id="cb11-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb12-2">df_def_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_def_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"alivernini"</span>)</span>
+<span id="cb12-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gMN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gSD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gTHD</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: right;">796127.0000</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="recuperar-atributos-do-dossel" class="level3">
+<h3 class="anchored" data-anchor-id="recuperar-atributos-do-dossel">2.6. Recuperar atributos do dossel</h3>
+<ul>
+<li>Função <code>get_canopy()</code> para estimar os atributos do dossel.</li>
+<li>Dentre eles:
+<ul>
+<li><strong>Fração das Lacunas</strong> (<img src="https://latex.codecogs.com/png.latex?FL">) = fração dos pixels das lacunas (nomeados por <em>1</em> na imagem binária): <img src="https://latex.codecogs.com/png.latex?FL%20=%20%7BTp%20%5Cover%20Np%7D">, onde <img src="https://latex.codecogs.com/png.latex?Tp"> é o número de pixels de lacuna, <img src="https://latex.codecogs.com/png.latex?Np"> é o número total de pixels;</li>
+<li><strong>Cobertura Foliar</strong> (<img src="https://latex.codecogs.com/png.latex?CF">) = complemento da fração das lacunas: <img src="https://latex.codecogs.com/png.latex?CF%20=%20%7B1%20-%20FL%7D">;</li>
+<li><strong>Cobertura do Dossel</strong> (<img src="https://latex.codecogs.com/png.latex?CD">) = complemento da fração das lacunas grandes: <img src="https://latex.codecogs.com/png.latex?CD%20=%201%20-%20%7BTp%20%5Cover%20Np%7D">;</li>
+<li><strong>Porosidade do Dossel</strong> (<img src="https://latex.codecogs.com/png.latex?PD">) = fração das lacunas dentro dos dosséis: <img src="https://latex.codecogs.com/png.latex?PD%20=%201%20-%20%7BCF%20%5Cover%20CD%7D"></li>
+</ul></li>
+</ul>
+<p>Os outros atributos podem ser verificados no artigo do <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5">Chianucci et al.</a>.</p>
+<ul>
+<li>Método <em>“Minimum”</em></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb13-2">df2_min_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_min_mac)</span>
+<span id="cb13-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_min_mac)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.091623</td>
+<td style="text-align: right;">2.087622</td>
+<td style="text-align: right;">3.409385</td>
+<td style="text-align: right;">0.6123163</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb14-2">df2_min_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_min_ali)</span>
+<span id="cb14-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_min_ali)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.6785124</td>
+<td style="text-align: right;">0.0451319</td>
+<td style="text-align: right;">2.087622</td>
+<td style="text-align: right;">4.204288</td>
+<td style="text-align: right;">0.496546</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<ul>
+<li>Método <em>“Default”</em></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb15-2">df2_def_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_def_mac)</span>
+<span id="cb15-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_def_mac)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.617063</td>
+<td style="text-align: right;">0.1469073</td>
+<td style="text-align: right;">1.494835</td>
+<td style="text-align: right;">2.366996</td>
+<td style="text-align: right;">0.6315324</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Default</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb16-2">df2_def_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_def_ali)</span>
+<span id="cb16-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_def_ali)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.5692228</td>
+<td style="text-align: right;">0.0752093</td>
+<td style="text-align: right;">1.494835</td>
+<td style="text-align: right;">2.945705</td>
+<td style="text-align: right;">0.5074625</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Default</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="comparação" class="level3">
+<h3 class="anchored" data-anchor-id="comparação">2.7. Comparação</h3>
+<p>Para efeito de comparação, abaixo estão todos os bancos de dados produzidos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb17-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">select</span>(methods,</span>
+<span id="cb17-3">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">CF =</span> FC, </span>
+<span id="cb17-4">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">CD =</span> CC, </span>
+<span id="cb17-5">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">PD =</span> CP) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">methods</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CF</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">PD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Minimum - Macfarlane</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.0916230</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Minimum - Alivernini</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.6785124</td>
+<td style="text-align: right;">0.0451319</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Default - Macfarlane</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.6170630</td>
+<td style="text-align: right;">0.1469073</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Minimum - Alivernini</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.5692228</td>
+<td style="text-align: right;">0.0752093</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="programação-funcional" class="level3">
+<h3 class="anchored" data-anchor-id="programação-funcional">2.8. Programação funcional</h3>
+<p>Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o processo para maiores volumes de dados.</p>
+<p>Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras: - ang: lente grande angular - normal: lente normal</p>
+<p>Abaixo, as imagens:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#|echo: false</span></span>
+<span id="cb18-2">p1 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt03_ang.png"</span>))</span>
+<span id="cb18-3">p2 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt03_normal.png"</span>))</span>
+<span id="cb18-4">p3 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt10_ang.png"</span>))</span>
+<span id="cb18-5">p4 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt10_normal.png"</span>))</span>
+<span id="cb18-6">p5 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt12_ang.png"</span>))</span>
+<span id="cb18-7">p6 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt12_normal.png"</span>))</span>
+<span id="cb18-8">p7 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt20_ang.png"</span>))</span>
+<span id="cb18-9">p8 <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggdraw</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_image</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt20_normal.png"</span>))</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot_grid</span>(p1, p2, p3, p4, p5, p6, p7, p8,</span>
+<span id="cb19-2">          <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ncol =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, </span>
+<span id="cb19-3">          <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nrow =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>,</span>
+<span id="cb19-4">          <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">label_x =</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span>,</span>
+<span id="cb19-5">          <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">label_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.2</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Do lado esquerdo, as imagens feitas com câmera grande angular, à direita, com câmera normal. Pontos: 03, 10, 12, e 20</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>O método utilizado foi o <em>Minimum</em>, e o método de medição de lacunas foi o <em>Macfarlane</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">images <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dir</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">path =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics"</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pattern =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"*.png"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">full.names =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb20-2"></span>
+<span id="cb20-3">images <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb20-4">    purrr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">map</span>(coveR, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Minimum"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"macfarlane"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">exif =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb20-5">    dplyr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bind_rows</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb20-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.0916230</td>
+<td style="text-align: right;">2.0876222</td>
+<td style="text-align: right;">3.4093855</td>
+<td style="text-align: right;">0.6123163</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_normal.png</td>
+<td style="text-align: right;">0.1219629</td>
+<td style="text-align: right;">0.1371821</td>
+<td style="text-align: right;">0.1109415</td>
+<td style="text-align: right;">0.2601328</td>
+<td style="text-align: right;">0.6032588</td>
+<td style="text-align: right;">0.4312127</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt10_ang.png</td>
+<td style="text-align: right;">0.9079427</td>
+<td style="text-align: right;">0.9834237</td>
+<td style="text-align: right;">0.0767532</td>
+<td style="text-align: right;">4.7706883</td>
+<td style="text-align: right;">5.0492110</td>
+<td style="text-align: right;">0.9448384</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt10_normal.png</td>
+<td style="text-align: right;">0.9001671</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.0998329</td>
+<td style="text-align: right;">4.6085150</td>
+<td style="text-align: right;">4.6085150</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt12_ang.png</td>
+<td style="text-align: right;">0.8985213</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.1014787</td>
+<td style="text-align: right;">4.5758131</td>
+<td style="text-align: right;">4.5758131</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt12_normal.png</td>
+<td style="text-align: right;">0.9081239</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.0918761</td>
+<td style="text-align: right;">4.7746290</td>
+<td style="text-align: right;">4.7746290</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt20_ang.png</td>
+<td style="text-align: right;">0.6560661</td>
+<td style="text-align: right;">0.7758553</td>
+<td style="text-align: right;">0.1543963</td>
+<td style="text-align: right;">2.1346115</td>
+<td style="text-align: right;">2.8989559</td>
+<td style="text-align: right;">0.7363380</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt20_normal.png</td>
+<td style="text-align: right;">0.5302192</td>
+<td style="text-align: right;">0.6309549</td>
+<td style="text-align: right;">0.1596559</td>
+<td style="text-align: right;">1.5109781</td>
+<td style="text-align: right;">2.3152690</td>
+<td style="text-align: right;">0.6526145</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="resumo" class="level1">
+<h1>3. Resumo</h1>
+<p>Neste post, mostrei como:</p>
+<ul>
+<li>Fazer upload de imagens para o R;</li>
+<li>Rasterizar imagens;</li>
+<li>Transformar imagens rasterizadas para um formato binário;</li>
+<li>Transformar e classificar lacunas;</li>
+<li>Recuperar atributos de dossel através do pixelamento de imagens;</li>
+<li>Fazer o processo em lotes (batch).</li>
+</ul>
+<p>Qualquer dúvida, basta entrar em contato ;)</p>
+</section>
+<section id="referências" class="level1">
+<h1>4. Referências</h1>
+<p>Chianucci et al.&nbsp;2022. coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes. <strong>Trees</strong>, 1-10.</p>
+<ul>
+<li>Link: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5" class="uri">https://link.springer.com/article/10.1007/s00468-022-02338-5</a></li>
+<li>GitLab: <a href="https://gitlab.com/fchianucci/coveR" class="uri">https://gitlab.com/fchianucci/coveR</a></li>
+</ul>
+<p>Alivernini, A., Fares, S., Ferrara, C. <em>et al.</em> 2018. An objective image analysis method for estimation of canopy attributes from digital cover photography. <strong>Trees</strong> 32, 713–723.</p>
+<p>Macfarlane, Craig; Grigg, Andrew; Crystelle Evangelista. 2007. Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle. <strong>Agricultural and Forest Meteorology</strong> 146, 1–2: 1-12.</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>coveR</category>
+  <category>dossel</category>
+  <category>ecologia</category>
+  <category>R</category>
+  <category>tags</category>
+  <guid>https://rsilveirafh.netlify.app/posts/007-coveR/index.html</guid>
+  <pubDate>Tue, 21 Jun 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://gitlab.com/fchianucci/coveR/-/raw/master/inst/extdata/coveR-logo_HR.png" medium="image" type="image/png"/>
+</item>
 </channel>
 </rss>

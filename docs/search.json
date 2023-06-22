@@ -18,7 +18,7 @@
     "href": "index.html",
     "title": "#blogR",
     "section": "",
-    "text": "Data wrangling with {dplyr}\n\n\n\ndata wrangling\n\n\ndplyr\n\n\nen\n\n\nR\n\n\ntidying\n\n\n\n\n\n\n\nRicardo\n\n\nOct 24, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nComo e porquê usar o pipe ( %&gt;% e |&gt; )?\n\n\n\nensinandoR\n\n\npipe\n\n\npt-br\n\n\nR\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 18, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExplorando o mundo de The Office\n\n\n\npt-br\n\n\nR\n\n\nThe Office\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nA great {ggplot2} tip!\n\n\n\ncode\n\n\nggplot2\n\n\nR\n\n\ntips\n\n\n\n\n\n\n\nRicardo\n\n\nOct 14, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDrawing a star in R with ggplot\n\n\n\ncode\n\n\nggplot2\n\n\nLula\n\n\nPT\n\n\nR\n\n\nstar\n\n\n\n\n\n\n\nRicardo\n\n\nOct 13, 2022\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to my blogR\n\n\n\nnews\n\n\n\n\n\n\n\nRicardo\n\n\nOct 10, 2022\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Data wrangling with {dplyr}\n\n\n\ndata wrangling\n\n\ndplyr\n\n\nen\n\n\nR\n\n\ntidying\n\n\n\n\n\n\n\nRicardo\n\n\nOct 24, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nComo e porquê usar o pipe ( %&gt;% e |&gt; )?\n\n\n\nensinandoR\n\n\npipe\n\n\npt-br\n\n\nR\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 18, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nExplorando o mundo de The Office\n\n\n\npt-br\n\n\nR\n\n\nThe Office\n\n\ntidyverse\n\n\n\n\n\n\n\nRicardo\n\n\nOct 15, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nA great {ggplot2} tip!\n\n\n\ncode\n\n\nggplot2\n\n\nR\n\n\ntips\n\n\n\n\n\n\n\nRicardo\n\n\nOct 14, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDrawing a star in R with ggplot\n\n\n\ncode\n\n\nggplot2\n\n\nLula\n\n\nPT\n\n\nR\n\n\nstar\n\n\n\n\n\n\n\nRicardo\n\n\nOct 13, 2022\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome to my blogR\n\n\n\nnews\n\n\n\n\n\n\n\nRicardo\n\n\nOct 10, 2022\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nCobertura de Dossel em imagens no R\n\n\n\ncoveR\n\n\ndossel\n\n\necologia\n\n\nR\n\n\ntags\n\n\n\n\n\n\n\nRicardo\n\n\nJun 21, 2022\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html#education",
@@ -222,5 +222,26 @@
     "title": "A great {ggplot2} tip!",
     "section": "",
     "text": "{ggplot2} tips"
+  },
+  {
+    "objectID": "posts/007-coveR/index.html",
+    "href": "posts/007-coveR/index.html",
+    "title": "Cobertura de Dossel em imagens no R",
+    "section": "",
+    "text": "Surgiu uma demanda no laboratório, em que precisarei tirar medidas de cobertura de dossel de cada um dos pitfall-traps que estão instalados em campo.\nPara adiantar, resolvi estudar e criar uma rotina para este propósito.\nAbaixo explico brevemente cada um dos passos para sua realização."
+  },
+  {
+    "objectID": "posts/007-coveR/index.html#propósito",
+    "href": "posts/007-coveR/index.html#propósito",
+    "title": "Cobertura de Dossel em imagens no R",
+    "section": "",
+    "text": "Surgiu uma demanda no laboratório, em que precisarei tirar medidas de cobertura de dossel de cada um dos pitfall-traps que estão instalados em campo.\nPara adiantar, resolvi estudar e criar uma rotina para este propósito.\nAbaixo explico brevemente cada um dos passos para sua realização."
+  },
+  {
+    "objectID": "posts/007-coveR/index.html#pacotes-utilizados-na-sessão",
+    "href": "posts/007-coveR/index.html#pacotes-utilizados-na-sessão",
+    "title": "Cobertura de Dossel em imagens no R",
+    "section": "1. Pacotes utilizados na sessão",
+    "text": "1. Pacotes utilizados na sessão\nApós pesquisar bastante, encontrei o pacote {coveR}, que foi escrito pelo Francesco Chianucci. Você pode ter mais informações no seu artigo de lançamento: veja aqui.\n\nPara que o {coveR} possa funcionar, são necessários os pacotes {EBImage} e {exiftoolr}, ver abaixo:\n\n\n# Repositório BiocManager:\ninstall.packages(\"BiocManager\")\n\n# Pacote {EBImage}\nBiocManager::install(\"EBImage\")\n\n# Pacote {exiftoolr} + instalação\ndevtools::install_github(\"JoshOBrien/exiftoolr\")\nexiftoolr::install_exiftool()\n\n# Pacote {coveR}\ndevtools::install_git(\"https://gitlab.com/fchianucci/coveR\")\n\n\nEu penei um pouco para instalar tudo com sucesso, mas nada que algumas horas de briga com o Linux não resolvam =)\n\n\nlibrary(coveR)      # imagens de cobertura\nlibrary(cowplot)    # organizar plots\nlibrary(here)       # localização de arquivos\nlibrary(kableExtra) # tabelas\nlibrary(knitr)      # tabelas/imagens\nlibrary(patchwork)  # organizar plots\nlibrary(tidyverse)  # manipulação de dados"
   }
 ]
