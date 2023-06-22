@@ -80,7 +80,7 @@ image <- here("posts/007-coveR/pics/pt03_ang.png")
 ```
 
 ```{r}
-#| fig-cap: "Imagem gerada a partir de um celular com lente angular no Ponto 03."
+#| fig-cap: "Imagem gerada a partir de um celular com lente grande angular no Ponto 03."
 #| fig-height: 100
 #| fig-align: left
 #| echo: false
@@ -92,7 +92,7 @@ knitr::include_graphics(image)
 - Isso é ilustrado a seguir:
 
 ```{r}
-#| fig-cap: "Imagem gerada a partir de um celular com lente angular no Ponto 03."
+#| fig-cap: "Imagem original e suas respectivas bandas RGB (red, green e blue)"
 #| fig-align: left
 #| echo: false
 
