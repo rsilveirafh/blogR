@@ -11,7 +11,7 @@ about:
       href: https://github.com/rsilveirafh
     - icon: file-pdf
       text: Resume
-      href: https:/c
+      href: https://github.com/rsilveirafh/blogR/blob/48c8a05ec41572ff59c90bf2e6c0f06ac17b047b/images/resume_rrdsf.pdf
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/rsilveirafh/
