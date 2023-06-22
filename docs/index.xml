@@ -10,6 +10,3976 @@
 <atom:link href="https://rsilveirafh.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>Learning R every day</description>
 <generator>quarto-1.3.340</generator>
-<lastBuildDate>Thu, 22 Jun 2023 13:19:12 GMT</lastBuildDate>
+<lastBuildDate>Mon, 24 Oct 2022 03:00:00 GMT</lastBuildDate>
+<item>
+  <title>Data wrangling with {dplyr}</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/006-dplyr-01/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="what-is-this-post-about" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-this-post-about">What is this post about?</h2>
+<ul>
+<li>What is the <code>{dplyr}</code> package?</li>
+<li>Presenting <code>arrange()</code> and <code>filter()</code>.</li>
+</ul>
+</section>
+<section id="history" class="level2">
+<h2 class="anchored" data-anchor-id="history">History</h2>
+<p>Hadley Wickham, one of the minds behind the <a href="https://www.tidyverse.org/"><em>tidyverse</em></a>, argues in his tidy data <a href="https://vita.had.co.nz/papers/tidy-data.html"><em>paper</em></a> that around <strong>80%</strong> of data analysis is spent on the process of cleaning and preparing the data.</p>
+<p>Given all this work and repetition of tasks, some of the <em>tidyverse</em> R packages were designed to maintain good and <em>reproducible</em> ways to handle different datasets.</p>
+<p>The <code>{dplyr}</code> package, according with my <del>humble</del> opinion, is the flagship of <em>tidyverse</em> when the objective is fixing messy data.</p>
+<p>I decided then to present some functions of the main <em>tidyverse</em> packages. We are starting with the <code>{dplyr}</code> functions <code>arrange()</code> and <code>filter()</code>.</p>
+</section>
+<section id="hands-on" class="level2">
+<h2 class="anchored" data-anchor-id="hands-on">Hands on</h2>
+<p>Firts of all we need to load the <code>{dplyr}</code> package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr)</span></code></pre></div>
+</div>
+<p>If you do not have it yet, just install using:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dplyr"</span>)</span></code></pre></div>
+</div>
+<p>We will use the Palmer Archipelago (Antarctica) penguin dataset, wich you can load and add into an R object like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># install.packages("palmerpenguins")</span></span>
+<span id="cb3-2">penguins <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> palmerpenguins<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>penguins</span>
+<span id="cb3-3"></span>
+<span id="cb3-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(penguins)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 344
+Columns: 8
+$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…
+$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…
+$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …
+$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …
+$ flipper_length_mm &lt;int&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…
+$ body_mass_g       &lt;int&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …
+$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…
+$ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>You can read more about this dataset at <a href="https://github.com/allisonhorst/palmerpenguins">Allison Horst</a> Github page.</p>
+</blockquote>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-penguins" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/006-dplyr-01/https:/github.com/allisonhorst/palmerpenguins/raw/main/man/figures/lter_penguins.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: Meet the Palmer penguins. Artwork by <span class="citation" data-cites="allison_horst">@allison_horst</span>.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="arrange" class="level3">
+<h3 class="anchored" data-anchor-id="arrange"><code>arrange()</code></h3>
+<p>The first <code>{dplyr}</code> function is <code>arrange()</code>.</p>
+<p>One thing that I like in the <code>{dplyr}</code> functions, is that they represent the <em>actions</em> of what they pretend to do. For instance, <code>arrange()</code> will literally <em>arrange</em> the dataset based in one or more columns, at the ascending or descending order (default is ascending).</p>
+<p>In the example below, we are sorting the dataset based on the name of the species:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(species)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>If you want to know more about the pipe (|&gt;), check my previous <a href="https://rsilveirafh.netlify.app/posts/005-pipe/">post</a> (in brazilian portuguese).</p>
+</blockquote>
+<p>Now, let’s arrange the dataset based on the <em>island</em> by descending order, and <em>species</em> by ascending order:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(island), species)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>The two variables above were alphabetically sorted, now we can try the same using the <em>body_mass_g</em> numeric variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb9-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(body_mass_g)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species   island   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;     &lt;fct&gt;             &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Chinstrap Dream              46.9          16.6               192        2700
+ 2 Adelie    Biscoe             36.5          16.6               181        2850
+ 3 Adelie    Biscoe             36.4          17.1               184        2850
+ 4 Adelie    Biscoe             34.5          18.1               187        2900
+ 5 Adelie    Dream              33.1          16.1               178        2900
+ 6 Adelie    Torgers…           38.6          17                 188        2900
+ 7 Chinstrap Dream              43.2          16.6               187        2900
+ 8 Adelie    Biscoe             37.9          18.6               193        2925
+ 9 Adelie    Dream              37.5          18.9               179        2975
+10 Adelie    Dream              37            16.9               185        3000
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>The lightest measured penguin weighed <em>2,700 g</em>, it was from the <em>Chinstrap</em> species from the <em>Dream</em> Island.</p>
+<p>What about the heaviest?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb11-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(body_mass_g))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 8
+   species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;           &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Gentoo  Biscoe           49.2          15.2               221        6300
+ 2 Gentoo  Biscoe           59.6          17                 230        6050
+ 3 Gentoo  Biscoe           51.1          16.3               220        6000
+ 4 Gentoo  Biscoe           48.8          16.2               222        6000
+ 5 Gentoo  Biscoe           45.2          16.4               223        5950
+ 6 Gentoo  Biscoe           49.8          15.9               229        5950
+ 7 Gentoo  Biscoe           48.4          14.6               213        5850
+ 8 Gentoo  Biscoe           49.3          15.7               217        5850
+ 9 Gentoo  Biscoe           55.1          16                 230        5850
+10 Gentoo  Biscoe           49.5          16.2               229        5800
+# ℹ 334 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>The heaviest was a <em>Gentoo</em>, from <em>Biscoe</em> Island, and weighed <em>6,300 g</em>.</p>
+</section>
+<section id="filter" class="level3">
+<h3 class="anchored" data-anchor-id="filter"><code>filter()</code></h3>
+<p>The <code>filter()</code> function is one of the more important at the <code>{dplyr}</code> package.</p>
+<p>According to its name, <code>filter()</code> will subset the observations (<strong>rows</strong>) of the dataset based on a given rule.</p>
+<p>To retain the values, the proposed rules must produce a <strong>TRUE</strong> value for all conditions.</p>
+<blockquote class="blockquote">
+<p>To do such conditions, some relational operators are necessary, here is a list of them:</p>
+<table class="table">
+<caption>Relational operators in R</caption>
+<thead>
+<tr class="header">
+<th>Operator</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&lt;</td>
+<td>Less than</td>
+</tr>
+<tr class="even">
+<td>&gt;</td>
+<td>Greater than</td>
+</tr>
+<tr class="odd">
+<td>&lt;=</td>
+<td>Less than or equal to</td>
+</tr>
+<tr class="even">
+<td>&gt;=</td>
+<td>Greater than or equal to</td>
+</tr>
+<tr class="odd">
+<td>==</td>
+<td>Equal to</td>
+</tr>
+<tr class="even">
+<td>!=</td>
+<td>Not equal to</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>Let’s start using only one condition.</p>
+<p>First, we want to pick only the penguins that weight <em>less than 3,000 g</em> (or 3 kg):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(body_mass_g <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3000</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 8
+  species   island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+  &lt;fct&gt;     &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+1 Adelie    Dream               37.5          18.9               179        2975
+2 Adelie    Biscoe              34.5          18.1               187        2900
+3 Adelie    Biscoe              36.5          16.6               181        2850
+4 Adelie    Biscoe              36.4          17.1               184        2850
+5 Adelie    Dream               33.1          16.1               178        2900
+6 Adelie    Biscoe              37.9          18.6               193        2925
+7 Adelie    Torgersen           38.6          17                 188        2900
+8 Chinstrap Dream               43.2          16.6               187        2900
+9 Chinstrap Dream               46.9          16.6               192        2700
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>The result is a filtered dataset containing only <em>9 penguins</em>.</p>
+<p>Now we want to filter only the female in the <code>penguins</code> data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb15-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(sex <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"female"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 165 × 8
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.5          17.4               186        3800
+ 2 Adelie  Torgersen           40.3          18                 195        3250
+ 3 Adelie  Torgersen           36.7          19.3               193        3450
+ 4 Adelie  Torgersen           38.9          17.8               181        3625
+ 5 Adelie  Torgersen           41.1          17.6               182        3200
+ 6 Adelie  Torgersen           36.6          17.8               185        3700
+ 7 Adelie  Torgersen           38.7          19                 195        3450
+ 8 Adelie  Torgersen           34.4          18.4               184        3325
+ 9 Adelie  Biscoe              37.8          18.3               174        3400
+10 Adelie  Biscoe              35.9          19.2               189        3800
+# ℹ 155 more rows
+# ℹ 2 more variables: sex &lt;fct&gt;, year &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>There are <em>165 female</em> penguins on this dataset (the total is 344).</p>
+<p>We can filter the dataset based in more than one condition. We want to subset the data by the <em>male</em>, <em>Adelie</em> species, that were collected at the <em>Dream</em> Island:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(sex <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"male"</span>,</span>
+<span id="cb17-3">           species <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Adelie"</span>,</span>
+<span id="cb17-4">           island <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Dream"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-5">    knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>() <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># only to show the whole data</span></span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 8%">
+<col style="width: 17%">
+<col style="width: 16%">
+<col style="width: 21%">
+<col style="width: 14%">
+<col style="width: 5%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">species</th>
+<th style="text-align: left;">island</th>
+<th style="text-align: right;">bill_length_mm</th>
+<th style="text-align: right;">bill_depth_mm</th>
+<th style="text-align: right;">flipper_length_mm</th>
+<th style="text-align: right;">body_mass_g</th>
+<th style="text-align: left;">sex</th>
+<th style="text-align: right;">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">37.2</td>
+<td style="text-align: right;">18.1</td>
+<td style="text-align: right;">178</td>
+<td style="text-align: right;">3900</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">40.9</td>
+<td style="text-align: right;">18.9</td>
+<td style="text-align: right;">184</td>
+<td style="text-align: right;">3900</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.2</td>
+<td style="text-align: right;">21.1</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: right;">4150</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">38.8</td>
+<td style="text-align: right;">20.0</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">3950</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.8</td>
+<td style="text-align: right;">19.1</td>
+<td style="text-align: right;">184</td>
+<td style="text-align: right;">4650</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">40.8</td>
+<td style="text-align: right;">18.4</td>
+<td style="text-align: right;">195</td>
+<td style="text-align: right;">3900</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">44.1</td>
+<td style="text-align: right;">19.7</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: right;">4400</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.6</td>
+<td style="text-align: right;">18.8</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">4600</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">41.1</td>
+<td style="text-align: right;">19.0</td>
+<td style="text-align: right;">182</td>
+<td style="text-align: right;">3425</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">42.3</td>
+<td style="text-align: right;">21.2</td>
+<td style="text-align: right;">191</td>
+<td style="text-align: right;">4150</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">41.3</td>
+<td style="text-align: right;">20.3</td>
+<td style="text-align: right;">194</td>
+<td style="text-align: right;">3550</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">36.3</td>
+<td style="text-align: right;">19.5</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">3800</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">38.3</td>
+<td style="text-align: right;">19.2</td>
+<td style="text-align: right;">189</td>
+<td style="text-align: right;">3950</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">41.1</td>
+<td style="text-align: right;">18.1</td>
+<td style="text-align: right;">205</td>
+<td style="text-align: right;">4300</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.6</td>
+<td style="text-align: right;">18.1</td>
+<td style="text-align: right;">186</td>
+<td style="text-align: right;">4450</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">40.8</td>
+<td style="text-align: right;">18.9</td>
+<td style="text-align: right;">208</td>
+<td style="text-align: right;">4300</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">40.3</td>
+<td style="text-align: right;">18.5</td>
+<td style="text-align: right;">196</td>
+<td style="text-align: right;">4350</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">43.2</td>
+<td style="text-align: right;">18.5</td>
+<td style="text-align: right;">192</td>
+<td style="text-align: right;">4100</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2008</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">37.5</td>
+<td style="text-align: right;">18.5</td>
+<td style="text-align: right;">199</td>
+<td style="text-align: right;">4475</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">41.1</td>
+<td style="text-align: right;">17.5</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">3900</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">40.2</td>
+<td style="text-align: right;">20.1</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">3975</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.7</td>
+<td style="text-align: right;">17.9</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: right;">4250</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">40.6</td>
+<td style="text-align: right;">17.2</td>
+<td style="text-align: right;">187</td>
+<td style="text-align: right;">3475</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">40.7</td>
+<td style="text-align: right;">17.0</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">3725</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.0</td>
+<td style="text-align: right;">18.7</td>
+<td style="text-align: right;">185</td>
+<td style="text-align: right;">3650</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.2</td>
+<td style="text-align: right;">18.6</td>
+<td style="text-align: right;">190</td>
+<td style="text-align: right;">4250</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">37.8</td>
+<td style="text-align: right;">18.1</td>
+<td style="text-align: right;">193</td>
+<td style="text-align: right;">3750</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">41.5</td>
+<td style="text-align: right;">18.5</td>
+<td style="text-align: right;">201</td>
+<td style="text-align: right;">4000</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2009</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>If we need to subset more than one information in a single variable, we can use the <code>%in%</code> operator. For example, we want the penguins that have <em>flipper_length_mm</em> <em>smaller than 180</em>, that were collected at the years of <em>2007</em> and <em>2009</em>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">penguins <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(flipper_length_mm <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">180</span>,</span>
+<span id="cb18-3">           year <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2007</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2009</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># the `c()` stands for "concatenate" </span></span>
+<span id="cb18-4">    knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 16%">
+<col style="width: 15%">
+<col style="width: 19%">
+<col style="width: 13%">
+<col style="width: 7%">
+<col style="width: 5%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">species</th>
+<th style="text-align: left;">island</th>
+<th style="text-align: right;">bill_length_mm</th>
+<th style="text-align: right;">bill_depth_mm</th>
+<th style="text-align: right;">flipper_length_mm</th>
+<th style="text-align: right;">body_mass_g</th>
+<th style="text-align: left;">sex</th>
+<th style="text-align: right;">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Biscoe</td>
+<td style="text-align: right;">37.8</td>
+<td style="text-align: right;">18.3</td>
+<td style="text-align: right;">174</td>
+<td style="text-align: right;">3400</td>
+<td style="text-align: left;">female</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Biscoe</td>
+<td style="text-align: right;">37.9</td>
+<td style="text-align: right;">18.6</td>
+<td style="text-align: right;">172</td>
+<td style="text-align: right;">3150</td>
+<td style="text-align: left;">female</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">39.5</td>
+<td style="text-align: right;">16.7</td>
+<td style="text-align: right;">178</td>
+<td style="text-align: right;">3250</td>
+<td style="text-align: left;">female</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">37.2</td>
+<td style="text-align: right;">18.1</td>
+<td style="text-align: right;">178</td>
+<td style="text-align: right;">3900</td>
+<td style="text-align: left;">male</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">37.5</td>
+<td style="text-align: right;">18.9</td>
+<td style="text-align: right;">179</td>
+<td style="text-align: right;">2975</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">2007</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adelie</td>
+<td style="text-align: left;">Torgersen</td>
+<td style="text-align: right;">40.2</td>
+<td style="text-align: right;">17.0</td>
+<td style="text-align: right;">176</td>
+<td style="text-align: right;">3450</td>
+<td style="text-align: left;">female</td>
+<td style="text-align: right;">2009</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Chinstrap</td>
+<td style="text-align: left;">Dream</td>
+<td style="text-align: right;">46.1</td>
+<td style="text-align: right;">18.2</td>
+<td style="text-align: right;">178</td>
+<td style="text-align: right;">3250</td>
+<td style="text-align: left;">female</td>
+<td style="text-align: right;">2007</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>So, <em>7</em> out of <em>344</em> penguins were collected at <em>2007</em> or <em>2009</em> and had flippers lengths <em>smaller than 180 mm</em>.</p>
+</section>
+</section>
+<section id="finishing" class="level2">
+<h2 class="anchored" data-anchor-id="finishing">Finishing</h2>
+<p>There is a lot more to do, and a lot of specific details at the <code>filter()</code> function, but the main idea of this post is just to do a glimpse of what it does.</p>
+<p>In this post, we explored:</p>
+<ul>
+<li><code>{dplyr}</code> package
+<ul>
+<li><code>arrange()</code> function;</li>
+<li><code>filter()</code> function.</li>
+</ul></li>
+</ul>
+<p>I hope you have enjoyed.</p>
+<p>See you soon.</p>
+<p>Cheers,</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>data wrangling</category>
+  <category>dplyr</category>
+  <category>en</category>
+  <category>R</category>
+  <category>tidying</category>
+  <guid>https://rsilveirafh.netlify.app/posts/006-dplyr-01/index.html</guid>
+  <pubDate>Mon, 24 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://dplyr.tidyverse.org/logo.png" medium="image" type="image/png"/>
+</item>
+<item>
+  <title>Como e porquê usar o pipe ( %&gt;% e |&gt; )?</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="sobre-o-que-é-essa-postagem" class="level2">
+<h2 class="anchored" data-anchor-id="sobre-o-que-é-essa-postagem">Sobre o que é essa postagem?</h2>
+<ul>
+<li>Demonstrar o conceito de <em>tidy data</em>.</li>
+<li>Utilizar o <em>pipe</em> (<code>%&gt;%</code> e <code>|&gt;</code>).</li>
+</ul>
+</section>
+<section id="história" class="level2">
+<h2 class="anchored" data-anchor-id="história">História</h2>
+<p>Dado que este blog é dedicado para pessoas em quaisquer nível de aprendizado em <code>R</code>, resolvi fazer uma série de posts explicando funções básicas para a manipulação de dados.</p>
+<p>Considero a linguagem <code>R</code> bastante objetiva na sua sintaxe básica, e a forma de estruturação desenvolvida pelo <a href="https://twitter.com/hadleywickham">Hadley</a> e equipe, o <a href="https://vita.had.co.nz/papers/tidy-data.html"><em>tidy data</em></a>, torna a linguagem ainda mais “simples” para que nós, meros mortais, possamos entendê-la.</p>
+<p>O <em>tidy data</em>, basicamente, é a padronização dos bancos de dados. Para que seja considerado <em>tidy</em>, o banco de dados deve obedecer às seguintes regras:</p>
+<ol type="1">
+<li>Cada <strong>coluna</strong> é uma <u>variável</u>;</li>
+<li>Cada <strong>linha</strong> é uma <u>observação</u>;</li>
+<li>Cada <strong>célula</strong> possui somente um valor.</li>
+</ol>
+<p>O antônimo de uma tabela <em>tidy</em>, é uma tabela <em>messy</em> (do inglês, bagunçada).</p>
+<hr>
+<p>O dia-a-dia de um errezêiro é uma jornada de pegar dados “crus” (<em>raw</em>) e transformá-los em dados limpos e utilizáveis. Nessa jornada, são realizadas transformações de variáveis, filtragens, sumários, etc.</p>
+<p>Para uma melhor leitura dos códigos por nós, seres humanes, foi desenvolvido o operador <em>pipe</em> <code>%&gt;%</code>. O <em>pipe</em> nesse formato têm sido usado há algum tempo no pacote <code>magrittr</code>, e sua função é unir uma sequência de funções, pegando o resultado anterior, e utilizando na próxima linha.</p>
+<blockquote class="blockquote">
+<p>Desde a versão R 4.1, o R estabeleceu o uso de um <em>pipe</em> próprio, embutido no seu código fonte, é o <code>|&gt;</code>. Existem algumas diferenças na forma que o R lê ambos, mas isso fica para outro post.</p>
+</blockquote>
+<p>Para ilustrar, utilizarei os passos para fazer um bolo:</p>
+<ol start="0" type="1">
+<li>Juntar ingredientes</li>
+<li>Assar;</li>
+<li>Mexer;</li>
+<li>Decorar;</li>
+<li>Cortar;</li>
+<li>Servir.</li>
+</ol>
+<p>Na sintaxe do <code>R</code> base, essa seria a forma de utilização:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">servir</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cortar</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">decorar</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">assar</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mexer</span>(ingredientes)))))</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>  (  <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>   (   <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>   (  <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>  (  <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>  (     <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>      )))))</span></code></pre></div>
+</div>
+<p>Ou seja,</p>
+<ol start="0" type="1">
+<li>Juntamos os ingredientes;</li>
+<li>Mexemos 0;</li>
+<li>Assamos o resultado de 1;</li>
+<li>Decoramos o resultado de 2;</li>
+<li>Cortamos o resultado de 3;</li>
+<li>Servimos o resultado de 4.</li>
+</ol>
+<hr>
+<p>Porém, utilizando o <em>pipe</em>, o código ficaria assim:</p>
+<blockquote class="blockquote">
+<p>O atalho de teclado para o pipe é <code>CONTROL + SHIFT + M</code>.</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">ingredientes <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 0</span></span>
+<span id="cb2-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mexer</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>     <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1</span></span>
+<span id="cb2-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">assar</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>     <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2</span></span>
+<span id="cb2-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">decorar</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3</span></span>
+<span id="cb2-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cortar</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span>    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 4</span></span>
+<span id="cb2-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">servir</span>()        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 5</span></span></code></pre></div>
+</div>
+<p>Ou, ilustrando:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="https://rsilveirafh.netlify.app/posts/005-pipe/baking.gif" class="img-fluid"></p>
+</div>
+</div>
+<p>Na hora que estamos trabalhando com dados reais, isso faz uma grande diferença.</p>
+</section>
+<section id="mãos-no-r" class="level2">
+<h2 class="anchored" data-anchor-id="mãos-no-r">Mãos no R</h2>
+<p>Para melhor ilustrar, vamos fazer umas manipulações simples em uns bancos de dados, utilizando 3 métodos diferentes: <em>aninhado</em>, <em>objetos múltiplos</em> e <em>pipes</em>.</p>
+<p>O objetivo é:</p>
+<ol type="1">
+<li>Carregar o banco de dados <code>starwars</code>;</li>
+<li>Filtrar por indivíduos com <em>altura</em> <u>maior que 150cm</u>;</li>
+<li>Agrupar por <em>gênero</em>;</li>
+<li>Sumariar pela <u>média</u>;</li>
+<li>Ordenar do valor <em>maior</em> para o <em>menor.</em></li>
+</ol>
+<blockquote class="blockquote">
+<p>Utilizarei o banco de dados <code>starwars</code>, incluído no pacote <code>dados</code>. Saiba mais sobre o pacote e a iniciativa aqui: <a href="https://cienciadedatos.github.io/dados/">https://cienciadedatos.github.io/dados/</a></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para instalar o pacote pelo GitHub:</span></span>
+<span id="cb3-2">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cienciadedatos/dados"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para instalar o pacote pelo CRAN:</span></span>
+<span id="cb4-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dados"</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para carregar os pacotes:</span></span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dados)</span>
+<span id="cb5-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr)</span>
+<span id="cb5-4"></span>
+<span id="cb5-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># para carregar o banco de dados `dados_starwars`, e ver um sumário</span></span>
+<span id="cb5-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(dados_starwars)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 87
+Columns: 14
+$ nome            &lt;chr&gt; "Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Le…
+$ altura          &lt;int&gt; 172, 167, 96, 202, 150, 178, 165, 97, 183, 182, 188, 1…
+$ massa           &lt;dbl&gt; 77.0, 75.0, 32.0, 136.0, 49.0, 120.0, 75.0, 32.0, 84.0…
+$ cor_do_cabelo   &lt;chr&gt; "Loiro", NA, NA, "Nenhum", "Castanho", "Castanho, Cinz…
+$ cor_da_pele     &lt;chr&gt; "Branca clara", "Ouro", "Branca, Azul", "Branca", "Cla…
+$ cor_dos_olhos   &lt;chr&gt; "Azul", "Amarelo", "Vermelho", "Amarelo", "Castanho", …
+$ ano_nascimento  &lt;dbl&gt; 19.0, 112.0, 33.0, 41.9, 19.0, 52.0, 47.0, NA, 24.0, 5…
+$ sexo_biologico  &lt;chr&gt; "Macho", "Nenhum", "Nenhum", "Macho", "Fêmea", "Macho"…
+$ genero          &lt;chr&gt; "Masculino", "Masculino", "Masculino", "Masculino", "F…
+$ planeta_natal   &lt;chr&gt; "Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan…
+$ especie         &lt;chr&gt; "Humano", "Droide", "Droide", "Humano", "Humano", "Hum…
+$ filmes          &lt;list&gt; &lt;"The Empire Strikes Back", "Revenge of the Sith", "R…
+$ veiculos        &lt;list&gt; &lt;"Snowspeeder", "Imperial Speeder Bike"&gt;, &lt;&gt;, &lt;&gt;, &lt;&gt;,…
+$ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &lt;&gt;, "TIE Advanced…</code></pre>
+</div>
+</div>
+<p><strong><u>Aninhado</u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(</span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(</span>
+<span id="cb7-3">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(</span>
+<span id="cb7-4">            <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>), </span>
+<span id="cb7-5">            genero), </span>
+<span id="cb7-6">        <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)),</span>
+<span id="cb7-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+<p><strong><u>Objetos múltiplos</u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(dados_starwars, altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>)</span>
+<span id="cb9-2">b <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(a, genero)</span>
+<span id="cb9-3">c <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(b, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>))</span>
+<span id="cb9-4">d <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(c, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span>
+<span id="cb9-5">d</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+<p><strong><u>Pipe <code>magrittr</code></u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">dados_starwars <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb11-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+<p><strong><u>Pipe R <code>base</code></u></strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">dados_starwars <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(altura <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(genero) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">media_massa =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(massa, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb13-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  genero    media_massa
+  &lt;chr&gt;           &lt;dbl&gt;
+1 Masculino       119. 
+2 Feminino         55.4
+3 &lt;NA&gt;             48  </code></pre>
+</div>
+</div>
+</section>
+<section id="finalizando" class="level2">
+<h2 class="anchored" data-anchor-id="finalizando">Finalizando</h2>
+<p>Eu sou super fã do pipe <code>magrittr</code> <code>%&gt;%</code>, e estou tentando me acostumar com o <em>pipe built-in</em> do <code>R</code> <code>|&gt;</code>, para melhorar a performance de meus códigos.</p>
+<p>As formas aninhadas e de múltiplos objetos utilizei bastante enquanto aprendia a linguagem, mas dificilmente as utilizo hoje em dia.</p>
+<p>E então, qual forma de programar em <code>R</code> você prefere?</p>
+<p>Até a próxima!</p>
+<p>Cheers,</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>ensinandoR</category>
+  <category>pipe</category>
+  <category>pt-br</category>
+  <category>R</category>
+  <category>tidyverse</category>
+  <guid>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</guid>
+  <pubDate>Tue, 18 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://magrittr.tidyverse.org/logo.png" medium="image" type="image/png"/>
+</item>
+<item>
+  <title>Explorando o mundo de The Office</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="sobre-o-que-é-essa-postagem" class="level2">
+<h2 class="anchored" data-anchor-id="sobre-o-que-é-essa-postagem">Sobre o que é essa postagem?</h2>
+<ul>
+<li>A melhor série de todos os tempos;</li>
+<li>Importando dados da internet;</li>
+<li>Coletando algumas informações utilizando <code>dplyr</code>.</li>
+</ul>
+</section>
+<section id="história" class="level2">
+<h2 class="anchored" data-anchor-id="história">História</h2>
+<p>Estava eu pensando sobre uma nova postagem para o blog, quando recebi no meu telefone uma notificação do <a href="https://www.reddit.com/r/datasets/comments/6yt3og/every_line_from_every_episode_of_the_office_us/">reddit</a>, com o título “<em>Every line from Every Episode of ‘The Office (US)’</em>” – <em>Todas as falas de todos os episódios do The Office (EUA)</em>. Sem pensar duas vezes, fui dar uma olhada.</p>
+<p>Explicando:</p>
+<p>Nos idos de 2009 tive a felicidade de conhecer <a href="https://pt.wikipedia.org/wiki/The_Office_(Estados_Unidos)">The Office</a>, que se trata de uma série de comédia em formato de pseudodocumentário exibida pela rede estadunidense NBC (No Brasil dá pra assistir pela <a href="https://www.amazon.com.br/prime">prime</a>, bebês 😘. Esta é minha série favorita do coração (🦆 Boy, Camura, Sarah).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-gif1" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/IwAZ6dvvvaTtdI8SD5/giphy.gif" class="img-fluid figure-img" style="width:50.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Yeah baby!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Voltando:</p>
+<p>Após checar do que se tratava o banco de dados (BD), resolvi trazer pra cá, e mexer um pouco só pra ver o que conseguimos extrair dele.</p>
+<p>Pensei em mostrar somente uma breve manipulação de dados agora, depois podemos transformar essas tabelas em belos gráficos 😉.</p>
+</section>
+<section id="mãos-no-computador" class="level2">
+<h2 class="anchored" data-anchor-id="mãos-no-computador">Mãos no computador</h2>
+<p>Por primeiro, devemos fazer o download dos dados. Há, pelo menos, três formas diferentes de fazer isso:</p>
+<ol type="1">
+<li>Utilizando o próprio BD cedido pelo usuário <a href="https://www.reddit.com/user/misunderstoodpoetry/">misunderstoodpoetry</a>.</li>
+</ol>
+<ul>
+<li>Os dados estão em uma planilha do google sheets;</li>
+<li>Para ter acesso pelo R, podemos utilizar o pacote <code>googlesheets4</code>, através da função <code>read_sheet()</code>, dessa forma:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># carregando o pacote necessário</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(googlesheets4) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ler diretamente do google sheets</span></span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># colocando o BD em um objeto do tipo dataframe (ou tibble)</span></span>
+<span id="cb1-5">theoffice <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_sheet</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534"</span>)</span></code></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Utilizando o BD fornecido pelo usuário <a href="https://www.kaggle.com/fabriziocominetti">Fabrizio Cominetti</a>, lá no <a href="https://www.kaggle.com/datasets/fabriziocominetti/the-office-lines">Kaggle</a> (em outro post trago mais detalhes sobre);</li>
+</ol>
+<ul>
+<li>Podemos fazer o download do BD utilizando uma API do Kaggle, utilizando o pacote <a href="https://github.com/mkearney/kaggler"><code>kaggler</code></a>;</li>
+</ul>
+<ol start="3" type="1">
+<li>Baixando os dados manualmente.</li>
+</ol>
+<ul>
+<li>Para ler o arquivo utilizarei o pacote <code>readr</code>, da família <code>tidyverse</code>:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># carregando os pacotes necessários</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># manipulação de dados</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(readr) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># função read_csv()</span></span>
+<span id="cb2-4"></span>
+<span id="cb2-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># lendo o arquivo "the-office_lines.csv.zip"</span></span>
+<span id="cb2-6">theoffice <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_csv</span>(here<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/004-explorando-the-office/the-office-lines - scripts.csv"</span>),</span>
+<span id="cb2-7">                      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">show_col_types =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb2-8"></span>
+<span id="cb2-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># resumindo os dados</span></span>
+<span id="cb2-10"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(theoffice)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 59,909
+Columns: 7
+$ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…
+$ season    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ episode   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ scene     &lt;dbl&gt; 1, 1, 1, 1, 1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 5, 6, 7, 7, …
+$ line_text &lt;chr&gt; "All right Jim. Your quarterlies look very good. How are thi…
+$ speaker   &lt;chr&gt; "Michael", "Jim", "Michael", "Jim", "Michael", "Michael", "M…
+$ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALS…</code></pre>
+</div>
+</div>
+<p>Como podemos ver, o objeto <code>theoffice</code> contém <strong>7 variáveis</strong> e <strong>59.909 observações</strong> (ou “falas” dos personagens).</p>
+<p>Para melhor visualização (somente das 6 primeiras observações):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(theoffice, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 0%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 92%">
+<col style="width: 1%">
+<col style="width: 1%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: right;">season</th>
+<th style="text-align: right;">episode</th>
+<th style="text-align: right;">scene</th>
+<th style="text-align: left;">line_text</th>
+<th style="text-align: left;">speaker</th>
+<th style="text-align: left;">deleted</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">All right Jim. Your quarterlies look very good. How are things at the library?</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Oh, I told you. I couldn’t close it. So…</td>
+<td style="text-align: left;">Jim</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">So you’ve come to the master for guidance? Is this what you’re saying, grasshopper?</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Actually, you called me in here, but yeah.</td>
+<td style="text-align: left;">Jim</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">All right. Well, let me show you how it’s done.</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">[on the phone] Yes, I’d like to speak to your office manager, please. Yes, hello. This is Michael Scott. I am the Regional Manager of Dunder Mifflin Paper Products. Just wanted to talk to you manager-a-manger. [quick cut scene] All right. Done deal. Thank you very much, sir. You’re a gentleman and a scholar. Oh, I’m sorry. OK. I’m sorry. My mistake. [hangs up] That was a woman I was talking to, so… She had a very low voice. Probably a smoker, so… [Clears throat] So that’s the way it’s done.</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Tá bom, Michael.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="renomeando-as-variáveis-para-pt-br" class="level4">
+<h4 class="anchored" data-anchor-id="renomeando-as-variáveis-para-pt-br">Renomeando as variáveis para pt-br</h4>
+<p>Agora, já que é uma postagem em português, vamos traduzir os nomes das variáveis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">theoffice_pt <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> theoffice <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rename</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">temporada =</span> season,</span>
+<span id="cb5-3">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">episodio =</span> episode,</span>
+<span id="cb5-4">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cena =</span> scene,</span>
+<span id="cb5-5">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fala =</span> line_text,</span>
+<span id="cb5-6">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">personagem =</span> speaker,</span>
+<span id="cb5-7">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">deletado =</span> deleted)</span>
+<span id="cb5-8"></span>
+<span id="cb5-9">knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(theoffice_pt, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>))</span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width: 2%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 3%">
+<col style="width: 62%">
+<col style="width: 8%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: right;">temporada</th>
+<th style="text-align: right;">episodio</th>
+<th style="text-align: right;">cena</th>
+<th style="text-align: left;">fala</th>
+<th style="text-align: left;">personagem</th>
+<th style="text-align: left;">deletado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">All right Jim. Your quarterlies look very good. How are things at the library?</td>
+<td style="text-align: left;">Michael</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Oh, I told you. I couldn’t close it. So…</td>
+<td style="text-align: left;">Jim</td>
+<td style="text-align: left;">FALSE</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Nomes das variáveis alteradas.</p>
+</section>
+<section id="número-de-falas-por-temporada" class="level4">
+<h4 class="anchored" data-anchor-id="número-de-falas-por-temporada">Número de falas por temporada</h4>
+<p>Bom, dessa vez vamos ver <strong>quantas falas existiram em cada uma das 9 temporadas da série</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb6-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># agrupando por temporada</span></span>
+<span id="cb6-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(temporada) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb6-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># somando as observações</span></span>
+<span id="cb6-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tally</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 2
+  temporada     n
+      &lt;dbl&gt; &lt;int&gt;
+1         1  1996
+2         2  7492
+3         3  7483
+4         4  5642
+5         5  8170
+6         6  7630
+7         7  7302
+8         8  7083
+9         9  7111</code></pre>
+</div>
+</div>
+<p>A função <code>tally()</code> faz uma soma do número de vezes que certo <em>grupo</em> aparece, dada na função <code>group_by()</code>. Nesse exemplo acima, ele pega cada um dos grupos dentro de temporada, e identifica quantas observações há em cada uma.</p>
+<p>A temporada que teve mais falas foi a <strong>5ª</strong> (que, inclusive, considero a melhor!), com <strong>8170 falas</strong>.</p>
+</section>
+<section id="número-de-falas-por-personagem-no-1º-episódio" class="level4">
+<h4 class="anchored" data-anchor-id="número-de-falas-por-personagem-no-1º-episódio">Número de falas por personagem no 1º episódio</h4>
+<p>Podemos também filtrar algumas informações, para ser mais específicos. Por exemplo, se quisermos saber quantas <strong>falas</strong> foram feitas <strong>por personagem</strong> no <strong>primeiro episódio</strong> da <strong>primeira temporada</strong> (<del>a mais odiada</del>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># filtramos a temporada 1 e o episódio 1</span></span>
+<span id="cb8-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(temporada <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> episodio <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-4">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># agrupamos por personagem</span></span>
+<span id="cb8-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(personagem) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-6">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># fazemos a somatória de observações</span></span>
+<span id="cb8-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tally</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb8-8">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># organizando do número maior para o menor</span></span>
+<span id="cb8-9">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(n))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 2
+   personagem                  n
+   &lt;chr&gt;                   &lt;int&gt;
+ 1 Michael                    97
+ 2 Pam                        46
+ 3 Jim                        37
+ 4 Dwight                     35
+ 5 Jan                        12
+ 6 Ryan                       10
+ 7 Oscar                       6
+ 8 Angela                      5
+ 9 Roy                         5
+10 Stanley                     5
+11 Documentary Crew Member     3
+12 Todd Packer                 3
+13 Kevin                       2
+14 Phyllis                     2
+15 Man                         1
+16 Michel                      1</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="finalizando" class="level2">
+<h2 class="anchored" data-anchor-id="finalizando">Finalizando</h2>
+<p>Acho que já deu pra dar uma breve ideia do que conseguimos fazer com algumas poucas funções, em breve vamos explorar um pouco mais esses dados, e também brincar com visualizações.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">É festa!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Nesta sessão apresentei os seguintes pacotes:</p>
+<ul>
+<li><code>dplyr</code></li>
+<li><code>googlesheets4</code></li>
+<li><code>readr</code></li>
+</ul>
+<p>Até mais!</p>
+<p>Cheers,</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+<p>Adendo: O Felipe Magalhães me sugeriu ver quantas vezes falaram “<em>That’s what she said!</em>” na série, não aguentei de curiosidade. Aí está:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># pacote para tratar com strings, também do tidyverse</span></span>
+<span id="cb10-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(stringr)</span>
+<span id="cb10-3"></span>
+<span id="cb10-4">twss <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> theoffice_pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb10-5">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># filtrando as falas que contém a famigerada frase</span></span>
+<span id="cb10-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str_detect</span>(fala, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[Tt]hat's what she said?"</span>))</span>
+<span id="cb10-7"></span>
+<span id="cb10-8"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">glimpse</span>(twss)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 35
+Columns: 7
+$ id         &lt;dbl&gt; 2545, 2547, 5325, 6322, 6353, 7644, 8872, 9624, 10904, 1259…
+$ temporada  &lt;dbl&gt; 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,…
+$ episodio   &lt;dbl&gt; 2, 2, 10, 12, 12, 17, 21, 1, 5, 10, 12, 17, 17, 20, 22, 2, …
+$ cena       &lt;dbl&gt; 24, 24, 2, 33, 38, 6, 22, 49, 59, 49, 41, 9, 23, 11, 68, 6,…
+$ fala       &lt;chr&gt; "That's what she said. Pam?", "That's what she sai [clears …
+$ personagem &lt;chr&gt; "Michael", "Michael", "Michael", "Dwight", "Michael", "Mich…
+$ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALS…</code></pre>
+</div>
+</div>
+<p><strong>35 falas</strong> com “<em>That’s what she said</em>”!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">twss <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb12-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">group_by</span>(personagem) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb12-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tally</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span> </span>
+<span id="cb12-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(n))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 2
+   personagem              n
+   &lt;chr&gt;               &lt;int&gt;
+ 1 Michael                23
+ 2 Dwight                  3
+ 3 Creed                   1
+ 4 David                   1
+ 5 Deposition Reporter     1
+ 6 Everyone                1
+ 7 Holly                   1
+ 8 Jan                     1
+ 9 Jim                     1
+10 Pam                     1
+11 Stanley                 1</code></pre>
+</div>
+</div>
+<p>Claro que quem mais falou foi o <em>Michael</em>, mas o VAR vai ser chamado pra checar esse banco de dados aí 😅!</p>
+
+
+</section>
+
+ ]]></description>
+  <category>pt-br</category>
+  <category>R</category>
+  <category>The Office</category>
+  <category>tidyverse</category>
+  <guid>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</guid>
+  <pubDate>Sat, 15 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif" medium="image" type="image/gif"/>
+</item>
+<item>
+  <title>A great {ggplot2} tip!</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="what-is-this-post-about" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-this-post-about">What is this post about?</h2>
+<ul>
+<li><code>{ggplot2}</code> tips</li>
+</ul>
+</section>
+<section id="history" class="level2">
+<h2 class="anchored" data-anchor-id="history">History</h2>
+<p>Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>{ggplot2}</code>.</p>
+<p>But, as is well known, if you don’t save that, it will be lost forever.</p>
+<p>Except when you have a great community on <a href="http://twitter.com/">twitter</a>, and there is a bunch of good people trying to help everyone!</p>
+<p><em>Some time ahead…</em></p>
+<p>I finally found it! Here it is:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-ggplot" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/https:/isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;1: ggplot2 theme elements references, by Isabella Benabaye.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>I also found the <a href="https://isabella-b.com/blog/ggplot2-theme-elements-reference/">post</a> on her blog, with better quality <a href="https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.png">images</a> and/or a <a href="https://isabella-b.com/files/ggplot2-theme-elements-reference-v2.pdf">pdf</a> file.</p>
+</section>
+<section id="the-history-continues" class="level2">
+<h2 class="anchored" data-anchor-id="the-history-continues">The history continues…</h2>
+<p>More interesting: actually, she had her idea after this twitter post from Henry Wang:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-tweet" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index_files/figure-html/fig-tweet-1.png" class="img-fluid figure-img" style="width:70.0%"></p>
+<figcaption class="figure-caption">Figure&nbsp;2: Henry Wang’s tweet.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>And, he also made a nice <a href="https://henrywang.nl/ggplot2-theme-elements-demonstration/">post</a> about the subject (where you can download his version of <code>{ggplot2}</code> theme elements demonstration).</p>
+</section>
+<section id="finishing" class="level2">
+<h2 class="anchored" data-anchor-id="finishing">Finishing</h2>
+<p>That’s it, enjoy the creativity and good ideas from all these people, soon I’ll bring some more.</p>
+<p>Thanks for the reading, cheers!</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>code</category>
+  <category>ggplot2</category>
+  <category>R</category>
+  <category>tips</category>
+  <guid>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index.html</guid>
+  <pubDate>Fri, 14 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" medium="image" type="image/png"/>
+</item>
+<item>
+  <title>Drawing a star in R with ggplot</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/002-star/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="what-is-this-post-about" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-this-post-about">What is this post about?</h2>
+<ul>
+<li>Drawing a star using <code>ggplot2</code> in R Language.</li>
+</ul>
+</section>
+<section id="history" class="level2">
+<h2 class="anchored" data-anchor-id="history">History:</h2>
+<p>In Brazil we are about to choose the next President for the 4 years ahead.</p>
+<p>I am a workers party supporter (PT, <em>Partido dos Trabalhadores</em>), with <strong><a href="https://twitter.com/LulaOficial">Lula</a></strong> as our candidate.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-lula" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/lula.jpeg" class="img-fluid figure-img" width="375"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;1: Lulinha peace and love &lt;3</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>With this being told, the PT flag is a white star in a red background, my plan is to draw this, showing all the steps to do it.</p>
+</section>
+<section id="hands-on" class="level2">
+<h2 class="anchored" data-anchor-id="hands-on">Hands on!</h2>
+<p>First of all, we will need to load <code>dplyr</code> and <code>ggplot2</code>, the package of functions that we will use in this session:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># data wrangling</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(ggplot2) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># plots</span></span></code></pre></div>
+</div>
+<p>Let’s start by creating our blank canvas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot01-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Blank canvas.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now we can ask to ggplot to put a void theme (without texts or axis), and then to add a red background:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">red <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ggplot</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme_void</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb3-3">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">theme</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">plot.background =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>))</span>
+<span id="cb3-4"></span>
+<span id="cb3-5">red</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot02-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Red canvas.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The challenge now is to draw by draft our star. First, let’s study how it is:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-star" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/star.jpg" class="img-fluid figure-img" style="width:150.0%"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;2: A star and its coordinates.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To do this, let’s create a <code>tibble</code> with the <code>x</code> and <code>y</code> coordinates (11 to close the polygon):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">r <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep_len</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sin</span>(pi<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cos</span>(pi<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>)), </span>
+<span id="cb4-2">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length.out =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)</span>
+<span id="cb4-3"></span>
+<span id="cb4-4">star <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tibble</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coord =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>,</span>
+<span id="cb4-5">               <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> r <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sin</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> pi, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length.out =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)),</span>
+<span id="cb4-6">               <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> r <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cos</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> pi, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length.out =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">11</span>)))</span>
+<span id="cb4-7"></span>
+<span id="cb4-8">knitr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(star, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">align =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"c"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: center;">coord</th>
+<th style="text-align: center;">x</th>
+<th style="text-align: center;">y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.00000</td>
+<td style="text-align: center;">100.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">22.45140</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">95.10565</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">36.32713</td>
+<td style="text-align: center;">-11.8034</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">58.77853</td>
+<td style="text-align: center;">-80.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.00000</td>
+<td style="text-align: center;">-38.1966</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">-58.77853</td>
+<td style="text-align: center;">-80.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">-36.32713</td>
+<td style="text-align: center;">-11.8034</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">-95.10565</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">-22.45140</td>
+<td style="text-align: center;">30.9017</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">11</td>
+<td style="text-align: center;">0.00000</td>
+<td style="text-align: center;">100.0000</td>
+</tr>
+</tbody>
+</table>
+<p>Star coordinates.</p>
+</div>
+</div>
+<p>Now, let’s include the star coordinates (and the paths) within the red plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">red <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb5-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_polygon</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> star, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mapping =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> y))</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot03-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Almost there.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The next step is to paint the star in white color, and also fix the coordinates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">pt <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> red <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb6-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">geom_polygon</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">data =</span> star, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mapping =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> y),</span>
+<span id="cb6-3">                 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"white"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb6-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">coord_equal</span>()</span>
+<span id="cb6-5"></span>
+<span id="cb6-6">pt </span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot04-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">The workers party flag!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our PT flag is ready!</p>
+<p>Just to complete, we can include the number of the party in the middle of the star, the number 13!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">pt <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span></span>
+<span id="cb7-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">annotate</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">geom =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"text"</span>,</span>
+<span id="cb7-3">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">label =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">13</span>,</span>
+<span id="cb7-4">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>,</span>
+<span id="cb7-5">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb7-6">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">40</span>,</span>
+<span id="cb7-7">             <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot05-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">It is ready!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We have our flag!</p>
+</section>
+<section id="finishing" class="level2">
+<h2 class="anchored" data-anchor-id="finishing">Finishing</h2>
+<p>The next step is to dress all red at October 30th 2022, vote in our great eletronic voting machines, and hope for the best!</p>
+<p>Make the L!</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-L" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/002-star/L.jpg" class="img-fluid figure-img" width="640"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;3: Faz o L!</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Cheers,</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>code</category>
+  <category>ggplot2</category>
+  <category>Lula</category>
+  <category>PT</category>
+  <category>R</category>
+  <category>star</category>
+  <guid>https://rsilveirafh.netlify.app/posts/002-star/index.html</guid>
+  <pubDate>Thu, 13 Oct 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://rsilveirafh.netlify.app/posts/002-star/image.png" medium="image" type="image/png" height="107" width="144"/>
+</item>
+<item>
+  <title>Welcome to my blogR</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/001-welcome/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Arriving here!</p>
+<p><img src="https://rsilveirafh.netlify.app/posts/001-welcome/welcome.gif" class="img-fluid"></p>
+<p>Cheers!</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+
+ ]]></description>
+  <category>news</category>
+  <guid>https://rsilveirafh.netlify.app/posts/001-welcome/index.html</guid>
+  <pubDate>Mon, 10 Oct 2022 03:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Medindo Cobertura de Dossel a partir de imagens no R</title>
+  <dc:creator>Ricardo </dc:creator>
+  <link>https://rsilveirafh.netlify.app/posts/007-coveR/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="propósito" class="level2">
+<h2 class="anchored" data-anchor-id="propósito">Propósito</h2>
+<p>Surgiu uma demanda no laboratório, em que precisarei tirar medidas de cobertura de dossel de cada um dos <em>pitfall-traps</em> que estão instalados em campo.</p>
+<p>Para adiantar, resolvi estudar e criar uma rotina para este propósito.</p>
+<p>Abaixo explico brevemente cada um dos passos para sua realização.</p>
+</section>
+<section id="pacotes-utilizados-na-sessão" class="level2">
+<h2 class="anchored" data-anchor-id="pacotes-utilizados-na-sessão">1. Pacotes utilizados na sessão</h2>
+<p>Após pesquisar bastante, encontrei o pacote <code>{coveR}</code>, que foi escrito pelo <em>Francesco Chianucci</em>. Você pode ter mais informações no seu artigo de lançamento: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5">veja aqui</a>.</p>
+<ul>
+<li>Para que o <code>{coveR}</code> possa funcionar, são necessários os pacotes <code>{EBImage}</code> e <code>{exiftoolr}</code>, ver abaixo:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Repositório BiocManager:</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"BiocManager"</span>)</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Pacote {EBImage}</span></span>
+<span id="cb1-5">BiocManager<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"EBImage"</span>)</span>
+<span id="cb1-6"></span>
+<span id="cb1-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Pacote {exiftoolr} + instalação</span></span>
+<span id="cb1-8">devtools<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"JoshOBrien/exiftoolr"</span>)</span>
+<span id="cb1-9">exiftoolr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_exiftool</span>()</span>
+<span id="cb1-10"></span>
+<span id="cb1-11"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Pacote {coveR}</span></span>
+<span id="cb1-12">devtools<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_git</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://gitlab.com/fchianucci/coveR"</span>)</span></code></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Eu penei um pouco para instalar tudo com sucesso, mas nada que algumas horas de briga com o Linux não resolvam =)</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(coveR)      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># imagens de cobertura</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(cowplot)    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># organizar plots</span></span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(here)       <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># localização de arquivos</span></span>
+<span id="cb2-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(kableExtra) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># tabelas</span></span>
+<span id="cb2-5"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(knitr)      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># tabelas/imagens</span></span>
+<span id="cb2-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(patchwork)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># organizar plots</span></span>
+<span id="cb2-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(tidyverse)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># manipulação de dados</span></span></code></pre></div>
+</div>
+<hr>
+</section>
+<section id="dados-iniciais" class="level2">
+<h2 class="anchored" data-anchor-id="dados-iniciais">2. Dados iniciais</h2>
+<section id="criar-o-objeto-principal" class="level3">
+<h3 class="anchored" data-anchor-id="criar-o-objeto-principal">2.1. Criar o objeto principal</h3>
+<ul>
+<li>Criando objeto <code>image</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">image <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics/pt03_ang.png"</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/pics/pt03_ang.png" class="img-fluid figure-img" width="640"></p>
+<figcaption class="figure-caption">Imagem gerada a partir de um celular com lente grande angular no Ponto 03.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<ul>
+<li>O canal azul é preferido porque permite um maior contraste entre os pixels do céu e do dossel</li>
+<li>Isso é ilustrado a seguir:</li>
+</ul>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem original e suas respectivas bandas RGB (red, green e blue)</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="selecionar-o-canal-azul" class="level3">
+<h3 class="anchored" data-anchor-id="selecionar-o-canal-azul">2.2. Selecionar o canal azul</h3>
+<ul>
+<li>Selecionar o canal azul</li>
+<li>Criando objeto <code>img_blue</code></li>
+<li>Função <code>open_blue()</code> importa a imagem transformando em um raster de canal único (azul)</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">img_blue <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">open_blue</span>(image, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">which.blue =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">exif =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">crop =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span>)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem raster feita a partir de uma banda azul.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classificar-os-pixels-e-criar-uma-imagem-binária" class="level3">
+<h3 class="anchored" data-anchor-id="classificar-os-pixels-e-criar-uma-imagem-binária">2.3. Classificar os pixels e criar uma imagem binária</h3>
+<ul>
+<li>Imagem binária onde céu (<em>1</em>) e dossel (<em>0</em>)</li>
+<li>A função <code>thd_blue()</code> recebe a imagem rasterizada azul e transforma em binária</li>
+<li>Utiliza a função <code>auto_thresh()</code> do pacote <code>{autothresholdr}</code> para definir o thresholding (limites) da imagem</li>
+<li>O padrão é o método “<em>Minimum</em>”, mas existem 17 métodos diferentes que podem ser testados (<a href="https://imagej.net/plugins/auto-threshold" class="uri">https://imagej.net/plugins/auto-threshold</a>)</li>
+<li>Criando objetos <code>img_lim_min</code> (médoto “<em>Minimum</em>”) e <code>img_lim_def</code> (método “<em>Default</em>”)</li>
+</ul>
+<div class="cell" data-layout-align="left">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">img_lim_min <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">thd_blue</span>(img_blue, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Minimum"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">display =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem binária feita com o método “Minimum”.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">img_lim_def <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">thd_blue</span>(img_blue, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Default"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">display =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Imagem binária feita com o método “Default”.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="segmentar-e-nomear-as-lacunas" class="level3">
+<h3 class="anchored" data-anchor-id="segmentar-e-nomear-as-lacunas">2.4. Segmentar e nomear as lacunas</h3>
+<ul>
+<li>Retornar os atributos do dossel requer uma classificação dos pixels (os valores <em>1</em> no raster binário)
+<ul>
+<li>largos: lacunas entre o dossel</li>
+<li>pequenos: lacunas dentro do dossel</li>
+</ul></li>
+<li>A função <code>label_gaps()</code> usa a função <code>bwlabel()</code> do pacote <code>{EBImage}</code> para atribuir um valor numérico para cada lacuna distinta</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">img_min_gaps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">label_gaps</span>(img_lim_min)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Minimum</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">img_def_gaps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">label_gaps</span>(img_lim_def)</span></code></pre></div>
+</div>
+<div class="cell" data-layout-align="left">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Default</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="classificar-lacunas-baseadas-no-tamanho" class="level3">
+<h3 class="anchored" data-anchor-id="classificar-lacunas-baseadas-no-tamanho">2.5. Classificar lacunas baseadas no tamanho</h3>
+<p>Existem basicamente dois métodos para classificar as lacunas a depender do seus tamanhos.</p>
+<ul>
+<li><a href="https://doi.org/10.1016/j.agrformet.2007.05.001">Macfarlane et al., 2007</a>
+<ul>
+<li>Considera lacunas grandes aquelas com 1,3% da área da imagem.</li>
+</ul></li>
+<li><a href="https://doi.org/10.1007/s00468-018-1666-3">Alivernini et al., 2018</a>
+<ul>
+<li>Se baseia na distribuição estatística do tamanho das lacunas dentro da imagem.</li>
+<li>Lacunas grandes são consideradas por <img src="https://latex.codecogs.com/png.latex?gL%20%5Cge%20%5Cmu%20+%20%5Csqrt%7B%7B%5Csigma%20%5Cover%20n%7D%7D"></li>
+<li>Comparado ao método anterior, este é dependente da densidade do dossel, já que o limite das lacunas grandes vão variar a cada imagem.</li>
+</ul></li>
+</ul>
+<p>Os métodos são implementados na função <code>extract_gap()</code>:</p>
+<ul>
+<li>Método “<em>Minimum</em>”</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb9-2">df_min_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_min_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"macfarlane"</span>)</span>
+<span id="cb9-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb10-2">df_min_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_min_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"alivernini"</span>)</span>
+<span id="cb10-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gMN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gSD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gTHD</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: right;">796127.0000</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<ul>
+<li>Método “<em>Default</em>”</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb11-2">df_def_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_def_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"macfarlane"</span>)</span>
+<span id="cb11-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb12-2">df_def_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">extract_gap</span>(img_def_gaps, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"alivernini"</span>)</span>
+<span id="cb12-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Var1</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Freq</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">NR</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gMN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gSD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gN</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">gTHD</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: right;">796127</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Canopy</td>
+<td style="text-align: right;">796127.0000</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1228800</td>
+<td style="text-align: left;">Small_gap</td>
+<td style="text-align: right;">114.4335</td>
+<td style="text-align: right;">5130.79</td>
+<td style="text-align: right;">3781</td>
+<td style="text-align: right;">197.8748</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="recuperar-atributos-do-dossel" class="level3">
+<h3 class="anchored" data-anchor-id="recuperar-atributos-do-dossel">2.6. Recuperar atributos do dossel</h3>
+<ul>
+<li>Função <code>get_canopy()</code> para estimar os atributos do dossel.</li>
+<li>Dentre eles:
+<ul>
+<li><strong>Fração das Lacunas</strong> (<img src="https://latex.codecogs.com/png.latex?FL">) = fração dos pixels das lacunas (nomeados por <em>1</em> na imagem binária): <img src="https://latex.codecogs.com/png.latex?FL%20=%20%7BTp%20%5Cover%20Np%7D">, onde <img src="https://latex.codecogs.com/png.latex?Tp"> é o número de pixels de lacuna, <img src="https://latex.codecogs.com/png.latex?Np"> é o número total de pixels;</li>
+<li><strong>Cobertura Foliar</strong> (<img src="https://latex.codecogs.com/png.latex?CF">) = complemento da fração das lacunas: <img src="https://latex.codecogs.com/png.latex?CF%20=%20%7B1%20-%20FL%7D">;</li>
+<li><strong>Cobertura do Dossel</strong> (<img src="https://latex.codecogs.com/png.latex?CD">) = complemento da fração das lacunas grandes: <img src="https://latex.codecogs.com/png.latex?CD%20=%201%20-%20%7BTp%20%5Cover%20Np%7D">;</li>
+<li><strong>Porosidade do Dossel</strong> (<img src="https://latex.codecogs.com/png.latex?PD">) = fração das lacunas dentro dos dosséis: <img src="https://latex.codecogs.com/png.latex?PD%20=%201%20-%20%7BCF%20%5Cover%20CD%7D"></li>
+</ul></li>
+</ul>
+<p>Os outros atributos podem ser verificados no artigo do <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5">Chianucci et al.</a>.</p>
+<ul>
+<li>Método “<em>Minimum</em>”</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb13-2">df2_min_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_min_mac)</span>
+<span id="cb13-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_min_mac)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.091623</td>
+<td style="text-align: right;">2.087622</td>
+<td style="text-align: right;">3.409385</td>
+<td style="text-align: right;">0.6123163</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb14-2">df2_min_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_min_ali)</span>
+<span id="cb14-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_min_ali)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.6785124</td>
+<td style="text-align: right;">0.0451319</td>
+<td style="text-align: right;">2.087622</td>
+<td style="text-align: right;">4.204288</td>
+<td style="text-align: right;">0.496546</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<ul>
+<li>Método “<em>Default</em>”</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Macfarlane</span></span>
+<span id="cb15-2">df2_def_mac <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_def_mac)</span>
+<span id="cb15-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_def_mac)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.617063</td>
+<td style="text-align: right;">0.1469073</td>
+<td style="text-align: right;">1.494835</td>
+<td style="text-align: right;">2.366996</td>
+<td style="text-align: right;">0.6315324</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Default</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Alivernini</span></span>
+<span id="cb16-2">df2_def_ali <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_canopy</span>(df_def_ali)</span>
+<span id="cb16-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>(df2_def_ali)</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.5692228</td>
+<td style="text-align: right;">0.0752093</td>
+<td style="text-align: right;">1.494835</td>
+<td style="text-align: right;">2.945705</td>
+<td style="text-align: right;">0.5074625</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">alivernini</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">Default</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="comparação" class="level3">
+<h3 class="anchored" data-anchor-id="comparação">2.7. Comparação</h3>
+<p>Para efeito de comparação, abaixo estão todos os bancos de dados produzidos:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb17-2">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">select</span>(methods,</span>
+<span id="cb17-3">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">CF =</span> FC, </span>
+<span id="cb17-4">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">CD =</span> CC, </span>
+<span id="cb17-5">           <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">PD =</span> CP) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb17-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">methods</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CF</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CD</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">PD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Minimum - Macfarlane</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.0916230</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Minimum - Alivernini</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.6785124</td>
+<td style="text-align: right;">0.0451319</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Default - Macfarlane</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.6170630</td>
+<td style="text-align: right;">0.1469073</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Minimum - Alivernini</td>
+<td style="text-align: right;">0.5264119</td>
+<td style="text-align: right;">0.5692228</td>
+<td style="text-align: right;">0.0752093</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="programação-funcional" class="level3">
+<h3 class="anchored" data-anchor-id="programação-funcional">2.8. Programação funcional</h3>
+<p>Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o processo para maiores volumes de dados.</p>
+<p>Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras:</p>
+<ul>
+<li><strong>ang</strong>: lente grande angular</li>
+<li><strong>normal</strong>: lente normal</li>
+</ul>
+<p>Abaixo, as imagens:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption class="figure-caption">Do lado esquerdo, as imagens feitas com câmera grande angular, à direita, com câmera normal. Pontos: 03, 10, 12, e 20</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>O método utilizado foi o <em>Minimum</em>, e o método de medição de lacunas foi o <em>Macfarlane</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">images <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dir</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">path =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"posts/007-coveR/pics"</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pattern =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"*.png"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">full.names =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb18-2"></span>
+<span id="cb18-3">images <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-4">    purrr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">map</span>(coveR, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">method =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Minimum"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gapmethod =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"macfarlane"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">exif =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-5">    dplyr<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">bind_rows</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb18-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">kable</span>()</span></code></pre></div>
+<div class="cell-output-display">
+<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">FC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CC</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CP</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Le</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">L</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">CI</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">k</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">gapmethod</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">thd</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">method</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">channel</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">FileSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Camera</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Model</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">ImageSize</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Date</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">day</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">month</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">year</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">pt03_ang.png</td>
+<td style="text-align: right;">0.6478898</td>
+<td style="text-align: right;">0.7132389</td>
+<td style="text-align: right;">0.0916230</td>
+<td style="text-align: right;">2.0876222</td>
+<td style="text-align: right;">3.4093855</td>
+<td style="text-align: right;">0.6123163</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt03_normal.png</td>
+<td style="text-align: right;">0.1219629</td>
+<td style="text-align: right;">0.1371821</td>
+<td style="text-align: right;">0.1109415</td>
+<td style="text-align: right;">0.2601328</td>
+<td style="text-align: right;">0.6032588</td>
+<td style="text-align: right;">0.4312127</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt10_ang.png</td>
+<td style="text-align: right;">0.9079427</td>
+<td style="text-align: right;">0.9834237</td>
+<td style="text-align: right;">0.0767532</td>
+<td style="text-align: right;">4.7706883</td>
+<td style="text-align: right;">5.0492110</td>
+<td style="text-align: right;">0.9448384</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt10_normal.png</td>
+<td style="text-align: right;">0.9001671</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.0998329</td>
+<td style="text-align: right;">4.6085150</td>
+<td style="text-align: right;">4.6085150</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt12_ang.png</td>
+<td style="text-align: right;">0.8985213</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.1014787</td>
+<td style="text-align: right;">4.5758131</td>
+<td style="text-align: right;">4.5758131</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt12_normal.png</td>
+<td style="text-align: right;">0.9081239</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.0918761</td>
+<td style="text-align: right;">4.7746290</td>
+<td style="text-align: right;">4.7746290</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pt20_ang.png</td>
+<td style="text-align: right;">0.6560661</td>
+<td style="text-align: right;">0.7758553</td>
+<td style="text-align: right;">0.1543963</td>
+<td style="text-align: right;">2.1346115</td>
+<td style="text-align: right;">2.8989559</td>
+<td style="text-align: right;">0.7363380</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pt20_normal.png</td>
+<td style="text-align: right;">0.5302192</td>
+<td style="text-align: right;">0.6309549</td>
+<td style="text-align: right;">0.1596559</td>
+<td style="text-align: right;">1.5109781</td>
+<td style="text-align: right;">2.3152690</td>
+<td style="text-align: right;">0.6526145</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: left;">macfarlane</td>
+<td style="text-align: right;">0.013</td>
+<td style="text-align: left;">Minimum</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+<td style="text-align: left;">NA</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="resumo" class="level2">
+<h2 class="anchored" data-anchor-id="resumo">3. Resumo</h2>
+<p>Neste post, mostrei como:</p>
+<ul>
+<li>Fazer upload de imagens para o R;</li>
+<li>Rasterizar imagens;</li>
+<li>Transformar imagens rasterizadas para um formato binário;</li>
+<li>Transformar e classificar lacunas;</li>
+<li>Recuperar atributos de dossel através do pixelamento de imagens;</li>
+<li>Fazer o processo em lotes (batch).</li>
+</ul>
+<p>Qualquer dúvida, basta entrar em contato ;)</p>
+<hr>
+</section>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">4. Referências</h2>
+<p>Chianucci et al.&nbsp;2022. coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes. <strong>Trees</strong>, 1-10.</p>
+<ul>
+<li>Link: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5" class="uri">https://link.springer.com/article/10.1007/s00468-022-02338-5</a></li>
+<li>GitLab: <a href="https://gitlab.com/fchianucci/coveR" class="uri">https://gitlab.com/fchianucci/coveR</a></li>
+</ul>
+<p>Alivernini, A., Fares, S., Ferrara, C. <em>et al.</em> 2018. An objective image analysis method for estimation of canopy attributes from digital cover photography. <strong>Trees</strong> 32, 713–723.</p>
+<p>Macfarlane, Craig; Grigg, Andrew; Crystelle Evangelista. 2007. Estimating forest leaf area using cover and fullframe fisheye photography: Thinking inside the circle. <strong>Agricultural and Forest Meteorology</strong> 146, 1–2: 1-12.</p>
+<ol start="18" type="A">
+<li></li>
+</ol>
+
+
+</section>
+
+ ]]></description>
+  <category>coveR</category>
+  <category>dossel</category>
+  <category>ecologia</category>
+  <category>R</category>
+  <category>tags</category>
+  <guid>https://rsilveirafh.netlify.app/posts/007-coveR/index.html</guid>
+  <pubDate>Tue, 21 Jun 2022 03:00:00 GMT</pubDate>
+  <media:content url="https://gitlab.com/fchianucci/coveR/-/raw/master/inst/extdata/coveR-logo_HR.png" medium="image" type="image/png"/>
+</item>
 </channel>
 </rss>
