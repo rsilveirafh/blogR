@@ -285,7 +285,7 @@ Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras:
 
 Abaixo, as imagens:
 ```{r}
-#|echo: false
+#| echo: false
 p1 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_ang.png"))
 p2 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt03_normal.png"))
 p3 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt10_ang.png"))
@@ -298,6 +298,7 @@ p8 <- ggdraw() + draw_image(here("posts/007-coveR/pics/pt20_normal.png"))
 
 ```{r}
 #| fig-cap: "Do lado esquerdo, as imagens feitas com câmera grande angular, à direita, com câmera normal. Pontos: 03, 10, 12, e 20"
+#| echo: false
 plot_grid(p1, p2, p3, p4, p5, p6, p7, p8,
           ncol = 2, 
           nrow = 4,
