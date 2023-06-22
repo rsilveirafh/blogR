@@ -170,40 +170,68 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
+</div>
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="code,ggplot2,R,tips" data-listing-date-sort="1665716400000" data-listing-file-modified-sort="1686790038428" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<a href="./posts/003-ggplot-tip/index.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="0" data-categories="data wrangling,dplyr,en,R,tidying" data-listing-date-sort="1666580400000" data-listing-file-modified-sort="1686767867493" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<a href="./posts/006-dplyr-01/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="thumbnail-image card-img" style="height: 150px;">
+<img src="https://dplyr.tidyverse.org/logo.png" class="thumbnail-image card-img" style="height: 150px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-A great <code>{ggplot2}</code> tip!
+Data wrangling with <code>{dplyr}</code>
 </h5>
 <div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
+<div class="listing-category" onclick="window.quartoListingCategory('data wrangling'); return false;">
+data wrangling
 </div>
-<div class="listing-category" onclick="window.quartoListingCategory('ggplot2'); return false;">
-ggplot2
+<div class="listing-category" onclick="window.quartoListingCategory('dplyr'); return false;">
+dplyr
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('en'); return false;">
+en
 </div>
 <div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
 R
 </div>
-<div class="listing-category" onclick="window.quartoListingCategory('tips'); return false;">
-tips
+<div class="listing-category" onclick="window.quartoListingCategory('tidying'); return false;">
+tidying
 </div>
 </div>
 <div class="card-text listing-description">
-Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>{ggplot2}</code>.
+Hadley Wickham, one of the minds behind the <em>tidyverse</em>, argues in his tidy data <em>paper</em> that around <strong>80%</strong> …
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Ricardo
 </div>
 <div class="listing-date">
-Oct 14, 2022
+Oct 24, 2022
 </div>
 </div>
 </div>
@@ -252,49 +280,85 @@ Oct 18, 2022
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-categories="data wrangling,dplyr,en,R,tidying" data-listing-date-sort="1666580400000" data-listing-file-modified-sort="1686767867493" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
-<a href="./posts/006-dplyr-01/index.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="2" data-categories="pt-br,R,The Office,tidyverse" data-listing-date-sort="1665802800000" data-listing-file-modified-sort="1665782391380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<a href="./posts/004-explorando-the-office/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
-<img src="https://dplyr.tidyverse.org/logo.png" class="thumbnail-image card-img" style="height: 150px;">
+<img src="https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif" class="thumbnail-image card-img" style="height: 150px;">
 </p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-Data wrangling with <code>{dplyr}</code>
+Explorando o mundo de The Office
 </h5>
 <div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('data wrangling'); return false;">
-data wrangling
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('dplyr'); return false;">
-dplyr
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('en'); return false;">
-en
+<div class="listing-category" onclick="window.quartoListingCategory('pt-br'); return false;">
+pt-br
 </div>
 <div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
 R
 </div>
-<div class="listing-category" onclick="window.quartoListingCategory('tidying'); return false;">
-tidying
+<div class="listing-category" onclick="window.quartoListingCategory('The Office'); return false;">
+The Office
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('tidyverse'); return false;">
+tidyverse
 </div>
 </div>
 <div class="card-text listing-description">
-Hadley Wickham, one of the minds behind the <em>tidyverse</em>, argues in his tidy data <em>paper</em> that around <strong>80%</strong> …
+Estava eu pensando sobre uma nova postagem para o blog, quando recebi no meu telefone uma notificação do reddit, com o título “<em>E…</em><em></em>
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Ricardo
 </div>
 <div class="listing-date">
-Oct 24, 2022
+Oct 15, 2022
 </div>
 </div>
 </div>
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-categories="code,ggplot2,Lula,PT,R,star" data-listing-date-sort="1665630000000" data-listing-file-modified-sort="1666644531220" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="g-col-1" data-index="3" data-categories="code,ggplot2,R,tips" data-listing-date-sort="1665716400000" data-listing-file-modified-sort="1686790038428" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<a href="./posts/003-ggplot-tip/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+A great <code>{ggplot2}</code> tip!
+</h5>
+<div class="listing-categories">
+<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
+code
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('ggplot2'); return false;">
+ggplot2
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
+R
+</div>
+<div class="listing-category" onclick="window.quartoListingCategory('tips'); return false;">
+tips
+</div>
+</div>
+<div class="card-text listing-description">
+Some time ago, lost through the deep arms of the internet 😎, I have found a great drawing with all the theme elements references of a plot within <code>{ggplot2}</code>.
+</div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Ricardo
+</div>
+<div class="listing-date">
+Oct 14, 2022
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="4" data-categories="code,ggplot2,Lula,PT,R,star" data-listing-date-sort="1665630000000" data-listing-file-modified-sort="1666644531220" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
 <a href="./posts/002-star/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -339,46 +403,35 @@ Oct 13, 2022
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="pt-br,R,The Office,tidyverse" data-listing-date-sort="1665802800000" data-listing-file-modified-sort="1665782391380" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
-<a href="./posts/004-explorando-the-office/index.html" class="quarto-grid-link">
+<div class="g-col-1" data-index="5" data-categories="news" data-listing-date-sort="1665370800000" data-listing-file-modified-sort="1665766530610" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<a href="./posts/001-welcome/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top">
-<img src="https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif" class="thumbnail-image card-img" style="height: 150px;">
-</p>
+<p class="card-img-top"><img src="posts/001-welcome/welcome.gif" style="height: 150px;"  class="thumbnail-image card-img"/></p>
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-Explorando o mundo de The Office
+Welcome to my blogR
 </h5>
 <div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('pt-br'); return false;">
-pt-br
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('R'); return false;">
-R
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('The Office'); return false;">
-The Office
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('tidyverse'); return false;">
-tidyverse
+<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
+news
 </div>
 </div>
 <div class="card-text listing-description">
-Estava eu pensando sobre uma nova postagem para o blog, quando recebi no meu telefone uma notificação do reddit, com o título “<em>E…</em><em></em>
+Arriving here!
 </div>
 <div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Ricardo
 </div>
 <div class="listing-date">
-Oct 15, 2022
+Oct 10, 2022
 </div>
 </div>
 </div>
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="5" data-categories="coveR,dossel,ecologia,R,tags" data-listing-date-sort="1655780400000" data-listing-file-modified-sort="1687438139394" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<div class="g-col-1" data-index="6" data-categories="coveR,dossel,ecologia,R,tags" data-listing-date-sort="1655780400000" data-listing-file-modified-sort="1687438409857" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
 <a href="./posts/007-coveR/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top">
@@ -414,34 +467,6 @@ Ricardo
 </div>
 <div class="listing-date">
 Jun 21, 2022
-</div>
-</div>
-</div>
-</div>
-</a>
-</div>
-<div class="g-col-1" data-index="6" data-categories="news" data-listing-date-sort="1665370800000" data-listing-file-modified-sort="1665766530610" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
-<a href="./posts/001-welcome/index.html" class="quarto-grid-link">
-<div class="quarto-grid-item card h-100 card-left">
-<p class="card-img-top"><img src="posts/001-welcome/welcome.gif" style="height: 150px;"  class="thumbnail-image card-img"/></p>
-<div class="card-body post-contents">
-<h5 class="no-anchor card-title listing-title">
-Welcome to my blogR
-</h5>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
-news
-</div>
-</div>
-<div class="card-text listing-description">
-Arriving here!
-</div>
-<div class="card-attribution card-text-small justify">
-<div class="listing-author">
-Ricardo
-</div>
-<div class="listing-date">
-Oct 10, 2022
 </div>
 </div>
 </div>

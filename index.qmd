@@ -2,17 +2,17 @@
 title: "#blogR"
 listing:
   contents: posts
-  sort: true
+  sort: "date desc"
   type: grid
   categories: true
-  sort-ui: false
-  filter-ui: false
+  sort-ui: true
+  filter-ui: true
   feed: 
     categories:
-    - Biology
-    - Data Science
-    - Ecology
-    - Herpetology
+    - biology
+    - data science
+    - ecology
+    - herpetology
     - R
 page-layout: full
 title-block-banner: false

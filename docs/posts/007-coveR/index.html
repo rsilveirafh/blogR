@@ -292,8 +292,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Imagem binária onde céu (<em>1</em>) e dossel (<em>0</em>)</li>
 <li>A função <code>thd_blue()</code> recebe a imagem rasterizada azul e transforma em binária</li>
 <li>Utiliza a função <code>auto_thresh()</code> do pacote <code>{autothresholdr}</code> para definir o thresholding (limites) da imagem</li>
-<li>O padrão é o método <em>“Minimum”</em>, mas existem 17 métodos diferentes que podem ser testados (<a href="https://imagej.net/plugins/auto-threshold" class="uri">https://imagej.net/plugins/auto-threshold</a>)</li>
-<li>Criando objetos <code>img_lim_min</code> (médoto <em>“Minimum”</em>) e <code>img_lim_def</code> (método <em>“Default”</em>)</li>
+<li>O padrão é o método “<em>Minimum</em>”, mas existem 17 métodos diferentes que podem ser testados (<a href="https://imagej.net/plugins/auto-threshold" class="uri">https://imagej.net/plugins/auto-threshold</a>)</li>
+<li>Criando objetos <code>img_lim_min</code> (médoto “<em>Minimum</em>”) e <code>img_lim_def</code> (método “<em>Default</em>”)</li>
 </ul>
 <div class="cell" data-layout-align="left">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>img_lim_min <span class="ot">&lt;-</span> <span class="fu">thd_blue</span>(img_blue, <span class="at">method =</span> <span class="st">"Minimum"</span>, <span class="at">display =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -372,7 +372,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Os métodos são implementados na função <code>extract_gap()</code>:</p>
 <ul>
-<li>Método <em>“Minimum”</em></li>
+<li>Método “<em>Minimum</em>”</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
@@ -697,7 +697,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <ul>
-<li>Método <em>“Default”</em></li>
+<li>Método “<em>Default</em>”</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
@@ -1036,7 +1036,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Os outros atributos podem ser verificados no artigo do <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5">Chianucci et al.</a>.</p>
 <ul>
-<li>Método <em>“Minimum”</em></li>
+<li>Método “<em>Minimum</em>”</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
@@ -1155,7 +1155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <ul>
-<li>Método <em>“Default”</em></li>
+<li>Método “<em>Default</em>”</li>
 </ul>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Macfarlane</span></span>
@@ -1331,8 +1331,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o processo para maiores volumes de dados.</p>
 <p>Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras:</p>
 <ul>
-<li>ang: lente grande angular</li>
-<li>normal: lente normal</li>
+<li><strong>ang</strong>: lente grande angular</li>
+<li><strong>normal</strong>: lente normal</li>
 </ul>
 <p>Abaixo, as imagens:</p>
 <div class="cell">
@@ -1577,6 +1577,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Fazer o processo em lotes (batch).</li>
 </ul>
 <p>Qualquer dúvida, basta entrar em contato ;)</p>
+<hr>
 </section>
 <section id="referências" class="level2">
 <h2 class="anchored" data-anchor-id="referências">4. Referências</h2>

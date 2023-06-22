@@ -134,8 +134,8 @@ sp::plot(img_blue)
 - Imagem binária onde céu (*1*) e dossel (*0*)
 - A função `thd_blue()` recebe a imagem rasterizada azul e transforma em binária
 - Utiliza a função `auto_thresh()` do pacote `{autothresholdr}` para definir o thresholding (limites) da imagem 
-- O padrão é o método _"Minimum"_, mas existem 17 métodos diferentes que podem ser testados (<https://imagej.net/plugins/auto-threshold>)
-- Criando objetos `img_lim_min` (médoto _"Minimum"_) e `img_lim_def` (método _"Default"_)
+- O padrão é o método "*Minimum*", mas existem 17 métodos diferentes que podem ser testados (<https://imagej.net/plugins/auto-threshold>)
+- Criando objetos `img_lim_min` (médoto "*Minimum*") e `img_lim_def` (método "*Default*")
 
 ```{r}
 #| fig-cap: 'Imagem binária feita com o método "Minimum".'
@@ -193,7 +193,7 @@ Existem basicamente dois métodos para classificar as lacunas a depender do seus
     
 Os métodos são implementados na função `extract_gap()`:
 
-- Método _"Minimum"_
+- Método "*Minimum*"
 ```{r}
 # Macfarlane
 df_min_mac <- extract_gap(img_min_gaps, gapmethod = "macfarlane")
@@ -204,7 +204,7 @@ df_min_ali <- extract_gap(img_min_gaps, gapmethod = "alivernini")
 kable(head(df_min_ali))
 ```
 
-- Método _"Default"_
+- Método "*Default*"
 ```{r}
 # Macfarlane
 df_def_mac <- extract_gap(img_def_gaps, gapmethod = "macfarlane")
@@ -227,7 +227,7 @@ kable(head(df_min_ali))
 
 Os outros atributos podem ser verificados no artigo do [Chianucci et al.](https://link.springer.com/article/10.1007/s00468-022-02338-5).
 
-- Método _"Minimum"_
+- Método "*Minimum*"
 ```{r}
 # Macfarlane
 df2_min_mac <- get_canopy(df_min_mac)
@@ -238,7 +238,7 @@ df2_min_ali <- get_canopy(df_min_ali)
 kable(df2_min_ali)
 ```
 
-- Método _"Default"_
+- Método "*Default*"
 ```{r}
 # Macfarlane
 df2_def_mac <- get_canopy(df_def_mac)
@@ -281,8 +281,8 @@ Todo o processo anterior foi realizado para apenas uma imagem, abaixo está o pr
 
 Eu tirei fotos de 4 pontos diferentes, em 2 formatos diferentes de câmeras:
 
-- ang: lente grande angular
-- normal: lente normal
+- **ang**: lente grande angular
+- **normal**: lente normal
 
 Abaixo, as imagens:
 ```{r}
@@ -320,7 +320,6 @@ images |>
 ```
 
 
-
 ---
 
 ## 3. Resumo
@@ -336,6 +335,8 @@ Neste post, mostrei como:
 
 Qualquer dúvida, basta entrar em contato ;)
 
+
+---
 
 ## 4. Referências
 

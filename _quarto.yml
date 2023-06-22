@@ -5,7 +5,7 @@ project:
 website:
   title: "#blogR"
   site-url: https://rsilveirafh.netlify.app/
-  description: "%>%ing the World"
+  description: "Learning R every day"
   page-footer: 
     left: "Blog made with [Quarto](https://quarto.org/), by Ricardo da Silveira Filho."
   navbar:
