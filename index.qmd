@@ -2,7 +2,7 @@
 title: "#blogR"
 listing:
   contents: posts
-  sort: "date desc"
+  sort: "date"
   type: grid
   categories: true
   sort-ui: true
