@@ -68,7 +68,7 @@ library(tidyverse)  # manipulação de dados
 
 ---
 
-# 2. Dados iniciais
+## 2. Dados iniciais
 
 
 ### 2.1. Criar o objeto principal
@@ -323,7 +323,7 @@ images |>
 
 ---
 
-# 3. Resumo
+## 3. Resumo
 
 Neste post, mostrei como:
 
@@ -337,7 +337,7 @@ Neste post, mostrei como:
 Qualquer dúvida, basta entrar em contato ;)
 
 
-# 4. Referências
+## 4. Referências
 
 Chianucci et al. 2022. coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes. **Trees**, 1-10.
 

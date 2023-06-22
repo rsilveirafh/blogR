@@ -2404,8 +2404,8 @@ font-style: inherit;"># manipulação de dados</span></span></code></pre></div>
 </div>
 <hr>
 </section>
-<section id="dados-iniciais" class="level1">
-<h1>2. Dados iniciais</h1>
+<section id="dados-iniciais" class="level2">
+<h2 class="anchored" data-anchor-id="dados-iniciais">2. Dados iniciais</h2>
 <section id="criar-o-objeto-principal" class="level3">
 <h3 class="anchored" data-anchor-id="criar-o-objeto-principal">2.1. Criar o objeto principal</h3>
 <ul>
@@ -3941,8 +3941,8 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 <hr>
 </section>
 </section>
-<section id="resumo" class="level1">
-<h1>3. Resumo</h1>
+<section id="resumo" class="level2">
+<h2 class="anchored" data-anchor-id="resumo">3. Resumo</h2>
 <p>Neste post, mostrei como:</p>
 <ul>
 <li>Fazer upload de imagens para o R;</li>
@@ -3954,8 +3954,8 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 </ul>
 <p>Qualquer dúvida, basta entrar em contato ;)</p>
 </section>
-<section id="referências" class="level1">
-<h1>4. Referências</h1>
+<section id="referências" class="level2">
+<h2 class="anchored" data-anchor-id="referências">4. Referências</h2>
 <p>Chianucci et al.&nbsp;2022. coveR: an R package for processing digital cover photography images to retrieve forest canopy attributes. <strong>Trees</strong>, 1-10.</p>
 <ul>
 <li>Link: <a href="https://link.springer.com/article/10.1007/s00468-022-02338-5" class="uri">https://link.springer.com/article/10.1007/s00468-022-02338-5</a></li>
