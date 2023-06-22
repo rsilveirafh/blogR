@@ -1,7 +1,7 @@
 ---
 title: "Lotofácil"
 subtitle: "Explorando os números da Lotofácil"
-date: "2022-06-14"
+date: "2022-06-XX"
 categories: [R, loteria, lotofácil]
 image: "logo.png"
 draft: true
@@ -11,63 +11,72 @@ draft: true
 knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
 ```
 
-## A história da Lotofácil
+## 1. A história da Lotofácil
 
 A Lotofácil é uma das loterias mais populares do Brasil, sendo introduzida em 2003 pela Caixa Econômica Federal. Ela foi criada com o objetivo de oferecer aos jogadores uma modalidade mais acessível e com maiores chances de ganhar. 
 
-
-### Apresentação da Lotofácil como uma das principais loterias do Brasil.
-
+De 25 números, 15 são sorteados. 15 também são os números escolhidos pelos jogadores. Ganham o valor máximo aqueles que acertarem todos os números sorteados. 
 
 
-### Breve visão geral dos tópicos a serem abordados.
+### 1.1. Breve visão geral dos tópicos a serem abordados.
+
+Aqui vamos explorar os dados da Lotofácil, mostrando os números que mais saíram em seus sorteios, além de explorar um pouco a ideia de distribuição uniforme.
 
 
-
-Pacotes
+## 2. Pacotes utilizados na sessão
 
 ```{r}
 library(dplyr)
 library(ggplot2)
 library(janitor)
+library(knitr)
 library(readr)
 library(tidyr)
 ```
 
 
-Carregando os dados
+## 3. Carregando os dados
+
+Por primeiro, carregando os dados e limpando os nomes das variáveis:
 
 ```{r}
-lotofacil <- read_csv("/home/ricardo/Documents/git/blogR/posts/008-lotofacil/lotofacil.csv") |> 
+lotofacil <- read_csv(here::here("posts/008-lotofacil/lotofacil.csv")) |> 
 	clean_names()
-
-head(lotofacil)
 ```
 
 
+Abaixo mostro como os dados estão organizados, somente com as 6 primeiras observações:
 
 ```{r}
+kable(arrange(tail(lotofacil), concurso))
+```
+
+
+Pensei em algumas coisas interessantes de se mostrar.
+
+- Quais os 15 números que mais foram sorteados?
+
+```{r}
+#| echo: false
 lf_long <- lotofacil |> 
-	pivot_longer(cols = c(bola_1:bola_15), names_to = "ordem", values_to = "bola")
+	pivot_longer(cols = c(bola_1:bola_15), names_to = "ordem", values_to = "numero")
+
+todos <- lf_long |> 
+	group_by(numero) |> 
+	tally()
 ```
 
 
-
-
-
 ```{r}
-todos <- lf_long |> 
-	group_by(bola) |> 
-	tally()
-
-ggplot(data = todos, aes(x = bola, y = n)) +
+#| echo: false
+ggplot(data = todos, aes(x = numero, y = n)) +
 	geom_col(position = position_dodge2(), 
-			 fill = ifelse(todos$bola %in% head(order(desc(todos$n)), 15),"#A2CDF1", "white"), 
+			 fill = ifelse(todos$numero %in% head(order(desc(todos$n)), 15),"#A2CDF1", "white"), 
 			 alpha = 0.8) +
 	scale_x_continuous(breaks = 1:25) +
 	scale_y_continuous(breaks = seq(0, 1750, 250)) +
-	geom_text(aes(y = n, label = n), vjust = 1.5, size = 3) +
-	labs(x = "Bola",
+	geom_text(aes(y = n, label = n), vjust = 1.5, size = 2) +
+	labs(x = "Número",
 		 y = "Frequência de saída") +
 	theme_dark() +
 	theme(panel.background = element_rect(fill = "black"),
@@ -77,6 +86,30 @@ ggplot(data = todos, aes(x = bola, y = n)) +
 		  axis.line = element_line(color = "yellow"),
 		  panel.grid.minor = element_blank(),
 		  panel.grid.major.x = element_blank())
+```
+
+
+Como mostra o gráfico acima, e o banco de dados abaixo, o número mais sorteado foi o **20**, aparecendo 1.774 vezes. E o 15° número mais sorteado foi o **2**, aparecendo 1.693 vezes.
+
+
+```{r}
+todos |> 
+	arrange(desc(n)) |> 
+	head(n = 15) |> 
+	kable()
+
+todos |> 
+	arrange(desc(n)) |> 
+	head(n = 15) |> 
+	arrange(n)
+
+```
+
+
+
+```{r}
+
+
 
 
 themeB <- function() {
@@ -91,21 +124,25 @@ themeB <- function() {
 
 
 
-bolas <- lf_long |> 
-	group_by(ordem, bola) |> 
+numeros <- lf_long |> 
+	group_by(ordem, numero) |> 
 	tally()
 
-ggplot(data = bolas, aes(x = ordem, y = n, group = bola)) +
+ggplot(data = numeros, aes(x = ordem, y = n, group = numero)) +
 	geom_col(position = position_dodge2(),
 			 fill = "#A2CDF1",
 			 alpha = 0.8) +
 	themeB() +
-	facet_wrap(~bola)
+	facet_wrap(~numero)
 
 
-bolas |> 
-	group_by(bola, ordem) |> 
-	summarise(max(n)) |>  View()
+numeros |> 
+	arrange(desc(n)) |> 
+	slice_max(order_by = ordem, with_ties = FALSE)
+
+numeros |> 
+	arrange(desc(n)) |> View()
+	
 ```
 
 
