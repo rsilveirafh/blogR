@@ -1,5 +1,5 @@
 ---
-title: "Cobertura de Dossel em imagens no R"
+title: "Medindo Cobertura de Dossel a partir de imagens no R"
 subtitle: "Explorando o pacote `{coveR}`"
 date: "2022-06-21"
 categories: [coveR, dossel, ecologia, R, tags]

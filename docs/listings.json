@@ -3,11 +3,11 @@
     "listing": "/index.html",
     "items": [
       "/posts/003-ggplot-tip/index.html",
-      "/posts/007-coveR/index.html",
       "/posts/005-pipe/index.html",
       "/posts/006-dplyr-01/index.html",
       "/posts/002-star/index.html",
       "/posts/004-explorando-the-office/index.html",
+      "/posts/007-coveR/index.html",
       "/posts/001-welcome/index.html"
     ]
   }
