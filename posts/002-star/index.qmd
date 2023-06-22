@@ -2,7 +2,7 @@
 title: "Drawing a star in R with ggplot"
 subtitle: "A star shines!"
 date: "2022-10-13"
-categories: [code, ggplot2, Lula, PT, R, star]
+categories: [code, ggplot2, lula, R, star]
 image: "image.png"
 draft: false
 ---

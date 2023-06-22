@@ -3,7 +3,7 @@ title: "Como e porquê usar o *pipe* ( `%>%`  e  `|>` )?"
 subtitle: "Entendendo o mundo do *tidy data*"
 author: "Ricardo"
 date: "2022-10-18"
-categories: [ensinandoR, pipe, pt-br, R, tidyverse]
+categories: [pipe, pt-br, R, tidyverse]
 image: "https://magrittr.tidyverse.org/logo.png"
 draft: false
 ---

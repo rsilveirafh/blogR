@@ -2,17 +2,15 @@
 title: "#blogR"
 listing:
   contents: posts
-  sort: "date"
+  sort: 
+    - "date desc"
+    - "title desc"
   type: grid
   categories: true
-  sort-ui: true
+  sort-ui: [title, date]
   filter-ui: true
   feed: 
     categories:
-    - biology
-    - data science
-    - ecology
-    - herpetology
     - R
 page-layout: full
 title-block-banner: false

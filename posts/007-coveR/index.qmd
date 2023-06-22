@@ -1,8 +1,8 @@
 ---
 title: "Medindo Cobertura de Dossel a partir de imagens no R"
 subtitle: "Explorando o pacote `{coveR}`"
-date: "2022-06-21"
-categories: [coveR, dossel, ecologia, R, tags]
+date: "2023-06-21"
+categories: [coveR, dossel, ecologia, pt-br, R, tags]
 image: "https://gitlab.com/fchianucci/coveR/-/raw/master/inst/extdata/coveR-logo_HR.png"
 draft: false
 ---
