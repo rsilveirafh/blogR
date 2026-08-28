@@ -3,7 +3,7 @@ title: "Manipulando dados com `{dplyr}`"
 subtitle: "Aprendendo funções do `{dplyr}` II"
 date: "2022-11-22"
 categories: [data wrangling, dplyr, pt-br, R, tidying]
-image: "https://dplyr.tidyverse.org/logo.png"
+image: "thumb.png"
 draft: true
 ---
 

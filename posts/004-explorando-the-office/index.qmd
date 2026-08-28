@@ -3,7 +3,7 @@ title: "Explorando o mundo de The Office"
 subtitle: "Uma breve manipulação de dados"
 date: "2022-10-15"
 categories: [pt-br, R, the office, tidyverse]
-image: "https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif"
+image: "thumb.gif"
 draft: false
 ---
 

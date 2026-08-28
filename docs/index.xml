@@ -6,16 +6,18 @@
       version="2.0">
 <channel>
 <title>#blogR</title>
-<link>https://rsilveirafh.netlify.app/index.html</link>
+<link>https://rsilveirafh.netlify.app/</link>
 <atom:link href="https://rsilveirafh.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>Learning R every day</description>
-<generator>quarto-1.3.340</generator>
+<generator>quarto-1.9.38</generator>
 <lastBuildDate>Wed, 21 Jun 2023 03:00:00 GMT</lastBuildDate>
 <item>
   <title>Medindo Cobertura de Dossel a partir de imagens no R</title>
   <dc:creator>Ricardo </dc:creator>
-  <link>https://rsilveirafh.netlify.app/posts/007-coveR/index.html</link>
+  <link>https://rsilveirafh.netlify.app/posts/007-coveR/</link>
   <description><![CDATA[ 
+
+
 
 
 
@@ -33,7 +35,7 @@
 <li>Para que o <code>{coveR}</code> possa funcionar, são necessários os pacotes <code>{EBImage}</code> e <code>{exiftoolr}</code>, ver abaixo:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Repositório BiocManager:</span></span>
 <span id="cb1-2"><span class="fu" style="color: #4758AB;
@@ -78,13 +80,13 @@ font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">install_git</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"https://gitlab.com/fchianucci/coveR"</span>)</span></code></pre></div>
+font-style: inherit;">"https://gitlab.com/fchianucci/coveR"</span>)</span></code></pre></div></div>
 </div>
 <blockquote class="blockquote">
 <p>Eu penei um pouco para instalar tudo com sucesso, mas nada que algumas horas de briga com o Linux não resolvam =)</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">library</span>(coveR)      <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -118,7 +120,7 @@ font-style: inherit;"># organizar plots</span></span>
 background-color: null;
 font-style: inherit;">library</span>(tidyverse)  <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># manipulação de dados</span></span></code></pre></div>
+font-style: inherit;"># manipulação de dados</span></span></code></pre></div></div>
 </div>
 <hr>
 </section>
@@ -130,20 +132,20 @@ font-style: inherit;"># manipulação de dados</span></span></code></pre></div>
 <li>Criando objeto <code>image</code></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">image <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">image <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">here</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"posts/007-coveR/pics/pt03_ang.png"</span>)</span></code></pre></div>
+font-style: inherit;">"posts/007-coveR/pics/pt03_ang.png"</span>)</span></code></pre></div></div>
 </div>
 <div class="cell" data-layout-align="left">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/pics/pt03_ang.png" class="img-fluid figure-img" width="640"></p>
-<figcaption class="figure-caption">Imagem gerada a partir de um celular com lente grande angular no Ponto 03.</figcaption>
+<figcaption>Imagem gerada a partir de um celular com lente grande angular no Ponto 03.</figcaption>
 </figure>
 </div>
 </div>
@@ -157,7 +159,7 @@ font-style: inherit;">"posts/007-coveR/pics/pt03_ang.png"</span>)</span></code><
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Imagem original e suas respectivas bandas RGB (red, green e blue)</figcaption>
+<figcaption>Imagem original e suas respectivas bandas RGB (red, green e blue)</figcaption>
 </figure>
 </div>
 </div>
@@ -171,7 +173,7 @@ font-style: inherit;">"posts/007-coveR/pics/pt03_ang.png"</span>)</span></code><
 <li>Função <code>open_blue()</code> importa a imagem transformando em um raster de canal único (azul)</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">img_blue <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">img_blue <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -187,14 +189,14 @@ font-style: inherit;">FALSE</span>, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">crop =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
-font-style: inherit;">NULL</span>)</span></code></pre></div>
+font-style: inherit;">NULL</span>)</span></code></pre></div></div>
 </div>
 <div class="cell" data-layout-align="left">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Imagem raster feita a partir de uma banda azul.</figcaption>
+<figcaption>Imagem raster feita a partir de uma banda azul.</figcaption>
 </figure>
 </div>
 </div>
@@ -210,7 +212,7 @@ font-style: inherit;">NULL</span>)</span></code></pre></div>
 <li>Criando objetos <code>img_lim_min</code> (médoto “<em>Minimum</em>”) e <code>img_lim_def</code> (método “<em>Default</em>”)</li>
 </ul>
 <div class="cell" data-layout-align="left">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">img_lim_min <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">img_lim_min <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -222,18 +224,18 @@ font-style: inherit;">"Minimum"</span>, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">display =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
-font-style: inherit;">TRUE</span>)</span></code></pre></div>
+font-style: inherit;">TRUE</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Imagem binária feita com o método “Minimum”.</figcaption>
+<figcaption>Imagem binária feita com o método “Minimum”.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell" data-layout-align="left">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">img_lim_def <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">img_lim_def <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -245,12 +247,12 @@ font-style: inherit;">"Default"</span>, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">display =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
-font-style: inherit;">TRUE</span>)</span></code></pre></div>
+font-style: inherit;">TRUE</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Imagem binária feita com o método “Default”.</figcaption>
+<figcaption>Imagem binária feita com o método “Default”.</figcaption>
 </figure>
 </div>
 </div>
@@ -267,35 +269,35 @@ font-style: inherit;">TRUE</span>)</span></code></pre></div>
 <li>A função <code>label_gaps()</code> usa a função <code>bwlabel()</code> do pacote <code>{EBImage}</code> para atribuir um valor numérico para cada lacuna distinta</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">img_min_gaps <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">img_min_gaps <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">label_gaps</span>(img_lim_min)</span></code></pre></div>
+font-style: inherit;">label_gaps</span>(img_lim_min)</span></code></pre></div></div>
 </div>
 <div class="cell" data-layout-align="left">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Minimum</figcaption>
+<figcaption>Minimum</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">img_def_gaps <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">img_def_gaps <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">label_gaps</span>(img_lim_def)</span></code></pre></div>
+font-style: inherit;">label_gaps</span>(img_lim_def)</span></code></pre></div></div>
 </div>
 <div class="cell" data-layout-align="left">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Default</figcaption>
+<figcaption>Default</figcaption>
 </figure>
 </div>
 </div>
@@ -321,7 +323,7 @@ font-style: inherit;">label_gaps</span>(img_lim_def)</span></code></pre></div>
 <li>Método “<em>Minimum</em>”</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Macfarlane</span></span>
 <span id="cb9-2">df_min_mac <span class="ot" style="color: #003B4F;
@@ -337,9 +339,9 @@ font-style: inherit;">"macfarlane"</span>)</span>
 background-color: null;
 font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
+font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -478,10 +480,8 @@ font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Alivernini</span></span>
 <span id="cb10-2">df_min_ali <span class="ot" style="color: #003B4F;
@@ -497,9 +497,9 @@ font-style: inherit;">"alivernini"</span>)</span>
 background-color: null;
 font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
+font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -666,15 +666,13 @@ font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 <ul>
 <li>Método “<em>Default</em>”</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Macfarlane</span></span>
 <span id="cb11-2">df_def_mac <span class="ot" style="color: #003B4F;
@@ -690,9 +688,9 @@ font-style: inherit;">"macfarlane"</span>)</span>
 background-color: null;
 font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
+font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -831,10 +829,8 @@ font-style: inherit;">head</span>(df_min_mac))</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Alivernini</span></span>
 <span id="cb12-2">df_def_ali <span class="ot" style="color: #003B4F;
@@ -850,9 +846,9 @@ font-style: inherit;">"alivernini"</span>)</span>
 background-color: null;
 font-style: inherit;">kable</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
+font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -1019,8 +1015,6 @@ font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 </section>
@@ -1041,7 +1035,7 @@ font-style: inherit;">head</span>(df_min_ali))</span></code></pre></div>
 <li>Método “<em>Minimum</em>”</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Macfarlane</span></span>
 <span id="cb13-2">df2_min_mac <span class="ot" style="color: #003B4F;
@@ -1051,9 +1045,9 @@ background-color: null;
 font-style: inherit;">get_canopy</span>(df_min_mac)</span>
 <span id="cb13-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">kable</span>(df2_min_mac)</span></code></pre></div>
+font-style: inherit;">kable</span>(df2_min_mac)</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -1103,10 +1097,8 @@ font-style: inherit;">kable</span>(df2_min_mac)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Alivernini</span></span>
 <span id="cb14-2">df2_min_ali <span class="ot" style="color: #003B4F;
@@ -1116,9 +1108,9 @@ background-color: null;
 font-style: inherit;">get_canopy</span>(df_min_ali)</span>
 <span id="cb14-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">kable</span>(df2_min_ali)</span></code></pre></div>
+font-style: inherit;">kable</span>(df2_min_ali)</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -1168,15 +1160,13 @@ font-style: inherit;">kable</span>(df2_min_ali)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 <ul>
 <li>Método “<em>Default</em>”</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Macfarlane</span></span>
 <span id="cb15-2">df2_def_mac <span class="ot" style="color: #003B4F;
@@ -1186,9 +1176,9 @@ background-color: null;
 font-style: inherit;">get_canopy</span>(df_def_mac)</span>
 <span id="cb15-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">kable</span>(df2_def_mac)</span></code></pre></div>
+font-style: inherit;">kable</span>(df2_def_mac)</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -1238,10 +1228,8 @@ font-style: inherit;">kable</span>(df2_def_mac)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Alivernini</span></span>
 <span id="cb16-2">df2_def_ali <span class="ot" style="color: #003B4F;
@@ -1251,9 +1239,9 @@ background-color: null;
 font-style: inherit;">get_canopy</span>(df_def_ali)</span>
 <span id="cb16-3"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">kable</span>(df2_def_ali)</span></code></pre></div>
+font-style: inherit;">kable</span>(df2_def_ali)</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -1303,8 +1291,6 @@ font-style: inherit;">kable</span>(df2_def_ali)</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 </section>
@@ -1312,7 +1298,7 @@ font-style: inherit;">kable</span>(df2_def_ali)</span></code></pre></div>
 <h3 class="anchored" data-anchor-id="comparação">2.7. Comparação</h3>
 <p>Para efeito de comparação, abaixo estão todos os bancos de dados produzidos:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">a <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">a <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span></span>
 <span id="cb17-2">    <span class="fu" style="color: #4758AB;
@@ -1331,9 +1317,9 @@ background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb17-6">    <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">kable</span>()</span></code></pre></div>
+font-style: inherit;">kable</span>()</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">methods</th>
@@ -1369,8 +1355,6 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 </section>
@@ -1388,14 +1372,14 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/007-coveR/index_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Do lado esquerdo, as imagens feitas com câmera grande angular, à direita, com câmera normal. Pontos: 03, 10, 12, e 20</figcaption>
+<figcaption>Do lado esquerdo, as imagens feitas com câmera grande angular, à direita, com câmera normal. Pontos: 03, 10, 12, e 20</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>O método utilizado foi o <em>Minimum</em>, e o método de medição de lacunas foi o <em>Macfarlane</em>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">images <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">images <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -1446,9 +1430,9 @@ background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb18-6">    <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">kable</span>()</span></code></pre></div>
+font-style: inherit;">kable</span>()</span></code></pre></div></div>
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">id</th>
@@ -1652,8 +1636,6 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 </tr>
 </tbody>
 </table>
-
-
 </div>
 </div>
 <hr>
@@ -1696,15 +1678,17 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
   <category>pt-br</category>
   <category>R</category>
   <category>tags</category>
-  <guid>https://rsilveirafh.netlify.app/posts/007-coveR/index.html</guid>
+  <guid>https://rsilveirafh.netlify.app/posts/007-coveR/</guid>
   <pubDate>Wed, 21 Jun 2023 03:00:00 GMT</pubDate>
-  <media:content url="https://gitlab.com/fchianucci/coveR/-/raw/master/inst/extdata/coveR-logo_HR.png" medium="image" type="image/png"/>
+  <media:content url="https://rsilveirafh.netlify.app/posts/007-coveR/thumb.png" medium="image" type="image/png" height="166" width="144"/>
 </item>
 <item>
   <title>Data wrangling with {dplyr}</title>
   <dc:creator>Ricardo </dc:creator>
-  <link>https://rsilveirafh.netlify.app/posts/006-dplyr-01/index.html</link>
+  <link>https://rsilveirafh.netlify.app/posts/006-dplyr-01/</link>
   <description><![CDATA[ 
+
+
 
 
 
@@ -1727,21 +1711,21 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="hands-on">Hands on</h2>
 <p>Firts of all we need to load the <code>{dplyr}</code> package:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">library</span>(dplyr)</span></code></pre></div>
+font-style: inherit;">library</span>(dplyr)</span></code></pre></div></div>
 </div>
 <p>If you do not have it yet, just install using:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"dplyr"</span>)</span></code></pre></div>
+font-style: inherit;">"dplyr"</span>)</span></code></pre></div></div>
 </div>
 <p>We will use the Palmer Archipelago (Antarctica) penguin dataset, wich you can load and add into an R object like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># install.packages("palmerpenguins")</span></span>
 <span id="cb3-2">penguins <span class="ot" style="color: #003B4F;
@@ -1752,7 +1736,7 @@ font-style: inherit;">::</span>penguins</span>
 <span id="cb3-3"></span>
 <span id="cb3-4"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">glimpse</span>(penguins)</span></code></pre></div>
+font-style: inherit;">glimpse</span>(penguins)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 344
 Columns: 8
@@ -1771,10 +1755,14 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 </blockquote>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-penguins" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/006-dplyr-01/https:/github.com/allisonhorst/palmerpenguins/raw/main/man/figures/lter_penguins.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Meet the Palmer penguins. Artwork by <span class="citation" data-cites="allison_horst">@allison_horst</span>.</figcaption>
+<div id="fig-penguins" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-penguins-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://github.com/allisonhorst/palmerpenguins/raw/main/man/figures/lter_penguins.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-penguins-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Meet the Palmer penguins. Artwork by <span class="citation" data-cites="allison_horst">@allison_horst</span>.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -1785,12 +1773,12 @@ $ year              &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 
 <p>One thing that I like in the <code>{dplyr}</code> functions, is that they represent the <em>actions</em> of what they pretend to do. For instance, <code>arrange()</code> will literally <em>arrange</em> the dataset based in one or more columns, at the ascending or descending order (default is ascending).</p>
 <p>In the example below, we are sorting the dataset based on the name of the species:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb5-2">    <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">arrange</span>(species)</span></code></pre></div>
+font-style: inherit;">arrange</span>(species)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -1814,14 +1802,14 @@ font-style: inherit;">arrange</span>(species)</span></code></pre></div>
 </blockquote>
 <p>Now, let’s arrange the dataset based on the <em>island</em> by descending order, and <em>species</em> by ascending order:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb7-2">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">desc</span>(island), species)</span></code></pre></div>
+font-style: inherit;">desc</span>(island), species)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -1842,12 +1830,12 @@ font-style: inherit;">desc</span>(island), species)</span></code></pre></div>
 </div>
 <p>The two variables above were alphabetically sorted, now we can try the same using the <em>body_mass_g</em> numeric variable:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb9-2">    <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">arrange</span>(body_mass_g)</span></code></pre></div>
+font-style: inherit;">arrange</span>(body_mass_g)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
    species   island   bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -1869,14 +1857,14 @@ font-style: inherit;">arrange</span>(body_mass_g)</span></code></pre></div>
 <p>The lightest measured penguin weighed <em>2,700 g</em>, it was from the <em>Chinstrap</em> species from the <em>Dream</em> Island.</p>
 <p>What about the heaviest?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb11-2">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">desc</span>(body_mass_g))</span></code></pre></div>
+font-style: inherit;">desc</span>(body_mass_g))</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 344 × 8
    species island bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -1904,7 +1892,7 @@ font-style: inherit;">desc</span>(body_mass_g))</span></code></pre></div>
 <p>To retain the values, the proposed rules must produce a <strong>TRUE</strong> value for all conditions.</p>
 <blockquote class="blockquote">
 <p>To do such conditions, some relational operators are necessary, here is a list of them:</p>
-<table class="table">
+<table class="caption-top table">
 <caption>Relational operators in R</caption>
 <thead>
 <tr class="header">
@@ -1943,7 +1931,7 @@ font-style: inherit;">desc</span>(body_mass_g))</span></code></pre></div>
 <p>Let’s start using only one condition.</p>
 <p>First, we want to pick only the penguins that weight <em>less than 3,000 g</em> (or 3 kg):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb13-2">    <span class="fu" style="color: #4758AB;
@@ -1952,7 +1940,7 @@ font-style: inherit;">filter</span>(body_mass_g <span class="sc" style="color: #
 background-color: null;
 font-style: inherit;">&lt;</span> <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">3000</span>)</span></code></pre></div>
+font-style: inherit;">3000</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 8
   species   island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -1972,7 +1960,7 @@ font-style: inherit;">3000</span>)</span></code></pre></div>
 <p>The result is a filtered dataset containing only <em>9 penguins</em>.</p>
 <p>Now we want to filter only the female in the <code>penguins</code> data:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb15-2">    <span class="fu" style="color: #4758AB;
@@ -1981,7 +1969,7 @@ font-style: inherit;">filter</span>(sex <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"female"</span>)</span></code></pre></div>
+font-style: inherit;">"female"</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 165 × 8
    species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
@@ -2003,7 +1991,7 @@ font-style: inherit;">"female"</span>)</span></code></pre></div>
 <p>There are <em>165 female</em> penguins on this dataset (the total is 344).</p>
 <p>We can filter the dataset based in more than one condition. We want to subset the data by the <em>male</em>, <em>Adelie</em> species, that were collected at the <em>Dream</em> Island:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb17-2">    <span class="fu" style="color: #4758AB;
@@ -2031,9 +2019,9 @@ font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">kable</span>() <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># only to show the whole data</span></span></code></pre></div>
+font-style: inherit;"># only to show the whole data</span></span></code></pre></div></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 9%">
 <col style="width: 8%">
@@ -2343,7 +2331,7 @@ font-style: inherit;"># only to show the whole data</span></span></code></pre></
 </div>
 <p>If we need to subset more than one information in a single variable, we can use the <code>%in%</code> operator. For example, we want the penguins that have <em>flipper_length_mm</em> <em>smaller than 180</em>, that were collected at the years of <em>2007</em> and <em>2009</em>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">penguins <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">penguins <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb18-2">    <span class="fu" style="color: #4758AB;
@@ -2370,9 +2358,9 @@ font-style: inherit;"># the `c()` stands for "concatenate" </span></span>
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">kable</span>()</span></code></pre></div>
+font-style: inherit;">kable</span>()</span></code></pre></div></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 10%">
 <col style="width: 10%">
@@ -2500,15 +2488,17 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
   <category>en</category>
   <category>R</category>
   <category>tidying</category>
-  <guid>https://rsilveirafh.netlify.app/posts/006-dplyr-01/index.html</guid>
+  <guid>https://rsilveirafh.netlify.app/posts/006-dplyr-01/</guid>
   <pubDate>Mon, 24 Oct 2022 03:00:00 GMT</pubDate>
-  <media:content url="https://dplyr.tidyverse.org/logo.png" medium="image" type="image/png"/>
+  <media:content url="https://rsilveirafh.netlify.app/posts/006-dplyr-01/thumb.png" medium="image" type="image/png" height="166" width="144"/>
 </item>
 <item>
   <title>Como e porquê usar o pipe ( %&gt;% e |&gt; )?</title>
   <dc:creator>Ricardo </dc:creator>
-  <link>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</link>
+  <link>https://rsilveirafh.netlify.app/posts/005-pipe/</link>
   <description><![CDATA[ 
+
+
 
 
 
@@ -2548,7 +2538,7 @@ font-style: inherit;">kable</span>()</span></code></pre></div>
 </ol>
 <p>Na sintaxe do <code>R</code> base, essa seria a forma de utilização:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">servir</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2572,7 +2562,7 @@ font-style: inherit;">2</span>  (  <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>  (     <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">0</span>      )))))</span></code></pre></div>
+font-style: inherit;">0</span>      )))))</span></code></pre></div></div>
 </div>
 <p>Ou seja,</p>
 <ol start="0" type="1">
@@ -2589,7 +2579,7 @@ font-style: inherit;">0</span>      )))))</span></code></pre></div>
 <p>O atalho de teclado para o pipe é <code>CONTROL + SHIFT + M</code>.</p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">ingredientes <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">ingredientes <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%&gt;%</span>    <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -2626,12 +2616,16 @@ font-style: inherit;"># 4</span></span>
 background-color: null;
 font-style: inherit;">servir</span>()        <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># 5</span></span></code></pre></div>
+font-style: inherit;"># 5</span></span></code></pre></div></div>
 </div>
 <p>Ou, ilustrando:</p>
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="https://rsilveirafh.netlify.app/posts/005-pipe/baking.gif" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="https://rsilveirafh.netlify.app/posts/005-pipe/baking.gif" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Na hora que estamos trabalhando com dados reais, isso faz uma grande diferença.</p>
@@ -2651,7 +2645,7 @@ font-style: inherit;"># 5</span></span></code></pre></div>
 <p>Utilizarei o banco de dados <code>starwars</code>, incluído no pacote <code>dados</code>. Saiba mais sobre o pacote e a iniciativa aqui: <a href="https://cienciadedatos.github.io/dados/">https://cienciadedatos.github.io/dados/</a></p>
 </blockquote>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># para instalar o pacote pelo GitHub:</span></span>
 <span id="cb3-2">remotes<span class="sc" style="color: #5E5E5E;
@@ -2660,20 +2654,20 @@ font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"cienciadedatos/dados"</span>)</span></code></pre></div>
+font-style: inherit;">"cienciadedatos/dados"</span>)</span></code></pre></div></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># para instalar o pacote pelo CRAN:</span></span>
 <span id="cb4-2"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"dados"</span>)</span></code></pre></div>
+font-style: inherit;">"dados"</span>)</span></code></pre></div></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># para carregar os pacotes:</span></span>
 <span id="cb5-2"><span class="fu" style="color: #4758AB;
@@ -2688,7 +2682,7 @@ background-color: null;
 font-style: inherit;"># para carregar o banco de dados `dados_starwars`, e ver um sumário</span></span>
 <span id="cb5-6"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">glimpse</span>(dados_starwars)</span></code></pre></div>
+font-style: inherit;">glimpse</span>(dados_starwars)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 87
 Columns: 14
@@ -2710,7 +2704,7 @@ $ naves_espaciais &lt;list&gt; &lt;"X-wing", "Imperial shuttle"&gt;, &lt;&gt;, &
 </div>
 <p><strong><u>Aninhado</u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">arrange</span>(</span>
 <span id="cb7-2">    <span class="fu" style="color: #4758AB;
@@ -2738,7 +2732,7 @@ background-color: null;
 font-style: inherit;">TRUE</span>)),</span>
 <span id="cb7-7">    <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa
@@ -2750,7 +2744,7 @@ font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
 </div>
 <p><strong><u>Objetos múltiplos</u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">a <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">a <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -2784,7 +2778,7 @@ background-color: null;
 font-style: inherit;">arrange</span>(c, <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">desc</span>(media_massa))</span>
-<span id="cb9-5">d</span></code></pre></div>
+<span id="cb9-5">d</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa
@@ -2796,7 +2790,7 @@ font-style: inherit;">desc</span>(media_massa))</span>
 </div>
 <p><strong><u>Pipe <code>magrittr</code></u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">dados_starwars <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">dados_starwars <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%&gt;%</span> </span>
 <span id="cb11-2">    <span class="fu" style="color: #4758AB;
@@ -2830,7 +2824,7 @@ font-style: inherit;">%&gt;%</span> </span>
 background-color: null;
 font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa
@@ -2842,7 +2836,7 @@ font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
 </div>
 <p><strong><u>Pipe R <code>base</code></u></strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">dados_starwars <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">dados_starwars <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">|&gt;</span> </span>
 <span id="cb13-2">    <span class="fu" style="color: #4758AB;
@@ -2876,7 +2870,7 @@ font-style: inherit;">|&gt;</span> </span>
 background-color: null;
 font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
+font-style: inherit;">desc</span>(media_massa))</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   genero    media_massa
@@ -2906,15 +2900,17 @@ font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
   <category>pt-br</category>
   <category>R</category>
   <category>tidyverse</category>
-  <guid>https://rsilveirafh.netlify.app/posts/005-pipe/index.html</guid>
+  <guid>https://rsilveirafh.netlify.app/posts/005-pipe/</guid>
   <pubDate>Tue, 18 Oct 2022 03:00:00 GMT</pubDate>
-  <media:content url="https://magrittr.tidyverse.org/logo.png" medium="image" type="image/png"/>
+  <media:content url="https://rsilveirafh.netlify.app/posts/005-pipe/thumb.png" medium="image" type="image/png" height="167" width="144"/>
 </item>
 <item>
   <title>Explorando o mundo de The Office</title>
   <dc:creator>Ricardo </dc:creator>
-  <link>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</link>
+  <link>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/</link>
   <description><![CDATA[ 
+
+
 
 
 
@@ -2934,10 +2930,14 @@ font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
 <p>Nos idos de 2009 tive a felicidade de conhecer <a href="https://pt.wikipedia.org/wiki/The_Office_(Estados_Unidos)">The Office</a>, que se trata de uma série de comédia em formato de pseudodocumentário exibida pela rede estadunidense NBC (No Brasil dá pra assistir pela <a href="https://www.amazon.com.br/prime">prime</a>, bebês 😘. Esta é minha série favorita do coração (🦆 Boy, Camura, Sarah).</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-gif1" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/IwAZ6dvvvaTtdI8SD5/giphy.gif" class="img-fluid figure-img" style="width:50.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Yeah baby!</figcaption>
+<div id="fig-gif1" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gif1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://media.giphy.com/media/IwAZ6dvvvaTtdI8SD5/giphy.gif" class="img-fluid figure-img" style="width:50.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gif1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Yeah baby!
+</figcaption>
 </figure>
 </div>
 </div>
@@ -2957,7 +2957,7 @@ font-style: inherit;">desc</span>(media_massa))</span></code></pre></div>
 <li>Para ter acesso pelo R, podemos utilizar o pacote <code>googlesheets4</code>, através da função <code>read_sheet()</code>, dessa forma:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># carregando o pacote necessário</span></span>
 <span id="cb1-2"><span class="fu" style="color: #4758AB;
@@ -2975,7 +2975,7 @@ font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">read_sheet</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534"</span>)</span></code></pre></div>
+font-style: inherit;">"https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwHLS95POmSNKA2jjzdt0phrxeAE0/edit#gid=747974534"</span>)</span></code></pre></div></div>
 </div>
 <ol start="2" type="1">
 <li>Utilizando o BD fornecido pelo usuário <a href="https://www.kaggle.com/fabriziocominetti">Fabrizio Cominetti</a>, lá no <a href="https://www.kaggle.com/datasets/fabriziocominetti/the-office-lines">Kaggle</a> (em outro post trago mais detalhes sobre);</li>
@@ -2990,7 +2990,7 @@ font-style: inherit;">"https://docs.google.com/spreadsheets/d/18wS5AAwOh8QO95RwH
 <li>Para ler o arquivo utilizarei o pacote <code>readr</code>, da família <code>tidyverse</code>:</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># carregando os pacotes necessários</span></span>
 <span id="cb2-2"><span class="fu" style="color: #4758AB;
@@ -3029,7 +3029,7 @@ background-color: null;
 font-style: inherit;"># resumindo os dados</span></span>
 <span id="cb2-10"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">glimpse</span>(theoffice)</span></code></pre></div>
+font-style: inherit;">glimpse</span>(theoffice)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 59,909
 Columns: 7
@@ -3045,7 +3045,7 @@ $ deleted   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, 
 <p>Como podemos ver, o objeto <code>theoffice</code> contém <strong>7 variáveis</strong> e <strong>59.909 observações</strong> (ou “falas” dos personagens).</p>
 <p>Para melhor visualização (somente das 6 primeiras observações):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">knitr<span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">knitr<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -3055,9 +3055,9 @@ font-style: inherit;">head</span>(theoffice, <span class="at" style="color: #657
 background-color: null;
 font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">6</span>))</span></code></pre></div>
+font-style: inherit;">6</span>))</span></code></pre></div></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 0%">
 <col style="width: 1%">
@@ -3141,8 +3141,8 @@ font-style: inherit;">6</span>))</span></code></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Tá bom, Michael.</figcaption>
+<p><img src="https://media.giphy.com/media/5wWf7H89PisM6An8UAU/giphy.gif" class="img-fluid figure-img"></p>
+<figcaption>Tá bom, Michael.</figcaption>
 </figure>
 </div>
 </div>
@@ -3151,7 +3151,7 @@ font-style: inherit;">6</span>))</span></code></pre></div>
 <h4 class="anchored" data-anchor-id="renomeando-as-variáveis-para-pt-br">Renomeando as variáveis para pt-br</h4>
 <p>Agora, já que é uma postagem em português, vamos traduzir os nomes das variáveis.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">theoffice_pt <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">theoffice_pt <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> theoffice <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3187,9 +3187,9 @@ font-style: inherit;">head</span>(theoffice_pt, <span class="at" style="color: #
 background-color: null;
 font-style: inherit;">n =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">2</span>))</span></code></pre></div>
+font-style: inherit;">2</span>))</span></code></pre></div></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 2%">
 <col style="width: 7%">
@@ -3239,7 +3239,7 @@ font-style: inherit;">2</span>))</span></code></pre></div>
 <h4 class="anchored" data-anchor-id="número-de-falas-por-temporada">Número de falas por temporada</h4>
 <p>Bom, dessa vez vamos ver <strong>quantas falas existiram em cada uma das 9 temporadas da série</strong>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%&gt;%</span> </span>
 <span id="cb6-2">    <span class="co" style="color: #5E5E5E;
@@ -3255,7 +3255,7 @@ background-color: null;
 font-style: inherit;"># somando as observações</span></span>
 <span id="cb6-5">    <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">tally</span>()</span></code></pre></div>
+font-style: inherit;">tally</span>()</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 2
   temporada     n
@@ -3278,7 +3278,7 @@ font-style: inherit;">tally</span>()</span></code></pre></div>
 <h4 class="anchored" data-anchor-id="número-de-falas-por-personagem-no-1º-episódio">Número de falas por personagem no 1º episódio</h4>
 <p>Podemos também filtrar algumas informações, para ser mais específicos. Por exemplo, se quisermos saber quantas <strong>falas</strong> foram feitas <strong>por personagem</strong> no <strong>primeiro episódio</strong> da <strong>primeira temporada</strong> (<del>a mais odiada</del>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">theoffice_pt <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%&gt;%</span> </span>
 <span id="cb8-2">    <span class="co" style="color: #5E5E5E;
@@ -3322,7 +3322,7 @@ font-style: inherit;"># organizando do número maior para o menor</span></span>
 background-color: null;
 font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">desc</span>(n))</span></code></pre></div>
+font-style: inherit;">desc</span>(n))</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16 × 2
    personagem                  n
@@ -3354,8 +3354,8 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/https:/media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">É festa!</figcaption>
+<p><img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" class="img-fluid figure-img"></p>
+<figcaption>É festa!</figcaption>
 </figure>
 </div>
 </div>
@@ -3373,7 +3373,7 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 </ol>
 <p>Adendo: O Felipe Magalhães me sugeriu ver quantas vezes falaram “<em>That’s what she said!</em>” na série, não aguentei de curiosidade. Aí está:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># pacote para tratar com strings, também do tidyverse</span></span>
 <span id="cb10-2"><span class="fu" style="color: #4758AB;
@@ -3398,7 +3398,7 @@ font-style: inherit;">"[Tt]hat's what she said?"</span>))</span>
 <span id="cb10-7"></span>
 <span id="cb10-8"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">glimpse</span>(twss)</span></code></pre></div>
+font-style: inherit;">glimpse</span>(twss)</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 35
 Columns: 7
@@ -3413,7 +3413,7 @@ $ deletado   &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, 
 </div>
 <p><strong>35 falas</strong> com “<em>That’s what she said</em>”!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">twss <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">twss <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%&gt;%</span> </span>
 <span id="cb12-2">    <span class="fu" style="color: #4758AB;
@@ -3430,7 +3430,7 @@ font-style: inherit;">%&gt;%</span> </span>
 background-color: null;
 font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">desc</span>(n))</span></code></pre></div>
+font-style: inherit;">desc</span>(n))</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 11 × 2
    personagem              n
@@ -3458,15 +3458,17 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
   <category>R</category>
   <category>the office</category>
   <category>tidyverse</category>
-  <guid>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/index.html</guid>
+  <guid>https://rsilveirafh.netlify.app/posts/004-explorando-the-office/</guid>
   <pubDate>Sat, 15 Oct 2022 03:00:00 GMT</pubDate>
-  <media:content url="https://media.giphy.com/media/LXfpI3nNbfCm91llsA/giphy.gif" medium="image" type="image/gif"/>
+  <media:content url="https://rsilveirafh.netlify.app/posts/004-explorando-the-office/thumb.gif" medium="image" type="image/gif"/>
 </item>
 <item>
   <title>A great {ggplot2} tip!</title>
   <dc:creator>Ricardo </dc:creator>
-  <link>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index.html</link>
+  <link>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/</link>
   <description><![CDATA[ 
+
+
 
 
 
@@ -3486,10 +3488,14 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <p>I finally found it! Here it is:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-ggplot" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/https:/isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: ggplot2 theme elements references, by Isabella Benabaye.</figcaption>
+<div id="fig-ggplot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ggplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ggplot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: ggplot2 theme elements references, by Isabella Benabaye.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -3501,10 +3507,14 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <p>More interesting: actually, she had her idea after this twitter post from Henry Wang:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-tweet" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index_files/figure-html/fig-tweet-1.png" class="img-fluid figure-img" style="width:70.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: Henry Wang’s tweet.</figcaption>
+<div id="fig-tweet" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tweet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index_files/figure-html/fig-tweet-1.png" class="img-fluid figure-img" style="width:70.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tweet-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Henry Wang’s tweet.
+</figcaption>
 </figure>
 </div>
 </div>
@@ -3527,15 +3537,17 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
   <category>ggplot2</category>
   <category>R</category>
   <category>tips</category>
-  <guid>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/index.html</guid>
+  <guid>https://rsilveirafh.netlify.app/posts/003-ggplot-tip/</guid>
   <pubDate>Fri, 14 Oct 2022 03:00:00 GMT</pubDate>
-  <media:content url="https://isabella-b.com/blog/ggplot2-theme-elements-reference/ggplot2-theme-elements-reference-v2_hu8994090e1960a0a71878a3756da20076_580819_2000x2000_fit_lanczos_2.png" medium="image" type="image/png"/>
+  <media:content url="https://rsilveirafh.netlify.app/posts/003-ggplot-tip/thumb.png" medium="image" type="image/png" height="90" width="144"/>
 </item>
 <item>
   <title>Drawing a star in R with ggplot</title>
   <dc:creator>Ricardo </dc:creator>
-  <link>https://rsilveirafh.netlify.app/posts/002-star/index.html</link>
+  <link>https://rsilveirafh.netlify.app/posts/002-star/</link>
   <description><![CDATA[ 
+
+
 
 
 
@@ -3552,10 +3564,14 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <p>I am a workers party supporter (PT, <em>Partido dos Trabalhadores</em>), with <strong><a href="https://twitter.com/LulaOficial">Lula</a></strong> as our candidate.</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-lula" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/002-star/lula.jpeg" class="img-fluid figure-img" width="375"></p>
-<figcaption class="figure-caption">Figure&nbsp;1: Lulinha peace and love &lt;3</figcaption>
+<div id="fig-lula" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-lula-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://rsilveirafh.netlify.app/posts/002-star/lula.jpeg" class="img-fluid figure-img" width="375">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-lula-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Lulinha peace and love &lt;3
+</figcaption>
 </figure>
 </div>
 </div>
@@ -3566,7 +3582,7 @@ font-style: inherit;">desc</span>(n))</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="hands-on">Hands on!</h2>
 <p>First of all, we will need to load <code>dplyr</code> and <code>ggplot2</code>, the package of functions that we will use in this session:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">library</span>(dplyr) <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -3575,25 +3591,25 @@ font-style: inherit;"># data wrangling</span></span>
 background-color: null;
 font-style: inherit;">library</span>(ggplot2) <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># plots</span></span></code></pre></div>
+font-style: inherit;"># plots</span></span></code></pre></div></div>
 </div>
 <p>Let’s start by creating our blank canvas:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">ggplot</span>()</span></code></pre></div>
+font-style: inherit;">ggplot</span>()</span></code></pre></div></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot01-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Blank canvas.</figcaption>
+<figcaption>Blank canvas.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>Now we can ask to ggplot to put a void theme (without texts or axis), and then to add a red background:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">red <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">red <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -3617,12 +3633,12 @@ font-style: inherit;">fill =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"red"</span>))</span>
 <span id="cb3-4"></span>
-<span id="cb3-5">red</span></code></pre></div>
+<span id="cb3-5">red</span></code></pre></div></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot02-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Red canvas.</figcaption>
+<figcaption>Red canvas.</figcaption>
 </figure>
 </div>
 </div>
@@ -3630,17 +3646,21 @@ font-style: inherit;">"red"</span>))</span>
 <p>The challenge now is to draw by draft our star. First, let’s study how it is:</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-star" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/002-star/star.jpg" class="img-fluid figure-img" style="width:150.0%"></p>
-<figcaption class="figure-caption">Figure&nbsp;2: A star and its coordinates.</figcaption>
+<div id="fig-star" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-star-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://rsilveirafh.netlify.app/posts/002-star/star.jpg" class="img-fluid figure-img" style="width:150.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-star-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: A star and its coordinates.
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>To do this, let’s create a <code>tibble</code> with the <code>x</code> and <code>y</code> coordinates (11 to close the polygon):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">r <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">r <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -3735,9 +3755,9 @@ font-style: inherit;">kable</span>(star, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">align =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"c"</span>)</span></code></pre></div>
+font-style: inherit;">"c"</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
-<table class="table table-sm table-striped small">
+<table class="caption-top table table-sm table-striped small">
 <thead>
 <tr class="header">
 <th style="text-align: center;">coord</th>
@@ -3808,7 +3828,7 @@ font-style: inherit;">"c"</span>)</span></code></pre></div>
 </div>
 <p>Now, let’s include the star coordinates (and the paths) within the red plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">red <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">red <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
 <span id="cb5-2">    <span class="fu" style="color: #4758AB;
@@ -3823,19 +3843,19 @@ font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">x =</span> x, <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">y =</span> y))</span></code></pre></div>
+font-style: inherit;">y =</span> y))</span></code></pre></div></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot03-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">Almost there.</figcaption>
+<figcaption>Almost there.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>The next step is to paint the star in white color, and also fix the coordinates:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">pt <span class="ot" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">pt <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> red <span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -3864,12 +3884,12 @@ font-style: inherit;">+</span></span>
 background-color: null;
 font-style: inherit;">coord_equal</span>()</span>
 <span id="cb6-5"></span>
-<span id="cb6-6">pt </span></code></pre></div>
+<span id="cb6-6">pt </span></code></pre></div></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot04-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">The workers party flag!</figcaption>
+<figcaption>The workers party flag!</figcaption>
 </figure>
 </div>
 </div>
@@ -3877,7 +3897,7 @@ font-style: inherit;">coord_equal</span>()</span>
 <p>Our PT flag is ready!</p>
 <p>Just to complete, we can include the number of the party in the middle of the star, the number 13!</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">pt <span class="sc" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">pt <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span></span>
 <span id="cb7-2">    <span class="fu" style="color: #4758AB;
@@ -3913,12 +3933,12 @@ font-style: inherit;">40</span>,</span>
 background-color: null;
 font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"red"</span>)</span></code></pre></div>
+font-style: inherit;">"red"</span>)</span></code></pre></div></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://rsilveirafh.netlify.app/posts/002-star/index_files/figure-html/plot05-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption class="figure-caption">It is ready!</figcaption>
+<figcaption>It is ready!</figcaption>
 </figure>
 </div>
 </div>
@@ -3931,10 +3951,14 @@ font-style: inherit;">"red"</span>)</span></code></pre></div>
 <p>Make the L!</p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-L" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure">
-<p><img src="https://rsilveirafh.netlify.app/posts/002-star/L.jpg" class="img-fluid figure-img" width="640"></p>
-<figcaption class="figure-caption">Figure&nbsp;3: Faz o L!</figcaption>
+<div id="fig-L" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-L-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://rsilveirafh.netlify.app/posts/002-star/L.jpg" class="img-fluid figure-img" width="640">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-L-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Faz o L!
+</figcaption>
 </figure>
 </div>
 </div>
@@ -3953,15 +3977,17 @@ font-style: inherit;">"red"</span>)</span></code></pre></div>
   <category>lula</category>
   <category>R</category>
   <category>star</category>
-  <guid>https://rsilveirafh.netlify.app/posts/002-star/index.html</guid>
+  <guid>https://rsilveirafh.netlify.app/posts/002-star/</guid>
   <pubDate>Thu, 13 Oct 2022 03:00:00 GMT</pubDate>
   <media:content url="https://rsilveirafh.netlify.app/posts/002-star/image.png" medium="image" type="image/png" height="107" width="144"/>
 </item>
 <item>
   <title>Welcome to my blogR</title>
   <dc:creator>Ricardo </dc:creator>
-  <link>https://rsilveirafh.netlify.app/posts/001-welcome/index.html</link>
+  <link>https://rsilveirafh.netlify.app/posts/001-welcome/</link>
   <description><![CDATA[ 
+
+
 
 
 
@@ -3977,7 +4003,7 @@ font-style: inherit;">"red"</span>)</span></code></pre></div>
 
  ]]></description>
   <category>news</category>
-  <guid>https://rsilveirafh.netlify.app/posts/001-welcome/index.html</guid>
+  <guid>https://rsilveirafh.netlify.app/posts/001-welcome/</guid>
   <pubDate>Mon, 10 Oct 2022 03:00:00 GMT</pubDate>
 </item>
 </channel>
