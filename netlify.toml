@@ -1,0 +1,6 @@
+# O blog foi aposentado em 2026-11. Todo acesso vai para o portfólio novo.
+[[redirects]]
+  from = "/*"
+  to = "https://rsilveirafh.github.io/"
+  status = 301
+  force = true
